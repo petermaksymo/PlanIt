@@ -6,7 +6,7 @@ A course dicovery tool by ECE444 Group 10 - 4Sight
 1. [Project Purpose](#project-purpose)
 2. [Version](#version)
 3. [Tech Stack](#tech-stack)
-4. [Development Envrironment](#development-environment)
+4. [Development Environment](#development-environment)
 5. [License](#license)
 6. [Contributing](#contributing)
 7. [Resources](#resources)
