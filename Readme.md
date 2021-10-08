@@ -31,6 +31,8 @@ PostgreSQL
 
 # License
 
+[MIT License](http://choosealicense.com/licenses/mit/)
+
 # Contributing
 
 See [Contribution.md](./Contribution.md)
