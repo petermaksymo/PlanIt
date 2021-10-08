@@ -37,6 +37,18 @@ PostgreSQL
 
 See [Contribution.md](./Contribution.md)
 
+# Contributors
+
+* [Yousif Al-Furaiji](https://github.com/YousifAlfuraiji)
+
+* [Peter Maksymowsky](https://github.com/petermaksymo)
+
+* [Alan (Jia Bao) Du](https://github.com/PomeloFruit)
+
+* [Yuhang Yan](https://github.com/Hoowolf)
+
+* [Kieun Joshua Park](https://github.com/kjoshuapark)
+
 # Resources
 [Github Projects Board](https://github.com/ECE444-2021Fall/project1-education-pathways-group-10-4sight/projects)
 
