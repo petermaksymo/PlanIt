@@ -46,7 +46,7 @@ See [Contribution.md](./Contribution.md)
 * [Kieun Joshua Park](https://github.com/kjoshuapark)
 
 # Resources
-[Github Projects Board](https://github.com/ECE444-2021Fall/project1-education-pathways-group-10-4sight/projects)
+[Github Projects Board](https://github.com/ECE444-2021Fall/project1-education-pathways-group-10-4sight/projects/1)
 
 [Github Wiki](https://github.com/ECE444-2021Fall/project1-education-pathways-group-10-4sight/wiki)
 
