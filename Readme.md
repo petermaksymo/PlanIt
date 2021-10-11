@@ -27,7 +27,14 @@ Flask
 PostgreSQL
 
 # Development Environment
-(to be completed)
+
+1. Download and install [docker-compose](https://docs.docker.com/compose/install/#install-compose)
+
+2. From the project directory, run `docker-compose -f docker-compose.yml up -d`
+
+3. The App should be up at [localhost:3000](http://localhost:3000) and you can see the logs with `docker logs --follow planit_app`
+
+4. The API should be up at [localhost:5000](http://localhost:5000) and you can see the logs with `docker logs --follow planit_api`
 
 # License
 
