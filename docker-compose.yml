@@ -23,3 +23,16 @@ services:
     environment:
       PORT: 5000
       FLASK_DEBUG: 1
+
+  postgres:
+    container_name: planit_postgres
+    image: postgres:14.0
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PASSWORD=development_password
+    volumes:
+      - planit-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  planit-postgres-data:
+    name: planit-postgres-data
