@@ -12,3 +12,14 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
     stdin_open: true
+
+  api:
+    container_name: planit_api
+    build: ./api
+    volumes:
+      - './api:/api'
+    ports:
+      - 5000:5000
+    environment:
+      PORT: 5000
+      FLASK_DEBUG: 1
