@@ -8,7 +8,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
     return 'API is Up!'
 
