@@ -1,5 +1,9 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
+}
+
+.pageContainer {
+  padding: 20px;
 }
 
 .App-logo {
