@@ -19,7 +19,6 @@ import NativeSelect from '@mui/material/NativeSelect';
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
 function App() {
-
     // Basic code showing how to communicate between our backend and frontend
     useEffect( () => {
       fetch(`${API_BASE_URL}/`).then(response => {

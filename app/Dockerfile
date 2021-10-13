@@ -11,4 +11,4 @@ COPY . ./
 RUN yarn install
 
 # Start React App
-CMD yarn start
+CMD yarn start-docker
