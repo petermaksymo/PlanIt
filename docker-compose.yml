@@ -8,9 +8,11 @@ services:
       - './app:/app'
       - '/app/node_modules'
     ports:
-      - 3000:3000
+      - ${APP_PORT}:3000
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - API_BASE_URL
+      - REACT_APP_API_BASE_URL=${API_BASE_URL}
     stdin_open: true
 
   api:
@@ -19,16 +21,18 @@ services:
     volumes:
       - './api:/api'
     ports:
-      - 5000:5000
+      - ${API_PORT}:5000
     environment:
-      PORT: 5000
-      FLASK_DEBUG: 1
+      - API_PORT
+      - FLASK_DEBUG=1
 
   postgres:
     container_name: planit_postgres
     image: postgres:14.0
     environment:
-      - POSTGRES_HOST=postgres
+      - POSTGRES_HOST
+      - POSTGRES_DB
+      - POSTGRES_USER
       - POSTGRES_PASSWORD=development_password
     volumes:
       - planit-postgres-data:/var/lib/postgresql/data
