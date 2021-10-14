@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import { NavBar } from './Components/navbar';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
 import Divider from '@mui/material/Divider';
@@ -16,16 +16,17 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import NativeSelect from '@mui/material/NativeSelect';
 
-function App() {
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
-  //   Basic code showing how to communicate between our backend and frontend
-  //   useEffect( () => {
-  //     fetch('/').then(response => {
-  //         if(response.ok) {
-  //             return response.json()
-  //         }
-  //     }).then(data => console.log(data))
-  // })
+function App() {
+    // Basic code showing how to communicate between our backend and frontend
+    useEffect( () => {
+      fetch(`${API_BASE_URL}/`).then(response => {
+          if(response.ok) {
+              return response.json()
+          }
+      }).then(data => console.log(data))
+  })
 
 
   return (
