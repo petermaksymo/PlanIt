@@ -1,7 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
 import { NavBar } from './Components/navbar';
-import React, { useEffect } from 'react';
+import { Results } from './Components/results';
+import React, { useEffect, useState } from 'react';
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
 import Divider from '@mui/material/Divider';
@@ -19,15 +20,45 @@ import NativeSelect from '@mui/material/NativeSelect';
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
 function App() {
-    // Basic code showing how to communicate between our backend and frontend
-    useEffect( () => {
-      fetch(`${API_BASE_URL}/`).then(response => {
-          if(response.ok) {
-              return response.json()
-          }
-      }).then(data => console.log(data))
-  })
+  const [search, setSearch] = useState('')
+  const [year, setYear] = useState('')
+  const [department, setDepartment] = useState('')
+  const [division, setDivision] = useState('')
+  const [campus, setCampus] = useState('')
+  const [results, setResults] = useState(null)
 
+  // Basic code showing how to communicate between our backend and frontend
+  useEffect( () => {
+    fetch(`${API_BASE_URL}/`).then(response => {
+        if(response.ok) {
+            return response.json()
+        }
+    }).then(data => console.log(data))
+  }, [])
+
+  const onSubmit = (e) => {
+    e.preventDefault()
+
+    const formdata = new FormData();
+    formdata.append("search", search);
+    formdata.append("select", year);
+    formdata.append("departments", "Any");
+    formdata.append("divisions", "Any");
+    formdata.append("campuses", "Any");
+    formdata.append("top", "10");
+
+    fetch(`${API_BASE_URL}/results`, {
+      method: 'POST',
+      mode: 'cors',
+      body: formdata
+    }).then(response => {
+        if(response.ok) {
+            return response.json()
+        }
+    }).then(data => {
+      setResults(data)
+    })
+  }
 
   return (
     <div className="App">
@@ -37,11 +68,14 @@ function App() {
           component="form"
           sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
           className='searchBar'
+          onSubmit={onSubmit}
         >
           <InputBase
             sx={{ ml: 1, flex: 1 }}
             placeholder="Enter a course name"
             inputProps={{ 'aria-label': 'search google maps' }}
+            value={search}
+            onChange={e => setSearch(e.target.value)}
           />
           <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
             <SearchIcon />
@@ -54,14 +88,14 @@ function App() {
 
         <FormControl sx={{ m: 1 }} variant="standard" sx={{ m: 1, minWidth: 120 }}>
           <InputLabel>Course Year</InputLabel>
-          <Select>
+          <Select value={year} onChange={e => setYear(e.target.value)}>
             <MenuItem value="">
               <em>Any</em>
             </MenuItem>
-            <MenuItem value={10}>1</MenuItem>
-            <MenuItem value={20}>2</MenuItem>
-            <MenuItem value={30}>3</MenuItem>
-            <MenuItem value={40}>4</MenuItem>
+            <MenuItem value={1}>1</MenuItem>
+            <MenuItem value={2}>2</MenuItem>
+            <MenuItem value={3}>3</MenuItem>
+            <MenuItem value={4}>4</MenuItem>
           </Select>
         </FormControl>
 
@@ -128,6 +162,8 @@ function App() {
           </Select>
         </FormControl>
       </div>
+
+      <Results data={results}/>
     </div>
   );
 }

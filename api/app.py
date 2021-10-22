@@ -10,3 +10,4 @@ def index():
 
 # Import the account related endpoints
 import api.routes.account
+import api.routes.courses
