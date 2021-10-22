@@ -1,5 +1,5 @@
-from src import db
-from src.database import Serializer
+from api import db
+from api.database import Serializer
 
 class Account(db.Model):
     """Model for accounts."""
