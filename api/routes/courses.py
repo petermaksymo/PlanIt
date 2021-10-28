@@ -62,7 +62,7 @@ def search_results():
         request.form['campuses'],
         request.form['top']
     )
-    return jsonify([i.to_dict() for i in results])
+    return results.to_json(orient='records')
 
 """
 This method shows the information about a single course.
@@ -158,26 +158,21 @@ def filter_courses(pos_terms, year, division, department, campus, n_return=10):
 
     # 6. Get the course data for relevant courses in order of score.
     idxs = [t[1] for t in sorted(list(zip(list(pos_vals), list(df.index))), key=lambda x: x[0], reverse=True)]
+    print(idxs)
     tf = df.loc[idxs]
 
+    print(tf)
+    print(tf.columns)
+
     # 7. Separate results by year, starting with the table for the year actually searched for and then decreasing by year. Apply any filters now.
-    main_table = tf[tf['Course Level'] == year]
+    tf['Code'] = tf.index
+    main_table = tf
     for name, filter in [('Division', division), ('Department', department), ('Campus', campus)]:
         if filter != 'Any':
             main_table = main_table[main_table[name] == filter]
-    tables = [
-        main_table[0:n_return][['Course', 'Name', 'Division', 'Course Description', 'Department', 'Course Level']]]
-    year -= 1
-    while (year > 0):
-        tf = df.loc[[t[0] for t in sorted(requisite_vals.items(), key=lambda x: x[1], reverse=True)]]
-        tf = tf[tf['Course Level'] == year]
-        for name, filter in [('Division', division), ('Department', department), ('Campus', campus)]:
-            if filter != 'Any':
-                tf = tf[tf[name] == filter]
-        tables.append(
-            tf[0:n_return][['Course', 'Name', 'Division', 'Course Description', 'Department', 'Course Level']])
-        year -= 1
-    return tables
+
+    print(main_table[0:n_return][['Code', 'Name', 'Division', 'Course Description', 'Department', 'Course Level', 'Pre-requisites']])
+    return main_table[0:n_return][['Code', 'Name', 'Division', 'Course Description', 'Department', 'Course Level', 'Pre-requisites']]
 
 
 with open('resources/course_vectorizer.pickle', 'rb') as f:
