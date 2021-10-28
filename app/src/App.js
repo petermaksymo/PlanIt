@@ -21,8 +21,8 @@ import NativeSelect from '@mui/material/NativeSelect';
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
 function App() {
-  const [search, setSearch] = useState('software')
-  const [year, setYear] = useState('4')
+  const [search, setSearch] = useState('')
+  const [year, setYear] = useState('')
   const [department, setDepartment] = useState('')
   const [division, setDivision] = useState('')
   const [campus, setCampus] = useState('')

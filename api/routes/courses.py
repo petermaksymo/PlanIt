@@ -171,7 +171,6 @@ def filter_courses(pos_terms, year, division, department, campus, n_return=10):
         if filter != 'Any':
             main_table = main_table[main_table[name] == filter]
 
-    print(main_table[0:n_return][['Code', 'Name', 'Division', 'Course Description', 'Department', 'Course Level', 'Pre-requisites']])
     return main_table[0:n_return][['Code', 'Name', 'Division', 'Course Description', 'Department', 'Course Level', 'Pre-requisites']]
 
 
