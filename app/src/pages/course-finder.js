@@ -12,6 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 
 
 import { Results } from "../Components/results";
+import {NavBar} from "../Components/navbar";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
@@ -59,6 +60,7 @@ export const CourseFinder = () => {
 
   return (
     <>
+      <NavBar/>
       <div className='pageContainer'>
         <Paper
           component="form"
