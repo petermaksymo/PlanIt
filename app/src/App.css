@@ -1,3 +1,8 @@
+a {
+    text-decoration: none;
+    color: unset;
+}
+
 .App {
     min-height: 100vh;
     display: flex;
