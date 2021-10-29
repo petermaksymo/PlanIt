@@ -159,9 +159,9 @@ export const CourseFinder = () => {
             <MenuItem value={30}>50</MenuItem>
           </Select>
         </FormControl>
-      </div>
 
-      <Results data={results}/>
+        <Results data={results}/>
+      </div>
     </>
   )
 }
