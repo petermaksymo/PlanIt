@@ -38,6 +38,14 @@ More information can be found in the [Wiki](https://github.com/ECE444-2021Fall/p
 
 4. The API should be up at [localhost:5000](http://localhost:5000) and you can see the logs with `docker logs --follow planit_api`
 
+## Testing:
+
+For now, you can test the api using docker with the following steps:
+
+1. After building the api from step 2 (or using `docker-compose-f docker-compose.yml up -d --build`)
+
+2. Run `docker-compose -f docker-compose.yml run -e ENVIRONMENT=testing --rm api python -m pytest` and the tests should run 
+
 # License
 
 [MIT License](http://choosealicense.com/licenses/mit/)

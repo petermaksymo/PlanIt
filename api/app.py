@@ -1,8 +1,11 @@
 from flask import jsonify
+import os
 
 from api import create_app
 
-app = create_app('development')
+ENVIRONMENT = os.getenv("ENVIRONMENT", 'development')
+
+app = create_app(ENVIRONMENT)
 
 @app.route('/', methods=['GET'])
 def index():
