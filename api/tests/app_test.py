@@ -9,14 +9,18 @@ from api.database import db
 def client():
     BASE_DIR = Path(__file__).resolve().parent.parent
 
+    db.create_all()
     yield app.test_client()  # tests run here
+    db.session.commit()
+    db.drop_all()
+
 
 def test_index(client):
     response = client.get('/')
     assert response.status_code == 200
 
 def get_account(client, name):
-    return client.get("/account", data=dict(name=name), follow_redirects=True)
+    return client.get("/account?name=admin", follow_redirects=True)
 
 def post_account(client, name, password):
     return client.post("/account", data=dict(name=name, password=password), follow_redirects=True)
@@ -37,16 +41,21 @@ def test_course_redirect(client):
     assert response.status_code == 302
     assert response.location == 'http://localhost/course/ECE444H1'
 
-
-# Alan Du 
-def test_account_get(client):
-    """Ensure account can be retrieved from database"""
-    response = get_account(client, 'admin')
-    assert b"account found" in response.data
-
-
-#Alan Du
+# #Alan Du
 def test_account_post(client):
     """Ensure account can be created in database"""
     response = post_account(client, 'admin', 'admin')
-    assert b"account created" in response.data
+    data = json.loads(response.data)
+    assert response.status_code == 200
+    assert data['name'] == 'admin'
+
+# Alan Du
+def test_account_get(client):
+    """Ensure account can be retrieved from database"""
+    post_account(client, 'admin', 'admin')
+    response = get_account(client, 'admin')
+    data = json.loads(response.data)
+    assert response.status_code == 200
+    assert data['name'] == 'admin'
+    response = client.get("/account", data=dict(name='not_admin'))
+    assert response.status_code == 404

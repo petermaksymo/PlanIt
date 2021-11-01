@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import jsonify, request, abort
 from datetime import datetime
 
 from api.app import app
@@ -18,6 +18,9 @@ def account():
 
     elif request.method == 'GET':
         name = request.args.get('name', '')
-
         account = Account.query.filter_by(name=name).first()
+
+        if not account:
+            return jsonify({ 'error': 'account does not exist' }), 404
+
         return jsonify(account.serialize())
