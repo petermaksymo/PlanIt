@@ -15,6 +15,11 @@ def test_index(client):
     response = client.get('/')
     assert response.status_code == 200
 
+def get_account(client, name):
+    return client.get("/account", data=dict(name=name), follow_redirects=True)
+
+def post_account(client, name, password):
+    return client.post("/account", data=dict(name=name, password=password), follow_redirects=True)
 
 # Peter Maksymowsky
 def test_course_success(client):
@@ -31,3 +36,17 @@ def test_course_redirect(client):
     response = client.get('/course/ECE444')
     assert response.status_code == 302
     assert response.location == 'http://localhost/course/ECE444H1'
+
+
+# Alan Du 
+def test_account_get(client):
+    """Ensure account can be retrieved from database"""
+    response = get_account(client, 'admin')
+    assert b"account found" in response.data
+
+
+#Alan Du
+def test_account_post(client):
+    """Ensure account can be created in database"""
+    response = post_account(client, 'admin', 'admin')
+    assert b"account created" in response.data
