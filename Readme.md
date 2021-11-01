@@ -1,5 +1,5 @@
 # PlanIt 
-A course dicovery tool by ECE444 Group 10 - 4Sight
+A course discovery tool by ECE444 Group 10 - 4Sight
 
 # Table of Contents
 
@@ -28,13 +28,23 @@ PostgreSQL
 
 # Development Environment
 
+More information can be found in the [Wiki](https://github.com/ECE444-2021Fall/project1-education-pathways-group-10-4sight/wiki#developer-commands).
+
 1. Download and install [docker-compose](https://docs.docker.com/compose/install/#install-compose)
 
-2. From the project directory, run `docker-compose -f docker-compose.yml up -d`
+2. From the project directory, run `docker-compose -f docker-compose.yml up -d --build`
 
 3. The App should be up at [localhost:3000](http://localhost:3000) and you can see the logs with `docker logs --follow planit_app`
 
 4. The API should be up at [localhost:5000](http://localhost:5000) and you can see the logs with `docker logs --follow planit_api`
+
+## Testing:
+
+For now, you can test the api using docker with the following steps:
+
+1. After building the api from step 2 (or using `docker-compose-f docker-compose.yml up -d --build`)
+
+2. Run `docker-compose -f docker-compose.yml run -e ENVIRONMENT=testing --rm api python -m pytest` and the tests should run 
 
 # License
 

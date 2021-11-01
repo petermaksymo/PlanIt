@@ -1,10 +1,13 @@
 from flask import jsonify
+import os
 
 from api import create_app, database
 
 from api.database import db
 
-app = create_app('development')
+ENVIRONMENT = os.getenv("ENVIRONMENT", 'development')
+
+app = create_app(ENVIRONMENT)
 
 @app.route('/', methods=['GET'])
 def index():
@@ -16,6 +19,4 @@ def recreatedatabase():
     
 # Import the account related endpoints
 import api.routes.account
-
-# Import the course related endpoints
-import api.routes.course
+import api.routes.courses
