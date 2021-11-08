@@ -24,13 +24,19 @@
     "start-docker": "react-scripts start",
     "build": "env-cmd -f ../.env react-scripts build",
     "test": "env-cmd -f ../.env react-scripts test",
-    "eject": "env-cmd -f ../.env react-scripts eject"
+    "eject": "env-cmd -f ../.env react-scripts eject",
+    "lint": "node_modules/.bin/eslint --ext js src",
+    "prettier": "prettier --no-semi --write .",
+    "prettier-check": "prettier --no-semi --check ."
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "semi": 0
+    }
   },
   "browserslist": {
     "production": [
@@ -43,5 +49,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "prettier": "^2.4.1"
   }
 }
