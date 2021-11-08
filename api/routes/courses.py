@@ -13,7 +13,6 @@ from api.app import app
 
 """Temporary for now, from: https://github.com/nelaturuk/education_pathways/blob/main/__init__.py"""
 
-
 class CourseSearchForm(Form):
     df = pd.read_pickle('resources/df_processed.pickle').set_index('Code')
     divisions = [('Any', 'Any')] + sorted([
