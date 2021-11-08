@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles'
+import { createTheme } from "@mui/material/styles"
 
 const theme = createTheme({
   breakpoints: {
@@ -6,26 +6,26 @@ const theme = createTheme({
       sm: 425,
       md: 768,
       lg: 1024,
-      xl: 1440
-    }
+      xl: 1440,
+    },
   },
   palette: {
     primary: {
-      main: '#3C096C'
+      main: "#3C096C",
     },
     secondary: {
-      main: '#FF9100'
+      main: "#FF9100",
     },
     text: {
-      primary: '#555555'
+      primary: "#555555",
     },
     background: {
-      paper: '#FBFBFB'
+      paper: "#FBFBFB",
     },
     typography: {
-      fontFamily: 'Red Hat Display'
-    }
-  }
+      fontFamily: "Red Hat Display",
+    },
+  },
 })
 
 export default theme
