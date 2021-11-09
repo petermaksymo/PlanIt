@@ -8,7 +8,11 @@
     "predb-load": "docker exec -i planit_postgres psql -U planit planit -c \"DROP SCHEMA public CASCADE; CREATE SCHEMA public;\"",
     "db-load": "cat ./api/resources/database_data.tar.gz | gunzip | docker exec -i planit_postgres psql -U planit planit",
     "db-exec": "docker exec -it planit_postgres psql -U planit planit",
-    "lint": "docker exec -i planit_app npm run lint",
-    "prettier": "docker exec -i planit_app npm run prettier"
+    "app-lint": "docker exec -i planit_app npm run lint",
+    "app-prettier": "docker exec -i planit_app npm run prettier",
+    "api-lint": "docker exec -i planit_api python -m flake8 --ignore F401,E402,E501,W503 .",
+    "api-prettier": "docker exec -i planit_api python -m black .",
+    "lint": "npm run app-lint && npm run api-lint",
+    "prettier": "npm run app-prettier && npm run api-prettier"
   }
 }
