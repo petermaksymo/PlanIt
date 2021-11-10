@@ -36,9 +36,7 @@ def signup_post():
     email = request.form.get('email')
     name = request.form.get('name')
     password = request.form.get('password')
-
     user = Account.query.filter_by(email=email).first()
-    
     if (user):
         flash('Email address already exists')
         return redirect(url_for('signup'))
@@ -47,7 +45,6 @@ def signup_post():
     db.session.add(new_user)
     db.session.commit()
     return "<h1>has signed up</h1>"
-
 
 @app.route('/login')
 def login():
@@ -70,3 +67,9 @@ def login_post():
 @login_required
 def profile():
     return "this is the profile"
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
