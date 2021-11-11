@@ -1,8 +1,9 @@
-from flask import Flask, jsonify, request
+from flask import Flask
 from flask_login import LoginManager
 from flask_cors import CORS
 
 from api.database import db
+
 import api.database.models
 from api.database.models import Account
 
@@ -14,7 +15,7 @@ def create_app(config_name):
     app.config.from_object(config_module)
     app.app_context().push()
 
-    CORS(app, origins=['*', 'http://localhost:3000'])
+    CORS(app, origins=["*", "http://localhost:3000"])
 
     db.init_app(app)
     db.create_all()

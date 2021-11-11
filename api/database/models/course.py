@@ -3,7 +3,7 @@ from api.database import Serializer
 
 
 """
-Construct the courses information table 
+Construct the courses information table
 
 Columns in df_processed.csv file:
 Code,Name,Division,Course Description,Department,Pre-requisites,Course Level,UTSC Breadth,APSC Electives,Campus,
@@ -13,27 +13,20 @@ Arts and Science Distribution,Later term course details,Course,FASEAvailable,May
 The data can be imported to database using pgAdmin4
 """
 
+
 class Course(db.Model):
     """Model for courses."""
 
-    __tablename__ = 'course'
+    __tablename__ = "course"
 
-    id = db.Column(db.Integer,
-                   primary_key=True,
-                   nullable=False)
-    code = db.Column(db.String,
-                     index=False,
-                     unique=True,
-                     nullable=False)
-    name = db.Column(db.String,
-                     index=False,
-                     unique=False,
-                     nullable=False) # Some courses have the same name, so this cannot be unique.
-    division = db.Column(db.String,
-                         nullable=False)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    code = db.Column(db.String, index=False, unique=True, nullable=False)
+    name = db.Column(
+        db.String, index=False, unique=False, nullable=False
+    )  # Some courses have the same name, so this cannot be unique.
+    division = db.Column(db.String, nullable=False)
     course_description = db.Column(db.Text)
-    department = db.Column(db.Text,
-                           nullable=False)
+    department = db.Column(db.Text, nullable=False)
     pre_requisites = db.Column(db.String)
     course_level = db.Column(db.SmallInteger)
     UTSC_breadth = db.Column(db.String)
@@ -56,12 +49,6 @@ class Course(db.Model):
     Minors_outcomes = db.Column(db.String)
     ai_Pre_Reqs = db.Column(db.String)
 
-
-                    
-
     def serialize(self):
         d = Serializer.serialize(self)
         return d
-
-
-
