@@ -27,23 +27,23 @@ def profile():
         account = request.args.get('account')
         result = Profile.query.filter_by(account_name=account).all()
 
-        return json.dumps(result)
-        #return jsonify([item.serialize() for item in result])
+        return jsonify([item.serialize() for item in result])
         
     elif request.method == 'PATCH':
-        account = request.form['account']
-        new_name = request.form['new_name']
-        entry = Profile.query.filter_by(account_name=account).all()
+        account = request.args.get('account')
+        old_profile = request.args.get('profile')
+        new_name = request.form['profile']
+        entry = Profile.query.filter_by(account_name=account, profile_name=old_profile).all()
         for each in entry:
-            each.account_name = new_name
+            each.profile_name = new_name
         db.session.commit()
-        return jsonify(entry.serialize())
+        return jsonify([item.serialize() for item in entry])
 
     elif request.method == 'DELETE':
-        account = request.form['account']
-        profile = request.form['profile']
-        session = request.form['session']
-        course = request.form['course']
+        account = request.args.get('account')
+        profile = request.args.get('profile')
+        session = request.args.get('session')
+        course = request.args.get('course')
 
         if(account != None):
             if(profile != None):
@@ -57,4 +57,5 @@ def profile():
             else:
                 result = Profile.query.filter_by(account_name=account).delete()
 
-        return jsonify(result.serialize())            
+        db.session.commit()
+        return jsonify(result)
