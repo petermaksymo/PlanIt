@@ -7,6 +7,7 @@ from api.database import db
 import api.database.models
 from api.database.models import Account
 
+
 def create_app(config_name):
     app = Flask(__name__)
 
@@ -22,8 +23,6 @@ def create_app(config_name):
 
     login_manager = LoginManager()
     login_manager.init_app(app)
-
-
 
     @login_manager.user_loader
     def load_user(user_id):
