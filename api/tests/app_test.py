@@ -64,3 +64,19 @@ def test_account_get(client):
     assert data["name"] == "admin"
     response = client.get("/account", data=dict(name="not_admin"))
     assert response.status_code == 404
+
+def test_profile_add(client):
+    """Ensure profiles can be added"""
+    result = client.post("/profile", data=dict(account="admin", profile="main", session="", course=""), follow_redirects=True)
+    data = json.loads(result.data)
+    assert data['account_name']=="admin"
+    assert data['session_name']==None
+
+def test_profile_get(client):
+    """Ensure profiles can be fetched"""
+    client.post("/profile", data=dict(account="admin", profile="main", session="", course=""), follow_redirects=True)
+    client.post("/profile", data=dict(account="admin", profile="main", session="FALL2021", course=""), follow_redirects=True)
+    client.post("/profile", data=dict(account="admin", profile="main", session="FALL2021", course="ECE444"), follow_redirects=True)
+
+    result = client.get("/profile?name=admin", follow_redirects=True)
+    assert result.status_code==200
