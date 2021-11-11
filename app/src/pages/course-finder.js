@@ -18,9 +18,9 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 export const CourseFinder = () => {
   const [search, setSearch] = useState("")
   const [year, setYear] = useState("")
-  const [department, setDepartment] = useState("")
-  const [division, setDivision] = useState("")
-  const [campus, setCampus] = useState("")
+  const [department, setDepartment] = useState("") // eslint-disable-line no-unused-vars
+  const [division, setDivision] = useState("") // eslint-disable-line no-unused-vars
+  const [campus, setCampus] = useState("") // eslint-disable-line no-unused-vars
   const [results, setResults] = useState(null)
 
   // Basic code showing how to communicate between our backend and frontend
@@ -95,11 +95,7 @@ export const CourseFinder = () => {
           </IconButton>
         </Paper>
 
-        <FormControl
-          sx={{ m: 1 }}
-          variant="standard"
-          sx={{ m: 1, minWidth: 120 }}
-        >
+        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
           <InputLabel>Course Year</InputLabel>
           <Select value={year} onChange={(e) => setYear(e.target.value)}>
             <MenuItem value="">
@@ -112,11 +108,7 @@ export const CourseFinder = () => {
           </Select>
         </FormControl>
 
-        <FormControl
-          sx={{ m: 1 }}
-          variant="standard"
-          sx={{ m: 1, minWidth: 120 }}
-        >
+        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
           <InputLabel>Division</InputLabel>
           <Select>
             <MenuItem value="">
@@ -131,11 +123,7 @@ export const CourseFinder = () => {
           </Select>
         </FormControl>
 
-        <FormControl
-          sx={{ m: 1 }}
-          variant="standard"
-          sx={{ m: 1, minWidth: 120 }}
-        >
+        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
           <InputLabel>Department</InputLabel>
           <Select>
             <MenuItem value="">
@@ -175,11 +163,7 @@ export const CourseFinder = () => {
           </Select>
         </FormControl>
 
-        <FormControl
-          sx={{ m: 1 }}
-          variant="standard"
-          sx={{ m: 1, minWidth: 120 }}
-        >
+        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
           <InputLabel>Campus</InputLabel>
           <Select>
             <MenuItem value="">
@@ -191,11 +175,7 @@ export const CourseFinder = () => {
           </Select>
         </FormControl>
 
-        <FormControl
-          sx={{ m: 1 }}
-          variant="standard"
-          sx={{ m: 1, minWidth: 120 }}
-        >
+        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
           <InputLabel>Max Results</InputLabel>
           <Select>
             <MenuItem value="">

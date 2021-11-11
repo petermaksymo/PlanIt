@@ -6,7 +6,6 @@ import IconButton from "@mui/material/IconButton"
 import Rating from "@mui/material/Rating"
 import Typography from "@mui/material/Typography"
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
-import BookmarkIcon from "@mui/icons-material/Bookmark"
 
 export const ResultCard = ({ result }) => {
   const rating = Math.random() * 5
