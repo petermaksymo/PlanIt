@@ -37,12 +37,16 @@ def profile():
         session = request.form['session']
         course = request.form['course']
 
-        todelete = None
         if(account != None):
             if(profile != None):
                 if(session != None):
                     if(course != None):
-                        todelete = Profile(account_name=account, profile_name=profile, session_name=session, course_name=course)
+                        result = Profile.query.filter_by(account_name=account, profile_name=profile, session_name=session, course_name=course).delete()
                     else:
-                        todelete = Profile()                        
-            
+                        result = Profile.query.filter_by(account_name=account, profile_name=profile, session_name=session).delete()
+                else:
+                    result = Profile.query.filter_by(account_name=account, profile_name=profile).delete()
+            else:
+                result = Profile.query.filter_by(account_name=account).delete()
+
+        return jsonify(result.serialize())            
