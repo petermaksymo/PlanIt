@@ -1,4 +1,5 @@
 from flask import jsonify, request
+import json
 
 from api.app import app
 from api.database import db 
@@ -12,6 +13,11 @@ def profile():
         session = request.form['session']
         course = request.form['course']
 
+        if(len(session) == 0):
+            session = None
+        if(len(course) == 0):
+            course = None
+
         new_entry = Profile(account_name=account, profile_name=profile, session_name=session, course_name=course)
         db.session.add(new_entry)
         db.session.commit()
@@ -20,7 +26,9 @@ def profile():
     elif request.method == 'GET':
         account = request.args.get('account')
         result = Profile.query.filter_by(account_name=account).all()
-        return jsonify(result.serialize())
+
+        return json.dumps(result)
+        #return jsonify([item.serialize() for item in result])
         
     elif request.method == 'PATCH':
         account = request.form['account']
