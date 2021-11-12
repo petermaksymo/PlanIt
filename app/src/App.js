@@ -6,6 +6,7 @@ import "./App.css"
 import theme from "./Theme"
 import { CourseFinder } from "./pages/course-finder"
 import { Signup } from "./pages/signup"
+import { Login } from "./pages/login"
 
 function App() {
   return (
@@ -15,6 +16,9 @@ function App() {
           <Switch>
             <Route path="/signup">
               <Signup />
+            </Route>
+            <Route path="/login">
+              <Login />
             </Route>
 
             {/*Keep this Route as the last one so it will also be the default for all other routes*/}

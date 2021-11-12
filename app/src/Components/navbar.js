@@ -15,7 +15,7 @@ import Logo from "./logo"
 
 const NavBarOption = ({ title, link }) => (
   <Link to={link} style={{ margin: "auto 14px" }}>
-    <Typography sx={{ fontSize: "18px" }}>{title}</Typography>
+    <Typography sx={{ fontSize: "18px", margin: '0 1rem'}}>{title}</Typography>
   </Link>
 )
 
@@ -77,21 +77,20 @@ export const NavBar = () => {
       <Link to="/login">
         <Button
           variant="contained"
-          color="secondary"
-          sx={{ marginRight: "14px" }}
+          sx={{ marginRight: "14px", backgroundColor: theme.palette.button.navBarButton}}
         >
           Login
         </Button>
       </Link>
       <Link to="/signup">
-        <Button variant="contained" color="secondary">
+        <Button variant="contained" sx={{backgroundColor: theme.palette.button.navBarButton}}>
           Signup
         </Button>
       </Link>
     </>
   )
   return (
-    <AppBar position="static" elevation={0}>
+    <AppBar position="static" elevation={0} sx={{backgroundColor: theme.palette.primary.main}}>
       <Toolbar
         sx={{
           maxWidth: 1440,
