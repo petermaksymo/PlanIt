@@ -12,7 +12,11 @@ ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
 
 
 def create_app(config_name):
-    app = Flask(__name__, static_folder='/app/build', static_url_path='/') if ENVIRONMENT == 'production' else Flask(__name__)
+    app = (
+        Flask(__name__, static_folder="/app/build", static_url_path="/")
+        if ENVIRONMENT == "production"
+        else Flask(__name__)
+    )
 
     config_module = f"api.config.{config_name.capitalize()}Config"
 

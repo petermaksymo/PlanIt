@@ -3,8 +3,6 @@ name: PlanIt Continuous Deployment
 
 on:
   push:
-    branches:
-      - continuous-deployment
     tags:
       - v**
 

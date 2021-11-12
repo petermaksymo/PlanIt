@@ -11,8 +11,8 @@
     "db-exec": "docker exec -it planit_postgres psql -U planit planit",
     "app-lint": "docker exec -t planit_app npm run lint",
     "app-prettier": "docker exec -t planit_app npm run prettier",
-    "api-lint": "docker exec -t planit_api python -m flake8 --ignore F401,E402,E501,W503 .",
-    "api-prettier": "docker exec -t planit_api python -m black .",
+    "api-lint": "docker exec -t planit_api python -m flake8 --ignore F401,E402,E501,W503 ./api",
+    "api-prettier": "docker exec -t planit_api python -m black ./api",
     "lint": "npm run app-lint && npm run api-lint",
     "prettier": "npm run app-prettier && npm run api-prettier"
   }

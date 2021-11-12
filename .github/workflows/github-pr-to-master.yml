@@ -14,12 +14,12 @@ jobs:
         run: docker-compose -f docker-compose.yml up -d --build
       - name: Lint API
         run: |
-          docker exec -t planit_api python -m flake8 --ignore F401,E402,E501,W503 .
-          docker exec -t planit_api python -m black --check .
+          docker exec -t planit_api python -m flake8 --ignore F401,E402,E501,W503 ./api
+          docker exec -t planit_api python -m black --check ./api
       - name: Lint APP
         run: |
           docker exec -t planit_app npm run lint
           docker exec -t planit_app npm run prettier-check
       - name: Test API
         run: |
-          docker exec -i planit_api python -m pytest -W ignore::DeprecationWarning
+          docker exec -i planit_api python -m pytest ./api -W ignore::DeprecationWarning
