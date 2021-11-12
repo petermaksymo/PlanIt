@@ -75,7 +75,6 @@ def test_profile_add(client):
     )
     data = json.loads(result.data)
     assert data["account_name"] == "admin"
-    assert data["session_name"] == None
 
 
 def test_profile_get(client):

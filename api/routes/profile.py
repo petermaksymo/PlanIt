@@ -53,10 +53,10 @@ def profile():
         session = request.args.get("session")
         course = request.args.get("course")
 
-        if account != None:
-            if profile != None:
-                if session != None:
-                    if course != None:
+        if account is not None:
+            if profile is not None:
+                if session is not None:
+                    if course is not None:
                         result = Profile.query.filter_by(
                             account_name=account,
                             profile_name=profile,
