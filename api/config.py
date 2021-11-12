@@ -19,6 +19,13 @@ class Config(object):
 
 class ProductionConfig(Config):
     """Production Configuration"""
+    SECRET_KEY = "super secret string that will never be cracked or pushed to a public github repo"
+
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", 'test')
+    # Fix for database url using outdated postgres prefix
+    SQLALCHEMY_DATABASE_URI = SQLALCHEMY_DATABASE_URI.replace("postgres", "postgresql")
+
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class DevelopmentConfig(Config):
