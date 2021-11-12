@@ -5,8 +5,8 @@ from api.app import app
 from api.database import db
 from api.database.models import Reaction
 
-@app.route("/profile", methods=["GET", "POST", "PATCH", "DELETE"])
-def profile():
+@app.route("/reaction", methods=["GET", "POST", "PATCH", "DELETE"])
+def reaction():
     if request.method == "POST":
         account = request.form["account"]
         course = request.form["course"]
