@@ -13,8 +13,8 @@ def client():
     db.drop_all()
 
 
-def test_index(client):
-    response = client.get("/")
+def test_status(client):
+    response = client.get("/status")
     assert response.status_code == 200
 
 

@@ -8,7 +8,7 @@ ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
 app = create_app(ENVIRONMENT)
 
 
-@app.route("/", methods=["GET"])
+@app.route("/status", methods=["GET"])
 def index():
     return jsonify(status="API is Up!")
 

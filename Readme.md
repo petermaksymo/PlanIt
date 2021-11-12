@@ -1,5 +1,8 @@
+![Website](https://img.shields.io/website?url=https%3A%2F%2Fece444-planit.herokuapp.com%2Fapi%2Fstatus)
 # PlanIt 
 A course discovery tool by ECE444 Group 10 - 4Sight
+
+Website: [ece444-planit.herokuapp.com](https://ece444-planit.herokuapp.com/)
 
 # Table of Contents
 
