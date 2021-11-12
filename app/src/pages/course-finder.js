@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import Paper from "@mui/material/Paper"
 import InputBase from "@mui/material/InputBase"
 import IconButton from "@mui/material/IconButton"
@@ -22,17 +22,6 @@ export const CourseFinder = () => {
   const [division, setDivision] = useState("") // eslint-disable-line no-unused-vars
   const [campus, setCampus] = useState("") // eslint-disable-line no-unused-vars
   const [results, setResults] = useState(null)
-
-  // Basic code showing how to communicate between our backend and frontend
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/`)
-      .then((response) => {
-        if (response.ok) {
-          return response.json()
-        }
-      })
-      .then((data) => console.log(data))
-  }, [])
 
   const onSubmit = (e) => {
     e.preventDefault()

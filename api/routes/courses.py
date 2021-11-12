@@ -1,4 +1,4 @@
-import pickle
+import pickle5 as pickle
 import numpy as np
 import pandas as pd
 import networkx as nx
@@ -13,7 +13,7 @@ from api.app import app
 
 
 class CourseSearchForm(Form):
-    df = pd.read_pickle("resources/df_processed.pickle").set_index("Code")
+    df = pd.read_pickle("api/resources/df_processed.pickle").set_index("Code")
     divisions = [("Any", "Any")] + sorted([(t, t) for t in set(df.Division.values)])
 
     departments = [("Any", "Any")] + sorted([(t, t) for t in set(df.Department.values)])
@@ -191,10 +191,10 @@ def filter_courses(pos_terms, year, division, department, campus, n_return=10):
     ]
 
 
-with open("resources/course_vectorizer.pickle", "rb") as f:
+with open("api/resources/course_vectorizer.pickle", "rb") as f:
     vectorizer = pickle.load(f)
-with open("resources/course_vectors.npz", "rb") as f:
+with open("api/resources/course_vectors.npz", "rb") as f:
     course_vectors = pickle.load(f)
-with open("resources/graph.pickle", "rb") as f:
-    G = nx.read_gpickle(f)
-df = pd.read_pickle("resources/df_processed.pickle").set_index("Code")
+with open("api/resources/graph.pickle", "rb") as f:
+    G = pickle.load(f)
+df = pd.read_pickle("api/resources/df_processed.pickle").set_index("Code")
