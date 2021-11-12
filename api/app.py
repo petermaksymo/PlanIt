@@ -21,3 +21,4 @@ def recreatedatabase():
 # Import the account related endpoints
 import api.routes.account
 import api.routes.courses
+import api.routes.profile
