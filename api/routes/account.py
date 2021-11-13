@@ -58,7 +58,7 @@ def signup_post():
     )
     db.session.add(new_user)
     db.session.commit()
-    return "<h1>has signed up</h1>"
+    return jsonify(new_user.serialize())
 
 
 @app.route("/login")
