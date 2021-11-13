@@ -123,8 +123,20 @@ def patch_profile(client, account, profile, newname):
 
 
 def delete_profile(client, account, profile, session, course):
+    request = "/profile?account=" + account + "&profile"
+    if profile != "":
+        request = request + "=" + profile
+    request = request + "&session"
+    if session != "":
+        request = request + "=" + session
+    request = request + "&course"
+    if course != "":
+        request = request + "=" + course
+
+    print(request)
+
     return client.delete (
-        "/profile?account=" + account + "&profile=" + profile + "&session=" + session + "&course=" + course,
+        request,
         follow_redirects=True,
     )
 
@@ -142,15 +154,25 @@ def test_profile_patch(client):
     assert data[2]["profile_name"] == "main2"
 
 
-# def test_profile_delete(client):
-#     """Ensure profiles can be deleted"""
-#     post_profile(client, "admin", "main", "", "")
-#     post_profile(client, "admin", "main", "FALL2021", "")
-#     post_profile(client, "admin", "main", "FALL2201", "ECE444")
+def test_profile_delete(client):
+    """Ensure profiles can be deleted"""
+    post_profile(client, "admin", "main", "", "")
+    post_profile(client, "admin", "main", "FALL2021", "")
+    post_profile(client, "admin", "main", "FALL2021", "ECE444")
+    result = delete_profile(client, "admin", "main", "FALL2021", "ECE444")
+    assert result.status_code == 200
+    data = json.loads(result.data)
+    assert data == 1
 
-#     result = delete_profile(client, "admin", "main", "FALL2021", "ECE444")
-#     assert result.status_code == 200
-#     data 
+    post_profile(client, "admin", "main", "FALL2201", "ECE444")
+    result = delete_profile(client, "admin", "main", "FALL2021", "")
+    assert result.status_code == 200
+    data = json.loads(result.data)
+    assert data == 2
 
-
-#     post_profile(client, "admin", "main", "FALL2201", "ECE444")
+    post_profile(client, "admin", "main", "FALL2021", "")
+    post_profile(client, "admin", "main", "FALL2021", "ECE444")
+    result = delete_profile(client, "admin", "main", "", "")
+    assert result.status_code == 200
+    data = json.loads(result.data)
+    assert data == 3
