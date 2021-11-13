@@ -1,4 +1,5 @@
 from api.database.models.account import Account
+from api.database.models.profile import Profile
 import pytest
 import json
 
@@ -45,6 +46,14 @@ def post_account(client, email, name, password):
     )
 
 
+def post_profile(client, account, profile, session, course):
+    return client.post(
+        "/profile",
+        data=dict(account=account, profile=profile, session=session, course=course),
+        follow_redirects=True,
+    )
+
+
 # Peter Maksymowsky
 def test_course_success(client):
     """Ensure the correct course is returned with a successful query"""
@@ -82,34 +91,66 @@ def test_account_get(client):
     assert accounts[0].name == "admin"
 
 
-def test_profile_add(client):
+def test_profile_post(client):
     """Ensure profiles can be added"""
-    result = client.post(
-        "/profile",
-        data=dict(account="admin", profile="main", session="", course=""),
-        follow_redirects=True,
-    )
-    data = json.loads(result.data)
-    assert data["account_name"] == "admin"
+    post_profile(client, "admin", "main", "", "")
+    query = Profile.query.filter_by(account_name="admin").first()
+    assert query.account_name == "admin"
 
 
 def test_profile_get(client):
     """Ensure profiles can be fetched"""
-    client.post(
-        "/profile",
-        data=dict(account="admin", profile="main", session="", course=""),
-        follow_redirects=True,
-    )
-    client.post(
-        "/profile",
-        data=dict(account="admin", profile="main", session="FALL2021", course=""),
-        follow_redirects=True,
-    )
-    client.post(
-        "/profile",
-        data=dict(account="admin", profile="main", session="FALL2021", course="ECE444"),
+    post_profile(client, "admin", "main", "", "")
+    post_profile(client, "admin", "main", "FALL2021", "")
+    post_profile(client, "admin", "main", "FALL2201", "ECE444")
+
+    result = client.get("/profile?account=admin", follow_redirects=True)
+    assert result.status_code == 200
+    data = json.loads(result.data)
+    assert data[0]["profile_name"] == "main"
+    assert data[0]["session_name"] == None
+    assert data[1]["session_name"] == "FALL2021"
+    assert data[1]["course_name"] == None
+    assert data[2]["course_name"] == "ECE444"
+
+
+def patch_profile(client, account, profile, newname):
+    return client.patch (
+        "/profile?account=" + account + "&profile=" + profile,
+        data=dict(profile=newname),
         follow_redirects=True,
     )
 
-    result = client.get("/profile?name=admin", follow_redirects=True)
+
+def delete_profile(client, account, profile, session, course):
+    return client.delete (
+        "/profile?account=" + account + "&profile=" + profile + "&session=" + session + "&course=" + course,
+        follow_redirects=True,
+    )
+
+def test_profile_patch(client):
+    """Ensure profiles can be updated"""
+    post_profile(client, "admin", "main", "", "")
+    post_profile(client, "admin", "main", "FALL2021", "")
+    post_profile(client, "admin", "main", "FALL2201", "ECE444")
+
+    result = patch_profile(client, "admin", "main", "main2")
     assert result.status_code == 200
+    data = json.loads(result.data)
+    assert data[0]["profile_name"] == "main2"
+    assert data[1]["profile_name"] == "main2"
+    assert data[2]["profile_name"] == "main2"
+
+
+# def test_profile_delete(client):
+#     """Ensure profiles can be deleted"""
+#     post_profile(client, "admin", "main", "", "")
+#     post_profile(client, "admin", "main", "FALL2021", "")
+#     post_profile(client, "admin", "main", "FALL2201", "ECE444")
+
+#     result = delete_profile(client, "admin", "main", "FALL2021", "ECE444")
+#     assert result.status_code == 200
+#     data 
+
+
+#     post_profile(client, "admin", "main", "FALL2201", "ECE444")
