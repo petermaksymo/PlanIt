@@ -5,6 +5,7 @@ from api.app import app
 from api.database import db
 from api.database.models import Reaction
 
+
 @app.route("/reaction", methods=["GET", "POST", "PATCH", "DELETE"])
 def reaction():
     if request.method == "POST":
@@ -14,7 +15,7 @@ def reaction():
 
         if len(rating) == 0:
             rating = None
-        
+
         new_entry = Reaction(
             rating=rating,
             account_name=account,
@@ -28,29 +29,28 @@ def reaction():
         course = request.args.get("course")
         result = Reaction.query.filter_by(
             course_name=course,
-            ).all()
+        ).all()
         views, total_ratings, total_raters = 0, 0, 0
-        
+
         for each in result:
-            views+=1
+            views += 1
             if each.rating is not None:
-                total_raters+=1
+                total_raters += 1
                 total_ratings = total_ratings + int(each.rating)
-        
-        return json.dumps([views, total_ratings/total_raters])
+
+        finalrating = round(total_ratings / max(total_raters, 1), 1)
+        return json.dumps([views, finalrating])
 
     elif request.method == "PATCH":
         account = request.args.get("account")
         course = request.args.get("course")
         rating = request.form["rating"]
-        entry = Reaction.query.filter_by(
-            account_name=account, 
-            course_name=course,
-        )
-        entry.rating = rating
-        
+        entry = Reaction.query.filter_by(account_name=account, course_name=course).all()
+        for each in entry:
+            each.rating = rating
+
         db.session.commit()
-        return jsonify(entry.serialize())
+        return jsonify([item.serialize() for item in entry])
 
     elif request.method == "DELETE":
         account = request.args.get("account")

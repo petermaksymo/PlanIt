@@ -1,6 +1,7 @@
 from api import db
 from api.database import Serializer
 
+
 class Reaction(db.Model):
     """Model for reactions"""
 
