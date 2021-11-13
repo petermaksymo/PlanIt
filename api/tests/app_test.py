@@ -1,8 +1,21 @@
+from api.database.models.account import Account
 import pytest
 import json
 
 from api.app import app
 from api.database import db
+from flask_login import current_user
+from contextlib import contextmanager
+from flask import appcontext_pushed, g
+
+
+@contextmanager
+def user_set(app, user):
+    def handler(sender, **kwargs):
+        g.user = user
+
+    with appcontext_pushed.connected_to(handler, app):
+        yield
 
 
 @pytest.fixture
@@ -18,13 +31,17 @@ def test_status(client):
     assert response.status_code == 200
 
 
-def get_account(client, name):
-    return client.get("/account?name=admin", follow_redirects=True)
-
-
-def post_account(client, name, password):
+def login_account(client, email, password):
     return client.post(
-        "/account", data=dict(name=name, password=password), follow_redirects=True
+        "/login", data=dict(email=email, password=password), follow_redirects=True
+    )
+
+
+def post_account(client, email, name, password):
+    return client.post(
+        "/signup",
+        data=dict(email=email, name=name, password=password),
+        follow_redirects=True,
     )
 
 
@@ -48,22 +65,21 @@ def test_course_redirect(client):
 # #Alan Du
 def test_account_post(client):
     """Ensure account can be created in database"""
-    response = post_account(client, "admin", "admin")
+    response = post_account(client, "admin@admin.ca", "admin", "admin")
     data = json.loads(response.data)
     assert response.status_code == 200
     assert data["name"] == "admin"
 
 
-# Alan Du
+# Alan Du, modified by Yuhang Yan
 def test_account_get(client):
     """Ensure account can be retrieved from database"""
-    post_account(client, "admin", "admin")
-    response = get_account(client, "admin")
-    data = json.loads(response.data)
+    post_account(client, "admin@admin.ca", "admin", "admin")
+    response = login_account(client, "admin@admin.ca", "admin")
     assert response.status_code == 200
-    assert data["name"] == "admin"
-    response = client.get("/account", data=dict(name="not_admin"))
-    assert response.status_code == 404
+    accounts = Account.query.filter_by(email="admin@admin.ca").all()
+    assert len(accounts) == 1
+    assert accounts[0].name == "admin"
 
 
 def test_profile_add(client):
