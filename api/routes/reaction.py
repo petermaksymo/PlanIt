@@ -11,8 +11,9 @@ def reaction():
 
     if request.method == "POST":
         """
-        Reaction [POST] request - adds a new reaction entry into the db
-        Input:  Requires the account name, course name, and rating (optional) as a form
+        Reaction [POST] request - adds a new reaction entry into the db.
+        Input:  Requires the account name, course name, and rating (optional)
+                as a form - Check /models/reaction.py for details.
         Output: Returns the entry that was created.
         """
         account = request.form["account"]
@@ -33,9 +34,9 @@ def reaction():
 
     elif request.method == "GET":
         """
-        Reaction [GET] request - returns the views and average rating of a course
-        Input:  Requires the course name as an argument/parameter
-        Output: Returns the number of views for the specific course and the average rating
+        Reaction [GET] request - returns the views and average rating of a course.
+        Input:  Requires the course name as an argument/parameter.
+        Output: Returns the number of views for the specific course and the average rating.
         """
         course = request.args.get("course")
         result = Reaction.query.filter_by(
@@ -54,9 +55,10 @@ def reaction():
 
     elif request.method == "PATCH":
         """
-        Reaction [PATCH] request - updates an existing entry with a new rating
-        Input:  Requires the account name, course name as an argument/parameter and the new rating as a form
-        Output: Returns the entry with the updated rating - should only be 1 item
+        Reaction [PATCH] request - updates an existing entry with a new rating.
+        Input:  Requires the account name, course name as an argument/parameter and the new
+                rating as a form.
+        Output: Returns the entry with the updated rating - should only be 1 item.
         """
         account = request.args.get("account")
         course = request.args.get("course")
@@ -70,9 +72,9 @@ def reaction():
 
     elif request.method == "DELETE":
         """
-        Reaction [DELETE] request - deletes an entry from the db
-        Input:  Requires the account name, course name as an argument/parameter
-        Output: Returns the number of items deleted
+        Reaction [DELETE] request - deletes an entry from the db.
+        Input:  Requires the account name, course name as an argument/parameter.
+        Output: Returns the number of items deleted.
         """
         account = request.args.get("account")
         course = request.args.get("course")
