@@ -6,9 +6,9 @@ import FormControl from "@mui/material/FormControl"
 import InputLabel from "@mui/material/InputLabel"
 import Select from "@mui/material/Select"
 import MenuItem from "@mui/material/MenuItem"
-import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
-import { useTheme} from '@mui/styles'
-import Grid from '@mui/material/Grid'
+import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt"
+import { useTheme } from "@mui/styles"
+import Grid from "@mui/material/Grid"
 
 import { Results } from "../Components/results"
 import { NavBar } from "../Components/navbar"
@@ -26,7 +26,7 @@ export const CourseFinder = () => {
 
   const onSubmit = (e) => {
     e.preventDefault()
-    if(search === '' || year === '') return
+    if (search === "" || year === "") return
 
     const formdata = new FormData()
     formdata.append("search", search)
@@ -54,8 +54,17 @@ export const CourseFinder = () => {
   return (
     <div>
       <NavBar />
-      <div className="pageContainer" >
-        <Grid container direction="column" justifyContent="center" alignItems="flex-start" style={{backgroundColor: theme.palette.background.lightPink, padding: '20px 286px'}}>
+      <div className="pageContainer">
+        <Grid
+          container
+          direction="column"
+          justifyContent="center"
+          alignItems="flex-start"
+          style={{
+            backgroundColor: theme.palette.background.lightPink,
+            padding: "20px 286px",
+          }}
+        >
           <Grid item>
             <Paper
               component="form"
@@ -64,8 +73,8 @@ export const CourseFinder = () => {
                 display: "flex",
                 alignItems: "center",
                 width: 650,
-                borderWidth: 'medium', 
-                border: 'solid',
+                borderWidth: "medium",
+                border: "solid",
                 borderColor: theme.palette.background.main,
                 // margin: '0 auto',
               }}
@@ -80,14 +89,22 @@ export const CourseFinder = () => {
                 onChange={(e) => setSearch(e.target.value)}
               />
               <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
-                <ArrowRightAltIcon color='primary'/>
+                <ArrowRightAltIcon color="primary" />
               </IconButton>
             </Paper>
           </Grid>
 
-          <Grid item id="form-filters" >
-            <FormControl variant="standard" sx={{ m: '1rem 1rem 1rem 0rem', width: 120, backgroundColor: theme.palette.button.brightRed, borderRadius: '0.5rem',}}>
-              <InputLabel sx={{color: "white"}}>Course Year</InputLabel>
+          <Grid item id="form-filters">
+            <FormControl
+              variant="standard"
+              sx={{
+                m: "1rem 1rem 1rem 0rem",
+                width: 120,
+                backgroundColor: theme.palette.button.brightRed,
+                borderRadius: "0.5rem",
+              }}
+            >
+              <InputLabel sx={{ color: "white" }}>Course Year</InputLabel>
               <Select value={year} onChange={(e) => setYear(e.target.value)}>
                 <MenuItem value="">
                   <em>Any</em>
@@ -99,8 +116,16 @@ export const CourseFinder = () => {
               </Select>
             </FormControl>
 
-            <FormControl variant="standard" sx={{ m: '1rem 1rem 1rem 0rem', minWidth: 120, backgroundColor: theme.palette.button.brightRed, borderRadius: '0.5rem', }}>
-              <InputLabel sx={{color: "white"}}>Division</InputLabel>
+            <FormControl
+              variant="standard"
+              sx={{
+                m: "1rem 1rem 1rem 0rem",
+                minWidth: 120,
+                backgroundColor: theme.palette.button.brightRed,
+                borderRadius: "0.5rem",
+              }}
+            >
+              <InputLabel sx={{ color: "white" }}>Division</InputLabel>
               <Select>
                 <MenuItem value="">
                   <em>Any</em>
@@ -109,13 +134,25 @@ export const CourseFinder = () => {
                   Faculty of Applied Science and Engineering
                 </MenuItem>
                 <MenuItem value={20}>Faculty of Arts and Science</MenuItem>
-                <MenuItem value={30}>University of Toronto Mississauga</MenuItem>
-                <MenuItem value={40}>University of Toronto Scarborough</MenuItem>
+                <MenuItem value={30}>
+                  University of Toronto Mississauga
+                </MenuItem>
+                <MenuItem value={40}>
+                  University of Toronto Scarborough
+                </MenuItem>
               </Select>
             </FormControl>
 
-            <FormControl variant="standard" sx={{ m: '1rem 1rem 1rem 0rem', minWidth: 120, backgroundColor: theme.palette.button.brightRed, borderRadius: '0.5rem', }}>
-              <InputLabel sx={{color: "white"}}>Department</InputLabel>
+            <FormControl
+              variant="standard"
+              sx={{
+                m: "1rem 1rem 1rem 0rem",
+                minWidth: 120,
+                backgroundColor: theme.palette.button.brightRed,
+                borderRadius: "0.5rem",
+              }}
+            >
+              <InputLabel sx={{ color: "white" }}>Department</InputLabel>
               <Select>
                 <MenuItem value="">
                   <em>Any</em>
@@ -154,8 +191,16 @@ export const CourseFinder = () => {
               </Select>
             </FormControl>
 
-            <FormControl variant="standard" sx={{ m: '1rem 1rem 1rem 0rem', minWidth: 120, backgroundColor: theme.palette.button.brightRed, borderRadius: '0.5rem', }}>
-              <InputLabel sx={{color: "white"}}>Campus</InputLabel>
+            <FormControl
+              variant="standard"
+              sx={{
+                m: "1rem 1rem 1rem 0rem",
+                minWidth: 120,
+                backgroundColor: theme.palette.button.brightRed,
+                borderRadius: "0.5rem",
+              }}
+            >
+              <InputLabel sx={{ color: "white" }}>Campus</InputLabel>
               <Select>
                 <MenuItem value="">
                   <em>Any</em>
@@ -166,8 +211,16 @@ export const CourseFinder = () => {
               </Select>
             </FormControl>
 
-            <FormControl variant="standard" sx={{ m: '1rem 1rem 1rem 0rem', minWidth: 120, backgroundColor: theme.palette.button.brightRed, borderRadius: '0.5rem', }}>
-              <InputLabel sx={{color: "white"}}>Max Results</InputLabel>
+            <FormControl
+              variant="standard"
+              sx={{
+                m: "1rem 1rem 1rem 0rem",
+                minWidth: 120,
+                backgroundColor: theme.palette.button.brightRed,
+                borderRadius: "0.5rem",
+              }}
+            >
+              <InputLabel sx={{ color: "white" }}>Max Results</InputLabel>
               <Select>
                 <MenuItem value="">
                   <em>Any</em>
@@ -179,8 +232,8 @@ export const CourseFinder = () => {
             </FormControl>
           </Grid>
         </Grid>
-        <div style={{margin: '20px 286px'}}>
-          <Results  data={results} />
+        <div style={{ margin: "20px 286px" }}>
+          <Results data={results} />
         </div>
       </div>
     </div>

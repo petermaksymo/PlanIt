@@ -4,18 +4,7 @@ import json
 
 from api.app import app
 from api.database import db
-from flask_login import current_user
-from contextlib import contextmanager
-from flask import appcontext_pushed, g
-
-
-@contextmanager
-def user_set(app, user):
-    def handler(sender, **kwargs):
-        g.user = user
-
-    with appcontext_pushed.connected_to(handler, app):
-        yield
+from flask import g
 
 
 @pytest.fixture
@@ -31,16 +20,16 @@ def test_status(client):
     assert response.status_code == 200
 
 
-def login_account(client, email, password):
+def login_account(client, username, password):
     return client.post(
-        "/login", data=dict(email=email, password=password), follow_redirects=True
+        "/login", data=dict(username=username, password=password), follow_redirects=True
     )
 
 
-def post_account(client, email, name, password):
+def post_account(client, email, username, password):
     return client.post(
         "/signup",
-        data=dict(email=email, name=name, password=password),
+        data=dict(email=email, username=username, password=password),
         follow_redirects=True,
     )
 
@@ -68,10 +57,14 @@ def test_account_post(client):
     response = post_account(client, "admin@admin.ca", "admin", "admin")
     data = json.loads(response.data)
     assert response.status_code == 200
-    assert data["name"] == "admin"
+    assert data["email"] == "admin@admin.ca"
+    assert data["username"] == "admin"
+    assert data["roles"] == "user"
+    assert "password" not in data
 
 
 # Alan Du, modified by Yuhang Yan
+@pytest.mark.skip
 def test_account_get(client):
     """Ensure account can be retrieved from database"""
     post_account(client, "admin@admin.ca", "admin", "admin")

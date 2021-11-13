@@ -25,8 +25,8 @@ const theme = createTheme({
       grey: "555555",
     },
     button: {
-      brightRed: '#EA698B',
-      navBarButton: '#AC46A1',
+      brightRed: "#EA698B",
+      navBarButton: "#AC46A1",
     },
     typography: {
       fontFamily: "Red Hat Display",

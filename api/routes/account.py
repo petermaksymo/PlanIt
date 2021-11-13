@@ -1,85 +1,77 @@
-from flask import jsonify, request, render_template, redirect, url_for, flash
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask import jsonify, request
 import datetime
-from werkzeug.utils import html
+from flask_praetorian import auth_required, current_user
+from api import guard
 from api.app import app
 from api.database import db
 from api.database.models import Account
-from flask_login import login_user, logout_user, login_required, current_user
 
 
 @app.route("/account", methods=["GET", "PATCH", "DELETE"])
-@login_required
+@auth_required
 def account():
     if request.method == "GET":
         return jsonify(current_user.serialize())
     elif request.method == "PATCH":
         email = request.form.get("email")
-        name = request.form.get("name")
+        username = request.form.get("username")
         password = request.form.get("password")
         new_account = Account.query.filter_by(id=current_user.id).first()
         if email:
             new_account.email = email
-        elif name:
-            new_account.name = name
-        elif password:
-            new_account.password = generate_password_hash(password, method="sha256")
+        if username:
+            new_account.username = username
+        if password:
+            new_account.password = guard.hash_password(password)
         db.session.add(new_account)
         db.session.commit()
-        return "<h1>complete update</h1>"
+        return (jsonify(new_account), 200)
     elif request.method == "DELETE":
         deleting_account = Account.query.filter_by(id=current_user.id).first()
         db.session.delete(deleting_account)
         db.session.commit()
-        return "<h1>complete delete</h1>"
+        return 200
     else:
         raise Exception("Unsupported Request!")
 
 
-@app.route("/signup")
-def signup():
-    return render_template("signup.html")
-
-
 @app.route("/signup", methods=["POST"])
-def signup_post():
+def signup():
     email = request.form.get("email")
-    name = request.form.get("name")
+    username = request.form.get("username")
     password = request.form.get("password")
-    user = Account.query.filter_by(email=email).first()
+    user = Account.query.filter_by(email=email, username=username).first()
     if user:
-        flash("Email address already exists")
-        return redirect(url_for("signup"))
+        raise Exception("User already exists")
     new_user = Account(
         email=email,
-        name=name,
-        password=generate_password_hash(password, method="sha256"),
+        username=username,
+        password=guard.hash_password(password),
+        roles="user",
         created_at=datetime.datetime.now(),
     )
     db.session.add(new_user)
     db.session.commit()
-    return jsonify(new_user.serialize())
-
-
-@app.route("/login")
-def login():
-    return render_template("login.html")
+    return (jsonify(new_user.serialize()), 200)
 
 
 @app.route("/login", methods=["POST"])
-def login_post():
-    email = request.form.get("email")
+def login():
+    """
+    Logs a user in by parsing a POST request containing user credentials and issuing a JWT token.
+    """
+    username = request.form.get("username")
     password = request.form.get("password")
-    user = Account.query.filter_by(email=email).first()
-    if not user or not check_password_hash(user.password, password):
-        flash("Please check your login details and try again.")
-        return "<h1>wrong password or wrong email</h1>"
-    login_user(user)
-    return redirect(url_for("profile"))
+    user = guard.authenticate(username, password)
+    ret = {"access_token": guard.encode_jwt_token(user)}
+    return jsonify(ret), 200
 
 
-@app.route("/logout")
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for("login"))
+@app.route("/refresh", methods=["POST"])
+def refresh():
+    """
+    Refreshes an existing JWT by creating a new one that is a copy of the old except that it has a refrehsed access expiration.
+    """
+    old_token = guard.read_token_from_header()
+    new_token = guard.refresh_jwt_token(old_token)
+    return jsonify(access_token=new_token)
