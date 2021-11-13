@@ -2,6 +2,7 @@ from api import db
 from api.database import Serializer
 from flask_login import UserMixin
 
+
 class Account(UserMixin, db.Model):
     """Model for accounts."""
 
@@ -10,8 +11,8 @@ class Account(UserMixin, db.Model):
     id = db.Column(db.Integer,
                    primary_key=True)
     email = db.Column(db.String(),
-                     unique = True,
-                     nullable = False)
+                      unique=True,
+                      nullable=False)
     name = db.Column(db.String(64),
                      index=False,
                      unique=True,
@@ -21,9 +22,9 @@ class Account(UserMixin, db.Model):
                          unique=False,
                          nullable=False)
     created_at = db.Column(db.DateTime,
-                        index=False,
-                        unique=False,
-                        nullable=False)
+                           index=False,
+                           unique=False,
+                           nullable=False)
 
     def serialize(self):
         d = Serializer.serialize(self)
