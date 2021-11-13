@@ -3,7 +3,12 @@ from api.database import Serializer
 
 
 class Reaction(db.Model):
-    """Model for reactions"""
+    """
+    Model for reactions
+    Reactions includes both the number of views and the ratings of a course.
+    Every entry in the db is a view but only the entries with a rating value
+    are included in the rating calculation.
+    """
 
     __tablename__ = "reaction"
 
