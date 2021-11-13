@@ -23,3 +23,4 @@ import api.routes.account
 import api.routes.courses
 import api.routes.profile
 import api.routes.reaction
+import api.routes.bookmark
