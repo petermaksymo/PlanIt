@@ -20,6 +20,10 @@ def reaction():
         course = request.form["course"]
         rating = request.form["rating"]
 
+        if len(account) == 0:
+            return jsonify({"status": 0, "message": "Please specify an account"}), 400
+        if len(course) == 0:
+            return jsonify({"status": 0, "message": "Please specify a course"}), 400
         if len(rating) == 0:
             rating = None
 
@@ -39,6 +43,9 @@ def reaction():
         Output: Returns the number of views for the specific course and the average rating.
         """
         course = request.args.get("course")
+        if course is None:
+            return jsonify({"status": 0, "message": "Please specify a course"}), 400
+
         result = Reaction.query.filter_by(
             course_name=course,
         ).all()
@@ -48,9 +55,12 @@ def reaction():
             views += 1
             if each.rating is not None:
                 total_raters += 1
-                total_ratings = total_ratings + int(each.rating)
+                total_ratings = total_ratings + float(each.rating)
 
-        finalrating = round(total_ratings / max(total_raters, 1), 1)
+        if total_raters == 0 and total_ratings == 0:
+            finalrating = None
+        else:
+            finalrating = round(total_ratings / total_raters, 1)
         return jsonify({"views": views, "rating": finalrating}), 200
 
     elif request.method == "PATCH":
@@ -63,12 +73,19 @@ def reaction():
         account = request.args.get("account")
         course = request.args.get("course")
         rating = request.form["rating"]
-        entry = Reaction.query.filter_by(account_name=account, course_name=course).all()
-        for each in entry:
-            each.rating = rating
+
+        if account is None:
+            return jsonify({"status": 0, "message": "Please specify an account"}), 400
+        if course is None:
+            return jsonify({"status": 0, "message": "Please specify a course"}), 400
+        if rating == "":
+            rating = None
+
+        entry = Reaction.query.filter_by(account_name=account, course_name=course).first()
+        entry.rating = rating
 
         db.session.commit()
-        return jsonify([item.serialize() for item in entry])
+        return jsonify(entry.serialize())
 
     elif request.method == "DELETE":
         """
@@ -79,10 +96,14 @@ def reaction():
         account = request.args.get("account")
         course = request.args.get("course")
 
-        if account is not None and course is None:
-            result = Reaction.query.filter_by(
-                account_name=account,
-            ).delete()
+        if account is None:
+            return jsonify({"status": 0, "message": "Please specify an account"}), 400
+        if course is None:
+            return jsonify({"status": 0, "message": "Please specify a course"}), 400
+
+        result = Reaction.query.filter_by(
+            account_name=account,
+        ).delete()
 
         db.session.commit()
         return jsonify(result)

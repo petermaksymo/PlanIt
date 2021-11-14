@@ -118,6 +118,52 @@ def delete_bookmark(client, account, course):
     )
 
 
+def post_reaction(client, account, course, rating):
+    return client.post(
+        "/reaction",
+        data=dict(account=account, course=course, rating=rating),
+        follow_redirects=True,
+    )
+
+
+def get_reaction(client, course):
+    request = "/reaction"
+    if course != "":
+        request = request + "?course=" + course
+    
+    return client.get(
+        request,
+        follow_redirects=True
+    )
+
+
+def patch_reaction(client, account, course, rating):
+    request = "/reaction"
+    if account != "":
+        request = request + "?account=" + account
+    if course != "":
+        request = request + "&course=" + course
+    
+    return client.patch(
+        request,
+        data=dict(rating=rating),
+        follow_redirects=True,
+    )
+
+
+def delete_reaction(client, account, course):
+    request  = "/reaction"
+    if account != "":
+        request = request + "?account=" + account
+    if course != "":
+        request = request + "&course=" + course
+    
+    return client.delete(
+        request,
+        follow_redirects=True,
+    )
+
+
 # Peter Maksymowsky
 def test_course_success(client):
     """Ensure the correct course is returned with a successful query"""
@@ -261,6 +307,64 @@ def test_bookmark_delete(client):
     assert data["message"] == "Please specify a course"
 
     result = delete_bookmark(client, "admin", "ECE444")
+    assert result.status_code == 200
+    data = json.loads(result.data)
+    assert data == 1
+
+
+def test_reaction_post(client):
+    result = post_reaction(client, "admin", "", "")
+    assert result.status_code == 400
+
+    result = post_reaction(client, "admin", "ECE444", "")
+    assert result.status_code == 200
+    data = json.loads(result.data)
+    assert data["account_name"] == "admin"
+
+
+def test_reaction_get(client):
+    post_reaction(client, "admin", "ECE444", "")
+    
+    result = get_reaction(client, "")
+    assert result.status_code == 400
+
+    result = get_reaction(client, "ECE444")
+    assert result.status_code == 200    
+    data = json.loads(result.data)
+    assert data["views"] == 1
+    assert data["rating"] == None
+
+    post_reaction(client, "admin2", "ECE444", "5")
+    post_reaction(client, "admin3", "ECE444", "4")
+    result = get_reaction(client, "ECE444")
+    data = json.loads(result.data)
+    assert data["views"] == 3
+    assert data["rating"] == 4.5
+
+
+def test_reaction_patch(client):
+    post_reaction(client, "admin", "ECE444", "")
+
+    result = patch_reaction(client, "admin", "", 5)
+    assert result.status_code == 400
+
+    result = patch_reaction(client, "admin" , "ECE444", 4)
+    assert result.status_code == 200
+    data = json.loads(result.data)
+    assert data["rating"] == 4
+
+    result = get_reaction(client, "ECE444")
+    data = json.loads(result.data)
+    assert data["rating"] == 4
+
+
+def test_reaction_delete(client):
+    post_reaction(client, "admin", "ECE444", "")
+
+    result = delete_reaction(client, "admin", "")
+    assert result.status_code == 400
+
+    result = delete_reaction(client, "admin", "ECE444")
     assert result.status_code == 200
     data = json.loads(result.data)
     assert data == 1
