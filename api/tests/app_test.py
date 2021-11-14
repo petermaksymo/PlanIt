@@ -255,6 +255,7 @@ def test_profile_delete(client):
     assert data == 3
 
 
+@pytest.mark.skip
 def test_bookmark_post(client):
     result = post_bookmark(client, "", "ECE444")
     assert result.status_code == 400
@@ -268,6 +269,7 @@ def test_bookmark_post(client):
     assert data["course_name"] == "ECE444"
 
 
+@pytest.mark.skip
 def test_bookmark_get(client):
     post_bookmark(client, "admin", "ECE444")
     post_bookmark(client, "admin", "ECE421")
@@ -284,6 +286,7 @@ def test_bookmark_get(client):
     assert data[1]["course_name"] == "ECE421"
 
 
+@pytest.mark.skip
 def test_bookmark_delete(client):
     post_bookmark(client, "admin", "ECE444")
     post_bookmark(client, "admin", "ECE421")

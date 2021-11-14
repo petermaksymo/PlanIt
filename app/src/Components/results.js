@@ -2,10 +2,10 @@ import React from "react"
 import map from "lodash/map"
 
 import Card from "@mui/material/Card"
-import IconButton from "@mui/material/IconButton"
 import Rating from "@mui/material/Rating"
 import Typography from "@mui/material/Typography"
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
+
+import BookmarkButton from "./bookmarkButton"
 
 export const ResultCard = ({ result }) => {
   const rating = Math.random() * 5
@@ -40,9 +40,10 @@ export const ResultCard = ({ result }) => {
         <Typography sx={{ margin: "auto 0", fontSize: 14 }}>
           {Math.round(Math.random() * 10000)} Views
         </Typography>
-        <IconButton sx={{ marginLeft: "auto" }}>
-          <BookmarkBorderIcon />
-        </IconButton>
+        <BookmarkButton
+          sx={{ marginLeft: "auto" }}
+          course_id={result["Code"]}
+        />
       </div>
       <Typography sx={{ padding: "6px 42px" }}>
         {result["Course Description"]}
