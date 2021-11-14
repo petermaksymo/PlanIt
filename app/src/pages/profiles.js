@@ -1,8 +1,7 @@
 import React, { useState } from "react"
-import { Typography } from "@mui/material"
 import { NavBar } from "../Components/navbar"
 import { useTheme } from "@mui/styles"
-import {Button, Card, Grid, IconButton} from '@mui/material';
+import {Button, Grid, IconButton, Typography} from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
@@ -75,9 +74,11 @@ export const Profiles = () => {
       title: "AI Minor",
     },
   ]
-
-  // const profileTemplate =[{title: "Main Profile"}, {title: "Test Profile"}, {title: "Business Minor"}, {title: "AI Minor"}]
+  
   const [profileJSON, setProfileJSON] = useState(profileTemplate[0])
+  if(profileJSON==="") {
+    setProfileJSON(profileTemplate[0])
+  }
 
 
   return (
