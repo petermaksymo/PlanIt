@@ -4,7 +4,6 @@ from api.app import app
 from api.database import db
 from api.database.models import Profile
 
-
 @app.route("/profile", methods=["GET", "POST", "PATCH", "DELETE"])
 def profile():
     if request.method == "POST":
@@ -19,6 +18,8 @@ def profile():
         session = request.form["session"]
         course = request.form["course"]
 
+        if len(account) == 0:
+            return jsonify({"status": 0, "message": "Please specify an account"}), 400
         if len(session) == 0:
             session = None
         if len(course) == 0:
@@ -41,8 +42,10 @@ def profile():
         Output: Returns the entries associated with the account.
         """
         account = request.args.get("account")
-        result = Profile.query.filter_by(account_name=account).all()
+        if account is None:
+            return jsonify({"status": 0, "message": "Please specify an account"}), 400
 
+        result = Profile.query.filter_by(account_name=account).all()
         return jsonify([item.serialize() for item in result])
 
     elif request.method == "PATCH":
@@ -55,6 +58,14 @@ def profile():
         account = request.args.get("account")
         old_profile = request.args.get("profile")
         new_name = request.form["profile"]
+
+        if account is None:
+            return jsonify({"status": 0, "message": "Please specify an account"}), 400
+        if old_profile is None:
+            return jsonify({"status": 0, "message": "Please specify a profile"}), 400
+        if len(new_name) == 0:
+            return jsonify({"status": 0, "message": "Please specify a new name"}), 400
+
         entry = Profile.query.filter_by(
             account_name=account, profile_name=old_profile
         ).all()
@@ -100,6 +111,8 @@ def profile():
                     ).delete()
             else:
                 result = Profile.query.filter_by(account_name=account).delete()
+        else: 
+            return jsonify({"status": 0, "message": "Please specify an account"}), 400
 
         db.session.commit()
         return jsonify(result)

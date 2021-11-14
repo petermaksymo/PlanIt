@@ -54,6 +54,29 @@ def post_profile(client, account, profile, session, course):
     )
 
 
+def patch_profile(client, account, profile, newname):
+    return client.patch (
+        "/profile?account=" + account + "&profile=" + profile,
+        data=dict(profile=newname),
+        follow_redirects=True,
+    )
+
+
+def delete_profile(client, account, profile, session, course):
+    request = "/profile?account=" + account
+    if profile != "":
+        request = request + "&profile=" + profile
+    if session != "":
+        request = request + "&session=" + session
+    if course != "":
+        request = request + "&course=" + course
+
+    return client.delete (
+        request,
+        follow_redirects=True,
+    )
+
+
 # Peter Maksymowsky
 def test_course_success(client):
     """Ensure the correct course is returned with a successful query"""
@@ -93,16 +116,22 @@ def test_account_get(client):
 
 def test_profile_post(client):
     """Ensure profiles can be added"""
-    post_profile(client, "admin", "main", "", "")
-    query = Profile.query.filter_by(account_name="admin").first()
-    assert query.account_name == "admin"
+    result = post_profile(client, "", "main", "", "")
+    assert result.status_code == 400
+    data = json.loads(result.data)
+    assert data["message"] == "Please specify an account"
+
+    result = post_profile(client, "admin", "main", "", "")
+    assert result.status_code == 200
+    data = json.loads(result.data)
+    assert data["account_name"] == "admin"
 
 
 def test_profile_get(client):
     """Ensure profiles can be fetched"""
     post_profile(client, "admin", "main", "", "")
     post_profile(client, "admin", "main", "FALL2021", "")
-    post_profile(client, "admin", "main", "FALL2201", "ECE444")
+    post_profile(client, "admin", "main", "FALL2021", "ECE444")
 
     result = client.get("/profile?account=admin", follow_redirects=True)
     assert result.status_code == 200
@@ -114,37 +143,11 @@ def test_profile_get(client):
     assert data[2]["course_name"] == "ECE444"
 
 
-def patch_profile(client, account, profile, newname):
-    return client.patch (
-        "/profile?account=" + account + "&profile=" + profile,
-        data=dict(profile=newname),
-        follow_redirects=True,
-    )
-
-
-def delete_profile(client, account, profile, session, course):
-    request = "/profile?account=" + account + "&profile"
-    if profile != "":
-        request = request + "=" + profile
-    request = request + "&session"
-    if session != "":
-        request = request + "=" + session
-    request = request + "&course"
-    if course != "":
-        request = request + "=" + course
-
-    print(request)
-
-    return client.delete (
-        request,
-        follow_redirects=True,
-    )
-
 def test_profile_patch(client):
     """Ensure profiles can be updated"""
     post_profile(client, "admin", "main", "", "")
     post_profile(client, "admin", "main", "FALL2021", "")
-    post_profile(client, "admin", "main", "FALL2201", "ECE444")
+    post_profile(client, "admin", "main", "FALL2021", "ECE444")
 
     result = patch_profile(client, "admin", "main", "main2")
     assert result.status_code == 200
@@ -164,7 +167,7 @@ def test_profile_delete(client):
     data = json.loads(result.data)
     assert data == 1
 
-    post_profile(client, "admin", "main", "FALL2201", "ECE444")
+    post_profile(client, "admin", "main", "FALL2021", "ECE444")
     result = delete_profile(client, "admin", "main", "FALL2021", "")
     assert result.status_code == 200
     data = json.loads(result.data)

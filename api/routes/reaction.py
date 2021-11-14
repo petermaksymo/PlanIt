@@ -51,7 +51,7 @@ def reaction():
                 total_ratings = total_ratings + int(each.rating)
 
         finalrating = round(total_ratings / max(total_raters, 1), 1)
-        return json.dumps([views, finalrating])
+        return jsonify({"views": views, "rating": finalrating}), 200
 
     elif request.method == "PATCH":
         """
