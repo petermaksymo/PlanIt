@@ -1,4 +1,4 @@
-import {Typography, Card, Rating} from '@mui/material';
+import { Typography, Card, Rating } from "@mui/material"
 // import BookmarkButton from "../Components/bookmarkButton"
 
 export const CourseContent = () => {
@@ -9,10 +9,10 @@ export const CourseContent = () => {
     courseDescription: "fdsd",
   }
 
-  return( 
+  return (
     <Card
-    sx={{ margin: "1rem 0 0 0", padding: "12px 24px", borderRadius: "10px" }}
-    elevation={3}
+      sx={{ margin: "1rem 0 0 0", padding: "12px 24px", borderRadius: "10px" }}
+      elevation={3}
     >
       <div style={{ display: "flex" }}>
         <Typography

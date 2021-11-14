@@ -233,12 +233,17 @@ export const CourseFinder = () => {
           </Grid>
         </Grid>
         <div style={{ margin: "20px 286px" }}>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 120, backgroundColor: '#D3D3D3', borderRadius: '0.5rem',}}>
+          <FormControl
+            variant="standard"
+            sx={{
+              m: 1,
+              minWidth: 120,
+              backgroundColor: "#D3D3D3",
+              borderRadius: "0.5rem",
+            }}
+          >
             <InputLabel>Filter</InputLabel>
-            <Select
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-            >
+            <Select value={filter} onChange={(e) => setFilter(e.target.value)}>
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
