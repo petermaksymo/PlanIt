@@ -1,4 +1,5 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
+import { useHistory } from "react-router-dom"
 import { Link } from "react-router-dom"
 import { useTheme } from "@mui/styles"
 import AppBar from "@mui/material/AppBar"
@@ -12,17 +13,20 @@ import Typography from "@mui/material/Typography"
 import useMediaQuery from "@mui/material/useMediaQuery"
 
 import Logo from "./logo"
+import { AuthContext } from "../contexts/auth"
 
 const NavBarOption = ({ title, link }) => (
   <Link to={link} style={{ margin: "auto 14px" }}>
-    <Typography sx={{ fontSize: "18px" }}>{title}</Typography>
+    <Typography sx={{ fontSize: "18px", margin: "0 1rem" }}>{title}</Typography>
   </Link>
 )
 
 export const NavBar = () => {
   const theme = useTheme()
+  const history = useHistory()
   const onMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [menuAnchorEl, setMenuAnchorEl] = useState(null)
+  const { isAuthed, logout } = useContext(AuthContext)
 
   const navOptions = [
     { title: "My Profiles", link: "/profiles" },
@@ -52,12 +56,25 @@ export const NavBar = () => {
             <MenuItem>{option.title}</MenuItem>
           </Link>
         ))}
-        <Link to="/login">
-          <MenuItem>Login</MenuItem>
-        </Link>
-        <Link to="/signup">
-          <MenuItem>Sign Up</MenuItem>
-        </Link>
+        {isAuthed ? (
+          <MenuItem
+            onClick={() => {
+              logout()
+              history.push("/")
+            }}
+          >
+            Logout
+          </MenuItem>
+        ) : (
+          <>
+            <Link to="/login">
+              <MenuItem>Login</MenuItem>
+            </Link>
+            <Link to="/signup">
+              <MenuItem>Sign Up</MenuItem>
+            </Link>
+          </>
+        )}
       </Menu>
       <Link to="/" style={{ margin: "auto" }}>
         <Logo height={48} width={96} />
@@ -74,24 +91,51 @@ export const NavBar = () => {
         <NavBarOption title={option.title} link={option.link} />
       ))}
       <div style={{ flex: 1 }} />
-      <Link to="/login">
+      {isAuthed ? (
         <Button
           variant="contained"
-          color="secondary"
-          sx={{ marginRight: "14px" }}
+          sx={{
+            marginRight: "14px",
+            backgroundColor: theme.palette.button.navBarButton,
+          }}
+          onClick={() => {
+            logout()
+            history.push("/")
+          }}
         >
-          Login
+          Logout
         </Button>
-      </Link>
-      <Link to="/signup">
-        <Button variant="contained" color="secondary">
-          Signup
-        </Button>
-      </Link>
+      ) : (
+        <>
+          <Link to="/login">
+            <Button
+              variant="contained"
+              sx={{
+                marginRight: "14px",
+                backgroundColor: theme.palette.button.navBarButton,
+              }}
+            >
+              Login
+            </Button>
+          </Link>
+          <Link to="/signup">
+            <Button
+              variant="contained"
+              sx={{ backgroundColor: theme.palette.button.navBarButton }}
+            >
+              Signup
+            </Button>
+          </Link>
+        </>
+      )}
     </>
   )
   return (
-    <AppBar position="static" elevation={0}>
+    <AppBar
+      position="static"
+      elevation={0}
+      sx={{ backgroundColor: theme.palette.primary.main }}
+    >
       <Toolbar
         sx={{
           maxWidth: 1440,

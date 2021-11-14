@@ -12,7 +12,7 @@ export const ResultCard = ({ result }) => {
 
   return (
     <Card
-      sx={{ margin: 2, padding: "12px 24px", borderRadius: "10px" }}
+      sx={{ margin: "1rem 0 0 0", padding: "12px 24px", borderRadius: "10px" }}
       elevation={3}
     >
       <div style={{ display: "flex" }}>

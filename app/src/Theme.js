@@ -16,11 +16,17 @@ const theme = createTheme({
     secondary: {
       main: "#FF9100",
     },
-    text: {
-      primary: "#555555",
-    },
     background: {
-      paper: "#FBFBFB",
+      main: "#5A189A",
+      lightPink: "#F9EEFF",
+    },
+    text: {
+      main: "#FFFFFF",
+      grey: "555555",
+    },
+    button: {
+      brightRed: "#EA698B",
+      navBarButton: "#AC46A1",
     },
     typography: {
       fontFamily: "Red Hat Display",
