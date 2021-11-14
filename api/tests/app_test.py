@@ -1,3 +1,4 @@
+from flask.json import jsonify
 from api.database.models.account import Account
 from api.database.models.profile import Profile
 import pytest
@@ -55,15 +56,23 @@ def post_profile(client, account, profile, session, course):
 
 
 def patch_profile(client, account, profile, newname):
+    request = "/profile"
+    if account != "":
+        request = request + "?account=" + account
+    if profile != "":
+        request = request + "&profile=" + profile
+    
     return client.patch (
-        "/profile?account=" + account + "&profile=" + profile,
+        request,
         data=dict(profile=newname),
         follow_redirects=True,
     )
 
 
 def delete_profile(client, account, profile, session, course):
-    request = "/profile?account=" + account
+    request = "/profile"
+    if account != "":
+        request = request + "?account=" + account
     if profile != "":
         request = request + "&profile=" + profile
     if session != "":
@@ -72,6 +81,38 @@ def delete_profile(client, account, profile, session, course):
         request = request + "&course=" + course
 
     return client.delete (
+        request,
+        follow_redirects=True,
+    )
+
+
+def post_bookmark(client, account, course):
+    return client.post(
+        "/bookmark",
+        data=dict(account=account, course=course),
+        follow_redirects=True,
+    )
+
+
+def get_bookmark(client, account):
+    request = "/bookmark"
+    if account != "":
+        request = request + "?account=" + account
+    
+    return client.get(
+        request,
+        follow_redirects=True
+    )
+
+
+def delete_bookmark(client, account, course):
+    request  = "/bookmark"
+    if account != "":
+        request = request + "?account=" + account
+    if course != "":
+        request = request + "&course=" + course
+    
+    return client.delete(
         request,
         follow_redirects=True,
     )
@@ -179,3 +220,47 @@ def test_profile_delete(client):
     assert result.status_code == 200
     data = json.loads(result.data)
     assert data == 3
+
+
+def test_bookmark_post(client):
+    result = post_bookmark(client, "", "ECE444")
+    assert result.status_code == 400
+    data = json.loads(result.data)
+    assert data["message"] == "Please specify an account"
+
+    result = post_bookmark(client, "admin", "ECE444")
+    assert result.status_code == 200
+    data = json.loads(result.data)
+    assert data["account_name"] == "admin"
+    assert data["course_name"] == "ECE444"
+
+
+def test_bookmark_get(client):
+    post_bookmark(client, "admin", "ECE444")
+    post_bookmark(client, "admin", "ECE421")
+
+    result = get_bookmark(client, "")
+    assert result.status_code == 400
+    data = json.loads(result.data)
+    assert data["message"] == "Please specify an account"
+
+    result = get_bookmark(client, "admin")
+    assert result.status_code == 200
+    data = json.loads(result.data)
+    assert data[0]["course_name"] == "ECE444"
+    assert data[1]["course_name"] == "ECE421"
+
+
+def test_bookmark_delete(client):
+    post_bookmark(client, "admin", "ECE444")
+    post_bookmark(client, "admin", "ECE421")
+
+    result = delete_bookmark(client, "admin", "")
+    assert result.status_code == 400
+    data = json.loads(result.data)
+    assert data["message"] == "Please specify a course"
+
+    result = delete_bookmark(client, "admin", "ECE444")
+    assert result.status_code == 200
+    data = json.loads(result.data)
+    assert data == 1

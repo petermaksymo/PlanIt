@@ -11,6 +11,11 @@ def bookmark():
         account = request.form["account"]
         course = request.form["course"]
 
+        if len(account) == 0:
+            return jsonify({"status": 0, "message": "Please specify an account"}), 400
+        if len(course) == 0:
+            return jsonify({"status": 0, "message": "Please specify a course"}), 400 
+
         new_entry = Bookmark(
             account_name=account,
             course_name=course,
@@ -21,6 +26,9 @@ def bookmark():
 
     elif request.method == "GET":
         account = request.args.get("account")
+        if account is None:
+            return jsonify({"status": 0, "message": "Please specify an account"}), 400
+
         result = Bookmark.query.filter_by(
             account_name=account,
         ).all()
@@ -29,6 +37,11 @@ def bookmark():
     elif request.method == "DELETE":
         account = request.args.get("account")
         course = request.args.get("course")
+        if account is None:
+            return jsonify({"status": 0, "message": "Please specify an account"}), 400
+        if course is None:
+            return jsonify({"status": 0, "message": "Please specify a course"}), 400
+
         result = Bookmark.query.filter_by(
             account_name=account,
             course_name=course,
