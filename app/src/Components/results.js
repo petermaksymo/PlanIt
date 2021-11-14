@@ -57,7 +57,6 @@ export const Results = ({ data }) => {
 
   return (
     <>
-      <Typography variant="h4">Results:</Typography>
       {map(data, (result) => (
         <ResultCard result={result} />
       ))}
