@@ -30,7 +30,7 @@ def profile():
             account_name=account,
             profile_name=profile,
             session_name=session,
-            course_name=course,
+            course_code=course,
         )
         db.session.add(new_entry)
         db.session.commit()
@@ -98,7 +98,7 @@ def profile():
                             account_name=account,
                             profile_name=profile,
                             session_name=session,
-                            course_name=course,
+                            course_code=course,
                         ).delete()
                     else:
                         result = Profile.query.filter_by(

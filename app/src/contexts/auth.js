@@ -17,9 +17,15 @@ const AuthProvider = ({ children }) => {
     return fetch(`${API_BASE_URL}/login`, { method: "POST", body: formdata })
       .then((response) => response.json())
       .then((token) => {
-        if (token.access_token)
+        if (token.error) {
+          setIsAuthLoading(false)
+          throw token.message
+        }
+
+        if (token.access_token) {
           localStorage.setItem("PLANIT_JWT", token.access_token)
-        setIsAuthed(true)
+          setIsAuthed(true)
+        }
         setIsAuthLoading(false)
       })
   }

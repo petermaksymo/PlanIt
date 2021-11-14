@@ -27,6 +27,7 @@ services:
     environment:
       - API_PORT
       - ENVIRONMENT=development
+      - FLASK_ENV=development
       - FLASK_DEBUG=1
       - POSTGRES_HOST
       - POSTGRES_DB
