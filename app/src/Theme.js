@@ -19,10 +19,12 @@ const theme = createTheme({
     background: {
       main: "#5A189A",
       lightPink: "#F9EEFF",
+      lightBlue: "#DAD8FF",
     },
     text: {
       main: "#FFFFFF",
-      grey: "555555",
+      grey: "#555555",
+      dark: "#303030",
     },
     button: {
       brightRed: "#EA698B",

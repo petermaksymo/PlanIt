@@ -23,6 +23,7 @@ export const CourseFinder = () => {
   const [division, setDivision] = useState("") // eslint-disable-line no-unused-vars
   const [campus, setCampus] = useState("") // eslint-disable-line no-unused-vars
   const [results, setResults] = useState(null)
+  const [filter, setFilter] = useState("")
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -76,14 +77,13 @@ export const CourseFinder = () => {
                 borderWidth: "medium",
                 border: "solid",
                 borderColor: theme.palette.background.main,
-                // margin: '0 auto',
               }}
               className="searchBar"
               onSubmit={onSubmit}
             >
               <InputBase
                 sx={{ ml: 1, flex: 1 }}
-                placeholder="Enter a course name"
+                placeholder="Search by course name, department, or campus"
                 inputProps={{ "aria-label": "search google maps" }}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -233,6 +233,24 @@ export const CourseFinder = () => {
           </Grid>
         </Grid>
         <div style={{ margin: "20px 286px" }}>
+          <FormControl
+            variant="standard"
+            sx={{
+              m: 1,
+              minWidth: 120,
+              backgroundColor: "#D3D3D3",
+              borderRadius: "0.5rem",
+            }}
+          >
+            <InputLabel>Filter</InputLabel>
+            <Select value={filter} onChange={(e) => setFilter(e.target.value)}>
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value="Field">Field</MenuItem>
+              <MenuItem value="something">Something</MenuItem>
+            </Select>
+          </FormControl>
           <Results data={results} />
         </div>
       </div>
