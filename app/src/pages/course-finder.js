@@ -83,7 +83,7 @@ export const CourseFinder = () => {
             >
               <InputBase
                 sx={{ ml: 1, flex: 1 }}
-                placeholder="Enter a course name"
+                placeholder="Search by course name, department, or campus"
                 inputProps={{ "aria-label": "search google maps" }}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}

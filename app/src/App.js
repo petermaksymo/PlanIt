@@ -12,6 +12,7 @@ import theme from "./Theme"
 import { CourseFinder } from "./pages/course-finder"
 import { Signup } from "./pages/signup"
 import { Login } from "./pages/login"
+import { Profiles } from "./pages/profiles"
 import AuthContext from "./contexts/auth"
 import PrivateRoute from "./Components/privateRoute"
 
@@ -29,6 +30,9 @@ function App() {
                 <Route path="/login">
                   <Login />
                 </Route>
+                {/* <Route path="/profiles">
+                  <Profiles />
+                </Route> */}
                 <PrivateRoute path="/profiles" component={CourseFinder} />
 
                 {/*Keep this Route as the last one so it will also be the default for all other routes*/}
