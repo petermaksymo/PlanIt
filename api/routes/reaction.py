@@ -81,7 +81,9 @@ def reaction():
         if rating == "":
             rating = None
 
-        entry = Reaction.query.filter_by(account_name=account, course_name=course).first()
+        entry = Reaction.query.filter_by(
+            account_name=account, course_name=course
+        ).first()
         entry.rating = rating
 
         db.session.commit()

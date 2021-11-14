@@ -61,8 +61,8 @@ def patch_profile(client, account, profile, newname):
         request = request + "?account=" + account
     if profile != "":
         request = request + "&profile=" + profile
-    
-    return client.patch (
+
+    return client.patch(
         request,
         data=dict(profile=newname),
         follow_redirects=True,
@@ -80,7 +80,7 @@ def delete_profile(client, account, profile, session, course):
     if course != "":
         request = request + "&course=" + course
 
-    return client.delete (
+    return client.delete(
         request,
         follow_redirects=True,
     )
@@ -98,20 +98,17 @@ def get_bookmark(client, account):
     request = "/bookmark"
     if account != "":
         request = request + "?account=" + account
-    
-    return client.get(
-        request,
-        follow_redirects=True
-    )
+
+    return client.get(request, follow_redirects=True)
 
 
 def delete_bookmark(client, account, course):
-    request  = "/bookmark"
+    request = "/bookmark"
     if account != "":
         request = request + "?account=" + account
     if course != "":
         request = request + "&course=" + course
-    
+
     return client.delete(
         request,
         follow_redirects=True,
@@ -130,11 +127,8 @@ def get_reaction(client, course):
     request = "/reaction"
     if course != "":
         request = request + "?course=" + course
-    
-    return client.get(
-        request,
-        follow_redirects=True
-    )
+
+    return client.get(request, follow_redirects=True)
 
 
 def patch_reaction(client, account, course, rating):
@@ -143,7 +137,7 @@ def patch_reaction(client, account, course, rating):
         request = request + "?account=" + account
     if course != "":
         request = request + "&course=" + course
-    
+
     return client.patch(
         request,
         data=dict(rating=rating),
@@ -152,12 +146,12 @@ def patch_reaction(client, account, course, rating):
 
 
 def delete_reaction(client, account, course):
-    request  = "/reaction"
+    request = "/reaction"
     if account != "":
         request = request + "?account=" + account
     if course != "":
         request = request + "&course=" + course
-    
+
     return client.delete(
         request,
         follow_redirects=True,
@@ -224,9 +218,9 @@ def test_profile_get(client):
     assert result.status_code == 200
     data = json.loads(result.data)
     assert data[0]["profile_name"] == "main"
-    assert data[0]["session_name"] == None
+    assert data[0]["session_name"] is None
     assert data[1]["session_name"] == "FALL2021"
-    assert data[1]["course_name"] == None
+    assert data[1]["course_name"] is None
     assert data[2]["course_name"] == "ECE444"
 
 
@@ -324,15 +318,15 @@ def test_reaction_post(client):
 
 def test_reaction_get(client):
     post_reaction(client, "admin", "ECE444", "")
-    
+
     result = get_reaction(client, "")
     assert result.status_code == 400
 
     result = get_reaction(client, "ECE444")
-    assert result.status_code == 200    
+    assert result.status_code == 200
     data = json.loads(result.data)
     assert data["views"] == 1
-    assert data["rating"] == None
+    assert data["rating"] is None
 
     post_reaction(client, "admin2", "ECE444", "5")
     post_reaction(client, "admin3", "ECE444", "4")
@@ -348,7 +342,7 @@ def test_reaction_patch(client):
     result = patch_reaction(client, "admin", "", 5)
     assert result.status_code == 400
 
-    result = patch_reaction(client, "admin" , "ECE444", 4)
+    result = patch_reaction(client, "admin", "ECE444", 4)
     assert result.status_code == 200
     data = json.loads(result.data)
     assert data["rating"] == 4

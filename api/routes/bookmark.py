@@ -14,7 +14,7 @@ def bookmark():
         if len(account) == 0:
             return jsonify({"status": 0, "message": "Please specify an account"}), 400
         if len(course) == 0:
-            return jsonify({"status": 0, "message": "Please specify a course"}), 400 
+            return jsonify({"status": 0, "message": "Please specify a course"}), 400
 
         new_entry = Bookmark(
             account_name=account,

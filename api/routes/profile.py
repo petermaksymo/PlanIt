@@ -4,6 +4,7 @@ from api.app import app
 from api.database import db
 from api.database.models import Profile
 
+
 @app.route("/profile", methods=["GET", "POST", "PATCH", "DELETE"])
 def profile():
     if request.method == "POST":
@@ -111,7 +112,7 @@ def profile():
                     ).delete()
             else:
                 result = Profile.query.filter_by(account_name=account).delete()
-        else: 
+        else:
             return jsonify({"status": 0, "message": "Please specify an account"}), 400
 
         db.session.commit()
