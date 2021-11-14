@@ -8,16 +8,17 @@ import { AuthContext } from "../contexts/auth"
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
 export const BookmarkButton = ({ course_id, ...props }) => {
-  const { authedFetch } = useContext(AuthContext)
+  const { isAuthed, authedFetch } = useContext(AuthContext)
   const [bookmarked, setBookmarked] = useState(false)
 
   useEffect(() => {
-    return authedFetch(`${API_BASE_URL}/bookmark?course=${course_id}`, {
-      method: "GET",
-    })
-      .then((res) => res.json())
-      .then((data) => setBookmarked(data.length === 1))
-  }, [course_id, authedFetch])
+    if (isAuthed)
+      return authedFetch(`${API_BASE_URL}/bookmark?course=${course_id}`, {
+        method: "GET",
+      })
+        .then((res) => res.json())
+        .then((data) => setBookmarked(data.length === 1))
+  }, [course_id, authedFetch, isAuthed])
 
   const toggleBookmark = () => {
     if (bookmarked) {
@@ -42,6 +43,8 @@ export const BookmarkButton = ({ course_id, ...props }) => {
         })
     }
   }
+
+  if (!isAuthed) return <div {...props} />
 
   return (
     <IconButton onClick={toggleBookmark} {...props}>
