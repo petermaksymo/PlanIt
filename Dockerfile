@@ -30,6 +30,6 @@ RUN pip3 install gunicorn
 WORKDIR /app
 
 # Run gunicorn as a daemon, replace the post in the nginx config with the assigned heroku port, start nginx
-CMD gunicorn -b 0.0.0.0:5000 api.app:app --daemon && \
+CMD gunicorn -b 0.0.0.0:5000 api.app:app & \
    sed -i -e 's/$PORT/'"$PORT"'/g' /etc/nginx/conf.d/default.conf && \
    nginx -g 'daemon off;'
