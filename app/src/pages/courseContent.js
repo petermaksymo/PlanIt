@@ -1,14 +1,13 @@
-import React from "react"
-import map from "lodash/map"
+import { Typography, Card, Rating } from "@mui/material"
+// import BookmarkButton from "../Components/bookmarkButton"
 
-import Card from "@mui/material/Card"
-import Rating from "@mui/material/Rating"
-import Typography from "@mui/material/Typography"
-
-import BookmarkButton from "./bookmarkButton"
-
-export const ResultCard = ({ result }) => {
+export const CourseContent = () => {
   const rating = Math.random() * 5
+  const result = {
+    name: "dsfsddsf",
+    code: "sdffds",
+    courseDescription: "fdsd",
+  }
 
   return (
     <Card
@@ -24,7 +23,7 @@ export const ResultCard = ({ result }) => {
             margin: "auto 0",
           }}
         >
-          {result["Name"]}
+          {result.name}
         </Typography>
         <Rating sx={{ margin: "auto 0" }} value={rating} readOnly />
         <Typography
@@ -40,26 +39,14 @@ export const ResultCard = ({ result }) => {
         <Typography sx={{ margin: "auto 0", fontSize: 14 }}>
           {Math.round(Math.random() * 10000)} Views
         </Typography>
-        <BookmarkButton
+        {/* <BookmarkButton
           sx={{ marginLeft: "auto" }}
-          course_id={result["Code"]}
-        />
+          course_id={result.code}
+        /> */}
       </div>
       <Typography sx={{ padding: "6px 42px" }}>
-        {result["Course Description"]}
+        {result.courseDescription}
       </Typography>
     </Card>
-  )
-}
-
-export const Results = ({ data }) => {
-  if (!data) return null
-
-  return (
-    <>
-      {map(data, (result) => (
-        <ResultCard result={result} />
-      ))}
-    </>
   )
 }
