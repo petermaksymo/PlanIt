@@ -1,89 +1,133 @@
-import React, { useState } from "react"
+import React, { useState, useContext, useEffect } from "react"
 import { NavBar } from "../Components/navbar"
 import { useTheme } from "@mui/styles"
-import { Button, Grid, IconButton, Typography } from "@mui/material"
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Grid,
+  IconButton,
+  TextField,
+  Typography,
+} from "@mui/material"
 import AddCircleIcon from "@mui/icons-material/AddCircle"
 import MoreVertIcon from "@mui/icons-material/MoreVert"
+import remove from "lodash/remove"
+import map from "lodash/map"
+
+import { AuthContext } from "../contexts/auth"
+import SelectedProfile from "../Components/selectedProfile"
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
 export const Profiles = () => {
   const theme = useTheme()
-  const profileTemplate = [
-    {
-      title: "Main Profile",
-      sessions: [
-        {
-          name: "Fall Session 2021",
-          courses: [
-            {
-              code: "ECE297H1",
-              name: "Communication and Design",
-            },
-            {
-              code: "ECE297H1",
-              name: "Communication and Design",
-            },
-            {
-              code: "ECE297H1",
-              name: "Communication and Design",
-            },
-            {
-              code: "ECE297H1",
-              name: "Communication and Design",
-            },
-          ],
-        },
-        {
-          name: "Winter Session 2022",
-          courses: [
-            {
-              code: "ECE345H1",
-              name: "Algorithms & Data Structures",
-            },
-            {
-              code: "ECE345H1",
-              name: "Algorithms & Data Structures",
-            },
-            {
-              code: "ECE345H1",
-              name: "Algorithms & Data Structures",
-            },
-            {
-              code: "ECE345H1",
-              name: "Algorithms & Data Structures",
-            },
-          ],
-        },
-        {
-          name: "Summer Session 2022",
-          courses: [
-            {
-              code: "ECE444H1",
-              name: "Software Engineering",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      title: "Test Profile",
-    },
-    {
-      title: "Business Minor",
-    },
-    {
-      title: "AI Minor",
-    },
-  ]
+  const { authedFetch } = useContext(AuthContext)
+  const [profiles, setProfiles] = useState()
+  const [selectedProfileId, setSelectedProfileId] = useState(0)
+  const selectedProfile = profiles && profiles[selectedProfileId]
 
-  const [profileJSON, setProfileJSON] = useState(profileTemplate[0])
-  if (profileJSON === "") {
-    setProfileJSON(profileTemplate[0])
+  const [addDialogOpen, setAddDialogOpen] = useState(false)
+  const [newProfileName, setNewProfileName] = useState("")
+  const closeAddDialog = () => {
+    setAddDialogOpen(false)
+    setNewProfileName("")
   }
+
+  const loadProfile = () => {
+    const convertProfileData = (data) => {
+      const profiles = map(
+        remove(data, (d) => !d.session_name && !d.course_code),
+        (p) => p.profile_name
+      )
+      return map(profiles, (profile) => {
+        const sessions = map(
+          remove(data, (d) => d.profile_name === profile && !d.course_code),
+          (s) => s.session_name
+        )
+
+        return {
+          title: profile,
+          sessions: map(sessions, (session) => {
+            const courses = map(
+              remove(
+                data,
+                (d) => d.profile_name === profile && d.session_name === session
+              ),
+              (c) => ({ code: c.course_code, name: c.course_name })
+            )
+
+            return {
+              name: session,
+              courses,
+            }
+          }),
+        }
+      })
+    }
+
+    return authedFetch(`${API_BASE_URL}/profile`, {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const fetched_profiles = convertProfileData(data)
+
+        setProfiles(fetched_profiles)
+      })
+  }
+
+  useEffect(loadProfile, [authedFetch])
+
+  const createProfile = (e) => {
+    e.preventDefault()
+
+    const formdata = new FormData()
+    formdata.append("profile", newProfileName)
+
+    return authedFetch(`${API_BASE_URL}/profile`, {
+      method: "POST",
+      body: formdata,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        loadProfile()
+        setSelectedProfileId(profiles.length)
+        closeAddDialog()
+      })
+  }
+
+  if (!profiles) return null
 
   return (
     <>
       <NavBar />
       <div className="pageContainer">
+        <Dialog open={addDialogOpen} onClose={closeAddDialog}>
+          <form onSubmit={createProfile}>
+            <DialogContent sx={{ minWidth: 320 }}>
+              <Typography paragraph variant="h5">
+                Add a new profile:
+              </Typography>
+              <TextField
+                required
+                fullWidth
+                label="Profile Name"
+                value={newProfileName}
+                onChange={(e) => setNewProfileName(e.target.value)}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button color="secondary" onClick={closeAddDialog}>
+                Cancel
+              </Button>
+              <Button color="primary" type="submit">
+                Add
+              </Button>
+            </DialogActions>
+          </form>
+        </Dialog>
         <div
           id="profiles"
           style={{
@@ -102,7 +146,7 @@ export const Profiles = () => {
           </Typography>
           <Grid container>
             <Grid item style={{ marginLeft: "50px" }}>
-              {profileTemplate.map((profile) => {
+              {map(profiles, (profile, idx) => {
                 return (
                   <Button
                     variant="contained"
@@ -113,6 +157,7 @@ export const Profiles = () => {
                       minHeight: "102px",
                       textTransform: "none",
                     }}
+                    onClick={() => setSelectedProfileId(idx)}
                   >
                     <Typography style={{ margin: "30px 15px", fontSize: 20 }}>
                       {profile.title}
@@ -141,6 +186,7 @@ export const Profiles = () => {
                 backgroundColor: "#FAFAFA",
                 textTransform: "none",
               }}
+              onClick={() => setAddDialogOpen(true)}
             >
               <div
                 style={{
@@ -165,121 +211,10 @@ export const Profiles = () => {
             </Button>
           </Grid>
         </div>
-        <div id="selected-profile" style={{ padding: "30px 286px" }}>
-          <Typography
-            style={{
-              color: theme.palette.text.dark,
-              fontSize: 28,
-              marginBottom: "15px",
-            }}
-          >
-            {profileJSON.title}
-          </Typography>
-          <div style={{ margin: "10px 10px" }}>
-            {profileJSON.sessions.map((session) => {
-              return (
-                <div id="session" style={{ marginBottom: "15px" }}>
-                  <Typography
-                    style={{
-                      color: theme.palette.text.grey,
-                      fontSize: 20,
-                      marginBottom: "15px",
-                    }}
-                  >
-                    {session.name}
-                  </Typography>
-                  <Grid container>
-                    <Grid item>
-                      {session.courses.map((course) => {
-                        return (
-                          <Button
-                            variant="contained"
-                            style={{
-                              margin: "0 5px",
-                              borderRadius: 10,
-                              minWidth: "250px",
-                              minHeight: "91px",
-                              textTransform: "none",
-                              border: "2px solid #B5B5B5",
-                            }}
-                          >
-                            <div
-                              style={{
-                                display: "flex",
-                                flexDirection: "column",
-                              }}
-                            >
-                              <Typography style={{ fontSize: 14 }}>
-                                {course.code}
-                              </Typography>
-                              <Typography style={{ fontSize: 14 }}>
-                                {course.name}
-                              </Typography>
-                            </div>
-                          </Button>
-                        )
-                      })}
-                    </Grid>
-                    <Grid item>
-                      <Button
-                        variant="contained"
-                        style={{
-                          margin: "0 5px",
-                          borderRadius: 10,
-                          minWidth: "250px",
-                          minHeight: "91px",
-                          textTransform: "none",
-                          border: "2px solid #B5B5B5",
-                          backgroundColor: "#FAFAFA",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                          }}
-                        >
-                          <AddCircleIcon
-                            sx={{
-                              top: "50%",
-                              color: theme.palette.background.main,
-                              fontSize: 40,
-                            }}
-                          />
-                          <Typography
-                            sx={{
-                              color: theme.palette.text.grey,
-                              fontSize: 16,
-                            }}
-                          >
-                            Add Course
-                          </Typography>
-                        </div>
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </div>
-              )
-            })}
-          </div>
-          <div
-            style={{ display: "flex", alignItems: "center", marginTop: "20px" }}
-          >
-            <AddCircleIcon
-              sx={{
-                top: "50%",
-                color: theme.palette.background.main,
-                fontSize: 40,
-              }}
-            />
-            <Typography
-              style={{ color: theme.palette.text.dark, fontSize: 20 }}
-            >
-              Add Session
-            </Typography>
-          </div>
-        </div>
+        <SelectedProfile
+          selectedProfile={selectedProfile}
+          reload={loadProfile}
+        />
         <div
           id="saved-courses-title"
           style={{
@@ -294,30 +229,30 @@ export const Profiles = () => {
         <div id="saved-courses" style={{ padding: "30px 286px" }}>
           <Grid container>
             <Grid item>
-              {profileTemplate[0].sessions[0].courses.map((course) => {
-                return (
-                  <Button
-                    variant="contained"
-                    style={{
-                      margin: "0 5px",
-                      borderRadius: 10,
-                      minWidth: "250px",
-                      minHeight: "91px",
-                      textTransform: "none",
-                      border: "2px solid #B5B5B5",
-                    }}
-                  >
-                    <div style={{ display: "flex", flexDirection: "column" }}>
-                      <Typography style={{ fontSize: 14 }}>
-                        {course.code}
-                      </Typography>
-                      <Typography style={{ fontSize: 14 }}>
-                        {course.name}
-                      </Typography>
-                    </div>
-                  </Button>
-                )
-              })}
+              {/*{map(selectedProfile.sessions[0].courses, (course) => {*/}
+              {/*  return (*/}
+              {/*    <Button*/}
+              {/*      variant="contained"*/}
+              {/*      style={{*/}
+              {/*        margin: "0 5px",*/}
+              {/*        borderRadius: 10,*/}
+              {/*        minWidth: "250px",*/}
+              {/*        minHeight: "91px",*/}
+              {/*        textTransform: "none",*/}
+              {/*        border: "2px solid #B5B5B5",*/}
+              {/*      }}*/}
+              {/*    >*/}
+              {/*      <div style={{ display: "flex", flexDirection: "column" }}>*/}
+              {/*        <Typography style={{ fontSize: 14 }}>*/}
+              {/*          {course.code}*/}
+              {/*        </Typography>*/}
+              {/*        <Typography style={{ fontSize: 14 }}>*/}
+              {/*          {course.name}*/}
+              {/*        </Typography>*/}
+              {/*      </div>*/}
+              {/*    </Button>*/}
+              {/*  )*/}
+              {/*})}*/}
             </Grid>
           </Grid>
         </div>

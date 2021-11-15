@@ -1,4 +1,5 @@
 from flask import jsonify, request
+from flask_praetorian import auth_required, current_user
 
 from api.app import app
 from api.database import db
@@ -6,6 +7,7 @@ from api.database.models import Profile
 
 
 @app.route("/profile", methods=["GET", "POST", "PATCH", "DELETE"])
+@auth_required
 def profile():
     if request.method == "POST":
         """
@@ -14,23 +16,24 @@ def profile():
                 course name (optional) as a form. - Check /models/profile.py for details.
         Output: Returns the entry that was created.
         """
-        account = request.form["account"]
-        profile = request.form["profile"]
-        session = request.form["session"]
-        course = request.form["course"]
+        profile = request.form.get("profile")
+        session = request.form.get("session")
+        course_code = request.form.get("course_code")
+        course_name = request.form.get("course_name")
 
-        if len(account) == 0:
-            return jsonify({"status": 0, "message": "Please specify an account"}), 400
-        if len(session) == 0:
+        if session is None or len(session) == 0:
             session = None
-        if len(course) == 0:
-            course = None
+        if course_code is None or len(course_code) == 0:
+            course_code = None
+        if course_name is None or len(course_name) == 0:
+            course_name = None
 
         new_entry = Profile(
-            account_name=account,
+            account_name=current_user().username,
             profile_name=profile,
             session_name=session,
-            course_code=course,
+            course_code=course_code,
+            course_name=course_name,
         )
         db.session.add(new_entry)
         db.session.commit()
@@ -42,11 +45,7 @@ def profile():
         Input:  Requires the account name as an argument/parameter.
         Output: Returns the entries associated with the account.
         """
-        account = request.args.get("account")
-        if account is None:
-            return jsonify({"status": 0, "message": "Please specify an account"}), 400
-
-        result = Profile.query.filter_by(account_name=account).all()
+        result = Profile.query.filter_by(account_name=current_user().username).all()
         return jsonify([item.serialize() for item in result])
 
     elif request.method == "PATCH":
@@ -56,19 +55,16 @@ def profile():
                 and the new profile name as a form.
         Output: Returns the entry with the updated profile name.
         """
-        account = request.args.get("account")
         old_profile = request.args.get("profile")
         new_name = request.form["profile"]
 
-        if account is None:
-            return jsonify({"status": 0, "message": "Please specify an account"}), 400
         if old_profile is None:
             return jsonify({"status": 0, "message": "Please specify a profile"}), 400
         if len(new_name) == 0:
             return jsonify({"status": 0, "message": "Please specify a new name"}), 400
 
         entry = Profile.query.filter_by(
-            account_name=account, profile_name=old_profile
+            account_name=current_user().username, profile_name=old_profile
         ).all()
         for each in entry:
             each.profile_name = new_name
@@ -85,7 +81,6 @@ def profile():
                 is given then the profile, related sessions and courses will be deleted etc...
         Output: Returns the entry with the updated profile name.
         """
-        account = request.args.get("account")
         profile = request.args.get("profile")
         session = request.args.get("session")
         course = request.args.get("course")
@@ -95,23 +90,25 @@ def profile():
                 if session is not None:
                     if course is not None:
                         result = Profile.query.filter_by(
-                            account_name=account,
+                            account_name=current_user().username,
                             profile_name=profile,
                             session_name=session,
                             course_code=course,
                         ).delete()
                     else:
                         result = Profile.query.filter_by(
-                            account_name=account,
+                            account_name=current_user().username,
                             profile_name=profile,
                             session_name=session,
                         ).delete()
                 else:
                     result = Profile.query.filter_by(
-                        account_name=account, profile_name=profile
+                        account_name=current_user().username, profile_name=profile
                     ).delete()
             else:
-                result = Profile.query.filter_by(account_name=account).delete()
+                result = Profile.query.filter_by(
+                    account_name=current_user().username
+                ).delete()
         else:
             return jsonify({"status": 0, "message": "Please specify an account"}), 400
 
