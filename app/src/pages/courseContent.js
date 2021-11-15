@@ -17,12 +17,18 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     backgroundColor: theme.palette.background.lightBlue, 
     height: '3px', 
-    margin: '42px 0',
+    margin: '41px 0',
   },
   align: {
     display: "flex", 
     flexDirection: "row", 
     alignItems: 'center',
+  },
+  cornerBorder: {
+    borderRadius: "14px", 
+    border: "4px solid", 
+    borderColor: theme.palette.background.lightBlue,
+    padding: "81px 137px"
   },
 }))
 
@@ -46,11 +52,11 @@ export const CourseContent = () => {
 
   return (
     <>
-    <NavBar/>
+      <NavBar/>
       <div id="page-container" style={{margin: "62px 172px"}}>
         <div
           id="course-container"
-          style={{padding: "81px 137px", borderRadius: "14px", border: "4px solid", borderColor: theme.palette.background.lightBlue }}
+          className={classes.cornerBorder}
         >
           <div id="segment1">
             <div style={{ display: "flex" }}>
@@ -78,7 +84,7 @@ export const CourseContent = () => {
                 {Math.round(result.rating)}/5 ({Math.round(Math.random() * 1000)} votes)
               </Typography>
               <Typography sx={{ margin: "auto 0", fontSize: 14, color: theme.palette.text.grey, }}>
-                {Math.round(Math.random() * 10000)} Views
+                {result.views} Views
               </Typography>
               <BookmarkButton
                 sx={{ marginLeft: "auto" }}
