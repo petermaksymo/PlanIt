@@ -1,8 +1,8 @@
+from sqlalchemy_serializer import SerializerMixin
 from api import db
-from api.database import Serializer
 
 
-class Profile(db.Model):
+class Profile(db.Model, SerializerMixin):
     """
     Model for profiles
     Profiles includes the Profile, the Sessions, and the Courses in each session.
@@ -27,7 +27,3 @@ class Profile(db.Model):
         db.String, db.ForeignKey("course.code"), unique=False, nullable=True
     )
     course_name = db.Column(db.String, unique=False, nullable=True)
-
-    def serialize(self):
-        d = Serializer.serialize(self)
-        return d

@@ -1,8 +1,8 @@
+from sqlalchemy_serializer import SerializerMixin
 from api import db
-from api.database import Serializer
 
 
-class Account(db.Model):
+class Account(db.Model, SerializerMixin):
     """Model for accounts."""
 
     __tablename__ = "account"
@@ -36,8 +36,3 @@ class Account(db.Model):
 
     def is_valid(self):
         return self.is_active
-
-    def serialize(self):
-        d = Serializer.serialize(self)
-        del d["password"]
-        return d

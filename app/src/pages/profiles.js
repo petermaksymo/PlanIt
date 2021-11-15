@@ -18,6 +18,7 @@ import map from "lodash/map"
 
 import { AuthContext } from "../contexts/auth"
 import SelectedProfile from "../Components/selectedProfile"
+import SavedCourses from "../Components/savedCourses"
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
@@ -215,47 +216,7 @@ export const Profiles = () => {
           selectedProfile={selectedProfile}
           reload={loadProfile}
         />
-        <div
-          id="saved-courses-title"
-          style={{
-            padding: "30px 286px",
-            backgroundColor: theme.palette.background.lightBlue,
-          }}
-        >
-          <Typography style={{ color: theme.palette.text.dark, fontSize: 28 }}>
-            Saved Courses
-          </Typography>
-        </div>
-        <div id="saved-courses" style={{ padding: "30px 286px" }}>
-          <Grid container>
-            <Grid item>
-              {/*{map(selectedProfile.sessions[0].courses, (course) => {*/}
-              {/*  return (*/}
-              {/*    <Button*/}
-              {/*      variant="contained"*/}
-              {/*      style={{*/}
-              {/*        margin: "0 5px",*/}
-              {/*        borderRadius: 10,*/}
-              {/*        minWidth: "250px",*/}
-              {/*        minHeight: "91px",*/}
-              {/*        textTransform: "none",*/}
-              {/*        border: "2px solid #B5B5B5",*/}
-              {/*      }}*/}
-              {/*    >*/}
-              {/*      <div style={{ display: "flex", flexDirection: "column" }}>*/}
-              {/*        <Typography style={{ fontSize: 14 }}>*/}
-              {/*          {course.code}*/}
-              {/*        </Typography>*/}
-              {/*        <Typography style={{ fontSize: 14 }}>*/}
-              {/*          {course.name}*/}
-              {/*        </Typography>*/}
-              {/*      </div>*/}
-              {/*    </Button>*/}
-              {/*  )*/}
-              {/*})}*/}
-            </Grid>
-          </Grid>
-        </div>
+        <SavedCourses />
       </div>
     </>
   )

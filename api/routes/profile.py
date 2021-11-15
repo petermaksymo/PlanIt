@@ -37,7 +37,7 @@ def profile():
         )
         db.session.add(new_entry)
         db.session.commit()
-        return jsonify(new_entry.serialize())
+        return jsonify(new_entry.to_dict())
 
     elif request.method == "GET":
         """
@@ -46,7 +46,7 @@ def profile():
         Output: Returns the entries associated with the account.
         """
         result = Profile.query.filter_by(account_name=current_user().username).all()
-        return jsonify([item.serialize() for item in result])
+        return jsonify([item.to_dict() for item in result])
 
     elif request.method == "PATCH":
         """
@@ -69,7 +69,7 @@ def profile():
         for each in entry:
             each.profile_name = new_name
         db.session.commit()
-        return jsonify([item.serialize() for item in entry])
+        return jsonify([item.to_dict() for item in entry])
 
     elif request.method == "DELETE":
         """

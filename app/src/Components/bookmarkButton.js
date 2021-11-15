@@ -39,7 +39,7 @@ export const BookmarkButton = ({ course_id, ...props }) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          setBookmarked(data.course_name === course_id)
+          setBookmarked(data.course_code === course_id)
         })
     }
   }

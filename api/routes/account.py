@@ -11,7 +11,7 @@ from api.database.models import Account
 @auth_required
 def account():
     if request.method == "GET":
-        return jsonify(current_user().serialize())
+        return jsonify(current_user.to_dict())
     elif request.method == "PATCH":
         email = request.form.get("email")
         username = request.form.get("username")
@@ -52,7 +52,7 @@ def signup():
     )
     db.session.add(new_user)
     db.session.commit()
-    return (jsonify(new_user.serialize()), 200)
+    return (jsonify(new_user.to_dict()), 200)
 
 
 @app.route("/login", methods=["POST"])
