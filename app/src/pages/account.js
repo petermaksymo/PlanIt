@@ -3,7 +3,7 @@ import { Typography, Divider, Button } from "@mui/material"
 import { NavBar } from "../Components/navbar"
 import { makeStyles, useTheme } from "@mui/styles"
 import TextField from "@mui/material/TextField"
-import SaveIcon from '@mui/icons-material/Save'
+import SaveIcon from "@mui/icons-material/Save"
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -53,7 +53,7 @@ export const Account = () => {
 
   const user = {
     username: "Test",
-    email: "test@gmail.com"
+    email: "test@gmail.com",
   }
 
   return (
@@ -66,11 +66,13 @@ export const Account = () => {
           backgroundColor: theme.palette.background.lightPink,
         }}
       >
-        <Typography style={{
-          color: theme.palette.text.dark,
-          fontSize: 28,
-          marginBottom: "15px",
-        }}>
+        <Typography
+          style={{
+            color: theme.palette.text.dark,
+            fontSize: 28,
+            marginBottom: "15px",
+          }}
+        >
           Account Settings
         </Typography>
       </div>
@@ -93,7 +95,9 @@ export const Account = () => {
                 onChange={(e) => setUsername(e.target.value)}
               />
               <Button variant="contained">
-                <SaveIcon sx={{fontSize: 40, color: theme.palette.background.primary}}/>
+                <SaveIcon
+                  sx={{ fontSize: 40, color: theme.palette.background.primary }}
+                />
               </Button>
             </div>
           </div>
@@ -115,7 +119,9 @@ export const Account = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
               <Button variant="contained">
-                <SaveIcon sx={{fontSize: 40, color: theme.palette.background.primary}}/>
+                <SaveIcon
+                  sx={{ fontSize: 40, color: theme.palette.background.primary }}
+                />
               </Button>
             </div>
           </div>
@@ -146,7 +152,9 @@ export const Account = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
               <Button variant="contained">
-                <SaveIcon sx={{fontSize: 40, color: theme.palette.background.primary}}/>
+                <SaveIcon
+                  sx={{ fontSize: 40, color: theme.palette.background.primary }}
+                />
               </Button>
             </div>
           </div>
