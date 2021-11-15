@@ -64,4 +64,3 @@ def course(code):
         return jsonify(course.serialize())
     else:
         raise Exception("Invalid Course Code!")
-

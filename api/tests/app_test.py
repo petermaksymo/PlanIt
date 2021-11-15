@@ -153,7 +153,9 @@ def delete_reaction(client, account, course):
 # Peter Maksymowsky
 def test_course_success(client):
     """Ensure the correct course is returned with a successful query"""
-    sample_course = Course(code='ECE444H1', name='Software Engineering')
+    sample_course = Course(
+        code="ECE444H1", name="Software Engineering", division="a", department="a"
+    )
     db.session.add(sample_course)
     db.session.commit()
     response = client.get("/course/ECE444H1")
@@ -171,7 +173,7 @@ def test_course_redirect(client):
     '''Ensure a redirect to a relevant course given a slightly incorrect query'''
     response = client.get("/course/ECE444")
     assert response.status_code == 302
-    assert response.location == "http://localhost/course/ECE444H1" 
+    assert response.location == "http://localhost/course/ECE444H1"
 """
 
 
