@@ -29,8 +29,8 @@ export const NavBar = () => {
   const { isAuthed, logout } = useContext(AuthContext)
 
   const navOptions = [
-    { title: "My Profiles", link: "/profiles" },
     { title: "Find Courses", link: "/" },
+    { title: "My Profiles", link: "/profiles" },
     { title: "My Account", link: "/account" },
     { title: "Help", link: "/help" },
   ]
