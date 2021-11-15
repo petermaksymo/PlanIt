@@ -55,10 +55,10 @@ def search_courses(search_keywords, year, divisions, departments, campuses, top)
 """
 This method shows the information about a single course.
 """
+
+
 @app.route("/course/<code>")
 def course(code):
     query = db.session.query(Course)
     course = query.filter_by(code=code).first()
     return jsonify(course.serialize())
-
-

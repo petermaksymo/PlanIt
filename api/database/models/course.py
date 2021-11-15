@@ -52,5 +52,3 @@ class Course(db.Model, json.JSONEncoder):
     def serialize(self):
         d = Serializer.serialize(self)
         return d
-
-
