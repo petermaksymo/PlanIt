@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  api:
+    container_name: planit_api_test
+    build: ./api
+    volumes:
+      - './api:/api'
+    ports:
+      - ${API_PORT}:6000
+    depends_on:
+      - postgres
+    restart: "always"
+    environment:
+      - API_PORT
+      - ENVIRONMENT=testing
+      - FLASK_DEBUG=1
+      - POSTGRES_HOST=planit_postgres_test
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD=development_password
+
+  postgres:
+    container_name: planit_postgres_test
+    image: postgres:14.0
+    environment:
+      - POSTGRES_HOST=planit_postgres_test
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD=development_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - planit-postgres-test-data:/var/lib/postgresql/data
+
+volumes:
+  planit-postgres-test-data:
+    name: planit-postgres-test-data

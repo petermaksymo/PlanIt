@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "docker-compose -f docker-compose.yml up -d --build",
-    "test": "docker exec -i planit_api python -m pytest api -W ignore::DeprecationWarning",
+    "test-setup": "docker-compose -f docker-compose-test.yml up -d --build",
+    "test": "docker exec -i planit_api_test python -m pytest api -W ignore::DeprecationWarning",
     "db-save": "docker exec -it planit_postgres pg_dump -U planit planit > ./api/resources/database_data.txt",
     "predb-load": "docker exec -i planit_postgres psql -U planit planit -c \"DROP SCHEMA public CASCADE; CREATE SCHEMA public;\"",
     "db-load": "docker cp ./api/resources/database_data.txt planit_postgres:/home/",
