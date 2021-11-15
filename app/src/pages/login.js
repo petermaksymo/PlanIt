@@ -87,6 +87,7 @@ export const Login = () => {
                 variant="filled"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                InputProps={{ disableUnderline: true }}
               />
             </div>
             <div id="password" style={{ marginBottom: "2rem" }}>
@@ -100,6 +101,7 @@ export const Login = () => {
                 variant="filled"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                InputProps={{ disableUnderline: true }}
               />
             </div>
             <div id="buttons" className={classes.buttonContainer}>

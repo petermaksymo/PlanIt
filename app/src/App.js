@@ -14,6 +14,7 @@ import { Signup } from "./pages/signup"
 import { Login } from "./pages/login"
 import { Profiles } from "./pages/profiles"
 import { CourseContent } from "./pages/courseContent"
+import { Account } from "./pages/account"
 import AuthContext from "./contexts/auth"
 import PrivateRoute from "./Components/privateRoute"
 
@@ -31,13 +32,11 @@ function App() {
                 <Route path="/login">
                   <Login />
                 </Route>
-                <Route path="/profiles">
-                  <Profiles />
-                </Route>
                 <Route path="/courseContent">
                   <CourseContent />
                 </Route>
                 <PrivateRoute path="/profiles" component={Profiles} />
+                <PrivateRoute path="/account" component={Account} />
 
                 {/*Keep this Route as the last one so it will also be the default for all other routes*/}
                 <Route path="/">
