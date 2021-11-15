@@ -8,30 +8,10 @@ from flask import request, redirect, jsonify, render_template
 from wtforms import Form, StringField, SelectField
 from api.database.models import Course
 from sqlalchemy import or_, and_
-
+import json
 from api.app import app
 
 """Temporary for now, from: https://github.com/nelaturuk/education_pathways/blob/main/__init__.py"""
-
-
-class CourseSearchForm(Form):
-    df = pd.read_pickle("api/resources/df_processed.pickle").set_index("Code")
-    divisions = [("Any", "Any")] + sorted([(t, t) for t in set(df.Division.values)])
-
-    departments = [("Any", "Any")] + sorted([(t, t) for t in set(df.Department.values)])
-
-    campus = [("Any", "Any")] + sorted([(t, t) for t in set(df.Campus.values)])
-
-    year_choices = [(t, t) for t in set(df["Course Level"].values)]
-
-    top = [("10", "10"), ("25", "25"), ("50", "50")]
-    select = SelectField("Course Year:", choices=year_choices)
-    top = SelectField("", choices=top)
-    divisions = SelectField("Division:", choices=divisions)
-    departments = SelectField("Department:", choices=departments)
-    campuses = SelectField("Campus:", choices=campus)
-    search = StringField("Search Terms:")
-
 
 """Handle the data from the POST request that will go to the main algorithm.
 If we get an empty search, just go back to home.
@@ -43,7 +23,7 @@ Pass the original search to the template as well, so the user can see the contex
 
 @app.route("/results", methods=["POST"])
 def search_results():
-    results = filter_courses(
+    results = search_courses(
         request.form["search_keywords"],
         request.form["year"],
         request.form["divisions"],
@@ -51,12 +31,13 @@ def search_results():
         request.form["campuses"],
         request.form["top"],
     )
-    return results.to_json(orient="records")
-
+    return jsonify([item.serialize() for item in results])
 
 def search_courses(search_keywords, year, divisions, departments, campuses, top):
     courses_contain_keywords = Course.query.filter(Course.name.like(f'%{search_keywords}%')).all()
-    if year != None:
+    # compete the search clause here
+    return courses_contain_keywords
+"""     if year != None:
         courses_contain_keywords = courses_contain_keywords.query.filter_by(course_level=year).all()
     if divisions != None:
         courses_contain_keywords = courses_contain_keywords.query.filter_by(division=divisions).all()
@@ -65,8 +46,7 @@ def search_courses(search_keywords, year, divisions, departments, campuses, top)
     if campuses != None:
         courses_contain_keywords = courses_contain_keywords.query.filter_by(campus=campuses).all()
     if top != None:
-        courses_contain_keywords = courses_contain_keywords.query.first(int(top))
-    return courses_contain_keywords
+        courses_contain_keywords = courses_contain_keywords.query.first(int(top)) """
 
 
 """

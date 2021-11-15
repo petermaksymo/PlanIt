@@ -7,7 +7,7 @@ import json
 from api.app import app
 from api.database import db
 from flask import g
-
+from api.routes.courses import search_courses
 
 @pytest.fixture
 def client():
@@ -358,3 +358,4 @@ def test_reaction_delete(client):
     assert result.status_code == 200
     data = json.loads(result.data)
     assert data == 1
+
