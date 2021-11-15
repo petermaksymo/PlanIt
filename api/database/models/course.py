@@ -1,6 +1,6 @@
 from api import db
 from api.database import Serializer
-
+import json
 
 """
 Construct the courses information table
@@ -14,7 +14,7 @@ The data can be imported to database using pgAdmin4
 """
 
 
-class Course(db.Model):
+class Course(db.Model, json.JSONEncoder):
     """Model for courses."""
 
     __tablename__ = "course"
