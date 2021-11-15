@@ -25,13 +25,7 @@ import SavedCourses from "../Components/savedCourses"
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
-const PROFILE_COLORS = [
-  '#D55D92',
-  '#AC46A1',
-  '#822FAF',
-  '#6411AD',
-  '#3D0D69'
-]
+const PROFILE_COLORS = ["#D55D92", "#AC46A1", "#822FAF", "#6411AD", "#3D0D69"]
 
 export const Profiles = () => {
   const theme = useTheme()
@@ -118,14 +112,14 @@ export const Profiles = () => {
   const handlePatch = (e) => {
     e.preventDefault()
 
-    const formData= new FormData()
-    formData.append('profile', newProfileName)
+    const formData = new FormData()
+    formData.append("profile", newProfileName)
 
     return authedFetch(
       `${API_BASE_URL}/profile?profile=${selectedProfileMenu}`,
       {
         method: "PATCH",
-        body: formData
+        body: formData,
       }
     )
       .then((res) => res.json())
@@ -134,7 +128,11 @@ export const Profiles = () => {
         setProfileAnchorEl(null)
         return loadProfile()
       })
-      .then(() => setSelectedProfileId(findIndex(profiles, p => p.title === selectedProfileMenu)))
+      .then(() =>
+        setSelectedProfileId(
+          findIndex(profiles, (p) => p.title === selectedProfileMenu)
+        )
+      )
   }
 
   const handleDelete = (session = null, course = null) => {
@@ -146,6 +144,8 @@ export const Profiles = () => {
     )
       .then((res) => res.json())
       .then((data) => {
+        closeDialog()
+        setProfileAnchorEl(null)
         loadProfile()
       })
   }
@@ -157,16 +157,20 @@ export const Profiles = () => {
       <NavBar />
       <div className="pageContainer">
         <Dialog open={dialogOpen} onClose={closeDialog}>
-          <form onSubmit={dialogMode === 'add' ? createProfile : handlePatch}>
+          <form onSubmit={dialogMode === "add" ? createProfile : handlePatch}>
             <DialogContent sx={{ minWidth: 320 }}>
               <Typography paragraph variant="h5">
-                {dialogMode === 'add' ? 'Add a new profile:' : `Rename ${selectedProfileMenu}:`}
+                {dialogMode === "add"
+                  ? "Add a new profile:"
+                  : `Rename ${selectedProfileMenu}:`}
               </Typography>
               <TextField
                 required
                 autoFocus
                 fullWidth
-                label={dialogMode === 'add' ? "Profile Name" : 'New Profile Name'}
+                label={
+                  dialogMode === "add" ? "Profile Name" : "New Profile Name"
+                }
                 value={newProfileName}
                 onChange={(e) => setNewProfileName(e.target.value)}
               />
@@ -176,7 +180,7 @@ export const Profiles = () => {
                 Cancel
               </Button>
               <Button color="primary" type="submit">
-                {dialogMode === 'add' ? 'Add' : 'Save'}
+                {dialogMode === "add" ? "Add" : "Save"}
               </Button>
             </DialogActions>
           </form>
@@ -200,11 +204,17 @@ export const Profiles = () => {
           <Grid container>
             <Grid item style={{ marginLeft: "50px" }}>
               {map(profiles, (profile, idx) => {
+                const isSelected = idx === selectedProfileId
+
                 return (
                   <Button
                     variant="contained"
+                    disableElevation
                     style={{
-                      backgroundColor: PROFILE_COLORS[idx%5],
+                      border: isSelected
+                        ? "5px solid #FF9E00"
+                        : "5px solid transparent",
+                      backgroundColor: PROFILE_COLORS[idx % 5],
                       margin: "10px",
                       borderRadius: 10,
                       minWidth: "237px",
@@ -218,7 +228,7 @@ export const Profiles = () => {
                     </Typography>
                     <IconButton
                       id={`profile-button-${profile.title}`}
-                      aria-controls='profile-menu'
+                      aria-controls="profile-menu"
                       aria-haspopup="true"
                       style={{
                         position: "absolute",
@@ -248,7 +258,7 @@ export const Profiles = () => {
                   backgroundColor: "#FAFAFA",
                   textTransform: "none",
                 }}
-                onClick={() => setDialogMode('add')}
+                onClick={() => setDialogMode("add")}
               >
                 <div
                   style={{
@@ -272,12 +282,12 @@ export const Profiles = () => {
                 </div>
               </Button>
               <Menu
-                id='profile-menu'
+                id="profile-menu"
                 anchorEl={profileAnchorEl}
                 open={profileMenuOpen}
                 onClose={() => setProfileAnchorEl(null)}
               >
-                <MenuItem onClick={() => setDialogMode('edit')}>Edit</MenuItem>
+                <MenuItem onClick={() => setDialogMode("edit")}>Edit</MenuItem>
                 <MenuItem onClick={() => handleDelete()}>Delete</MenuItem>
               </Menu>
             </Grid>

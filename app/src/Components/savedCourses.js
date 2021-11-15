@@ -8,13 +8,7 @@ import BookmarkButton from "./bookmarkButton"
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
-const COURSE_COLORS = [
-  '#F9EEFF',
-  '#FFDFE8',
-  '#DAD8FF',
-  '#EDCDFF',
-  '#FEC5C5'
-]
+const COURSE_COLORS = ["#F9EEFF", "#FFDFE8", "#DAD8FF", "#EDCDFF", "#FEC5C5"]
 
 const SavedCourses = () => {
   const theme = useTheme()
@@ -46,13 +40,15 @@ const SavedCourses = () => {
         </Typography>
       </div>
       <div id="saved-courses" style={{ padding: "30px 286px" }}>
-        <Grid id='course-grid' container>
-        {courses ? (
+        <Grid id="course-grid" container>
+          {courses ? (
             <Grid item>
               {map(courses, (course, idx) => {
-                const cards_per_row = Math.floor(document.getElementById('course-grid').clientWidth / 270 )
+                const cards_per_row = Math.floor(
+                  document.getElementById("course-grid").clientWidth / 270
+                )
                 const row_idx = Math.floor(idx / cards_per_row)
-                const color = COURSE_COLORS[row_idx%5]
+                const color = COURSE_COLORS[row_idx % 5]
 
                 return (
                   <Button
@@ -68,7 +64,9 @@ const SavedCourses = () => {
                       textTransform: "none",
                       border: "2px solid #B5B5B5",
                     }}
-                    onClick={() => window.open(`/course/${course.code}`, '__newtab')}
+                    onClick={() =>
+                      window.open(`/course/${course.code}`, "__newtab")
+                    }
                   >
                     <BookmarkButton
                       course_id={course.code}
@@ -79,21 +77,27 @@ const SavedCourses = () => {
                         zIndex: 1,
                       }}
                     />
-                      <div style={{ display: "flex", flexDirection: "column", color: '#000' }}>
-                        <Typography style={{ fontSize: 14 }}>
-                          {course.code}
-                        </Typography>
-                        <Typography style={{ fontSize: 14 }}>
-                          {course.name}
-                        </Typography>
-                      </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        color: "#000",
+                      }}
+                    >
+                      <Typography style={{ fontSize: 14 }}>
+                        {course.code}
+                      </Typography>
+                      <Typography style={{ fontSize: 14 }}>
+                        {course.name}
+                      </Typography>
+                    </div>
                   </Button>
                 )
               })}
             </Grid>
-        ) : (
-          <Typography>Courses you bookmark will be visible here</Typography>
-        )}
+          ) : (
+            <Typography>Courses you bookmark will be visible here</Typography>
+          )}
         </Grid>
       </div>
     </>

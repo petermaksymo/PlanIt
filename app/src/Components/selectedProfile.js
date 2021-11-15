@@ -5,11 +5,13 @@ import {
   IconButton,
   Grid,
   Typography,
+  InputAdornment,
   Dialog,
   DialogContent,
   DialogActions,
   TextField,
 } from "@mui/material"
+import SearchIcon from "@mui/icons-material/Search"
 import AddCircleIcon from "@mui/icons-material/AddCircle"
 import DeleteIcon from "@mui/icons-material/Delete"
 import map from "lodash/map"
@@ -18,13 +20,7 @@ import { AuthContext } from "../contexts/auth"
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
-const COURSE_COLORS = [
-  '#F9EEFF',
-  '#FFDFE8',
-  '#DAD8FF',
-  '#EDCDFF',
-  '#FEC5C5'
-]
+const COURSE_COLORS = ["#F9EEFF", "#FFDFE8", "#DAD8FF", "#EDCDFF", "#FEC5C5"]
 
 const SelectedProfile = ({ selectedProfile, reload }) => {
   const theme = useTheme()
@@ -32,11 +28,13 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
   const [addDialog, setAddDialog] = useState("")
   const [sessionName, setSessionName] = useState("")
   const [courseCode, setCourseCode] = useState("")
+  const [searchResult, setSearchResult] = useState()
 
   const closeAddDialog = () => {
     setAddDialog("")
     setSessionName("")
     setCourseCode("")
+    setSearchResult()
   }
 
   const addToProfile = (e) => {
@@ -45,7 +43,7 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
     const formdata = new FormData()
     formdata.append("profile", selectedProfile.title)
     formdata.append("session", sessionName)
-    courseCode !== "" && formdata.append("course_code", courseCode)
+    courseCode !== "" && formdata.append("course_code", searchResult["Code"])
 
     return authedFetch(`${API_BASE_URL}/profile`, {
       method: "POST",
@@ -56,6 +54,7 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
         closeAddDialog()
         reload()
       })
+      .catch((err) => console.log(err))
   }
 
   const handleDelete = (session = null, course = null) => {
@@ -73,6 +72,17 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
       })
   }
 
+  const handleCourseSearch = (e) => {
+    e.preventDefault()
+
+    return fetch(`${API_BASE_URL}/course/${courseCode.toUpperCase()}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setSearchResult(data)
+      })
+      .catch((err) => console.log(err))
+  }
+
   if (!selectedProfile)
     return (
       <Typography>
@@ -83,7 +93,13 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
   return (
     <div id="selected-profile" style={{ padding: "30px 286px" }}>
       <Dialog open={addDialog !== ""} onClose={closeAddDialog}>
-        <form onSubmit={addToProfile}>
+        <form
+          onSubmit={
+            addDialog === "course" && !searchResult
+              ? handleCourseSearch
+              : addToProfile
+          }
+        >
           <DialogContent sx={{ minWidth: 320 }}>
             <Typography paragraph variant="h5">
               Add a new {addDialog}:
@@ -99,6 +115,9 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
               />
             ) : (
               <>
+                <Typography paragraph>
+                  Search for a course by course code for a match:
+                </Typography>
                 <TextField
                   autoFocus
                   required
@@ -107,7 +126,26 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
                   value={courseCode}
                   onChange={(e) => setCourseCode(e.target.value)}
                   sx={{ marginBottom: 4 }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={handleCourseSearch} edge="end">
+                          <SearchIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
+              </>
+            )}
+            {searchResult && (
+              <>
+                <Typography>
+                  <strong>Found course</strong>
+                  <br />
+                  <strong>Course Name:</strong> {searchResult["Name"]} <br />
+                  <strong>Course Code:</strong> {searchResult["Code"]}
+                </Typography>
               </>
             )}
           </DialogContent>
@@ -116,7 +154,7 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
               Cancel
             </Button>
             <Button color="primary" type="submit">
-              Add
+              {addDialog === "course" && !searchResult ? "Search" : "Add"}
             </Button>
           </DialogActions>
         </form>
@@ -162,8 +200,8 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
                         disableElevation
                         variant="contained"
                         style={{
-                          backgroundColor: COURSE_COLORS[session_idx%5],
-                          margin: "0 5px",
+                          backgroundColor: COURSE_COLORS[session_idx % 5],
+                          margin: 10,
                           borderRadius: 10,
                           minWidth: "250px",
                           maxWidth: 250,
@@ -179,7 +217,7 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
                           style={{
                             display: "flex",
                             flexDirection: "column",
-                            color: '#000'
+                            color: "#000",
                           }}
                         >
                           <IconButton
@@ -187,7 +225,7 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
                               position: "absolute",
                               top: 0,
                               right: 3,
-                              color: '#000'
+                              color: "#000",
                             }}
                             onClick={(e) => {
                               e.stopPropagation()
@@ -207,8 +245,6 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
                       </Button>
                     )
                   })}
-                </Grid>
-                <Grid item>
                   <Button
                     disableElevation
                     variant="contained"
