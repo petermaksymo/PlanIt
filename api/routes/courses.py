@@ -4,8 +4,10 @@ import pandas as pd
 import networkx as nx
 from collections import defaultdict
 from sklearn.metrics.pairwise import cosine_similarity
-from flask import request, redirect, jsonify
+from flask import request, redirect, jsonify, render_template
 from wtforms import Form, StringField, SelectField
+from api.database.models import Course
+from sqlalchemy import or_, and_
 
 from api.app import app
 
@@ -42,14 +44,29 @@ Pass the original search to the template as well, so the user can see the contex
 @app.route("/results", methods=["POST"])
 def search_results():
     results = filter_courses(
-        request.form["search"],
-        request.form["select"],
+        request.form["search_keywords"],
+        request.form["year"],
         request.form["divisions"],
         request.form["departments"],
         request.form["campuses"],
         request.form["top"],
     )
     return results.to_json(orient="records")
+
+
+def search_courses(search_keywords, year, divisions, departments, campuses, top):
+    courses_contain_keywords = Course.query.filter(Course.name.like(f'%{search_keywords}%')).all()
+    if year != None:
+        courses_contain_keywords = courses_contain_keywords.query.filter_by(course_level=year).all()
+    if divisions != None:
+        courses_contain_keywords = courses_contain_keywords.query.filter_by(division=divisions).all()
+    if departments != None:
+        courses_contain_keywords = courses_contain_keywords.query.filter_by(department=departments).all()
+    if campuses != None:
+        courses_contain_keywords = courses_contain_keywords.query.filter_by(campus=campuses).all()
+    if top != None:
+        courses_contain_keywords = courses_contain_keywords.query.first(int(top))
+    return courses_contain_keywords
 
 
 """

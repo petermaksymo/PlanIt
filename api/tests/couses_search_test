@@ -1,0 +1,18 @@
+from flask.json import jsonify
+from api.database.models.account import Account
+from api.database.models.profile import Profile
+import pytest
+import json
+
+from api.app import app
+from api.database import db
+from flask import g
+from api.routes.courses import search_courses
+
+
+
+
+def test_search_courses():
+    results = search_courses("networks", None, None, None, None, 25)
+    assert len(results) != 0
+    print(len(results))
