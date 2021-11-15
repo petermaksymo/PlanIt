@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect } from "react"
-import { Link } from "react-router-dom"
 import { useTheme } from "@mui/styles"
 import { Button, Grid, Typography } from "@mui/material"
 import map from "lodash/map"
@@ -45,6 +44,7 @@ const SavedCourses = () => {
               {map(courses, (course) => {
                 return (
                   <Button
+                    disableElevation
                     variant="contained"
                     style={{
                       margin: "0 5px",
@@ -54,6 +54,7 @@ const SavedCourses = () => {
                       textTransform: "none",
                       border: "2px solid #B5B5B5",
                     }}
+                    onClick={() => window.open(`/course/${course.code}`, '__newtab')}
                   >
                     <BookmarkButton
                       course_id={course.code}
@@ -64,7 +65,6 @@ const SavedCourses = () => {
                         zIndex: 1,
                       }}
                     />
-                    <Link to={`/course/${course.code}`}>
                       <div style={{ display: "flex", flexDirection: "column" }}>
                         <Typography style={{ fontSize: 14 }}>
                           {course.code}
@@ -73,7 +73,6 @@ const SavedCourses = () => {
                           {course.name}
                         </Typography>
                       </div>
-                    </Link>
                   </Button>
                 )
               })}

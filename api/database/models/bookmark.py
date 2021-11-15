@@ -15,5 +15,6 @@ class Bookmark(db.Model, SerializerMixin):
     course_code = db.Column(
         db.String, db.ForeignKey("course.code"), unique=False, nullable=False
     )
+    account = relationship("Account")
     course = relationship("Course")
     serialize_only = ("id", "account_name", "course_code", "course.name")

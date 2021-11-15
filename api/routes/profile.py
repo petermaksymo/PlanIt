@@ -19,21 +19,17 @@ def profile():
         profile = request.form.get("profile")
         session = request.form.get("session")
         course_code = request.form.get("course_code")
-        course_name = request.form.get("course_name")
 
         if session is None or len(session) == 0:
             session = None
         if course_code is None or len(course_code) == 0:
             course_code = None
-        if course_name is None or len(course_name) == 0:
-            course_name = None
 
         new_entry = Profile(
             account_name=current_user().username,
             profile_name=profile,
             session_name=session,
             course_code=course_code,
-            course_name=course_name,
         )
         db.session.add(new_entry)
         db.session.commit()
@@ -85,32 +81,29 @@ def profile():
         session = request.args.get("session")
         course = request.args.get("course")
 
-        if account is not None:
-            if profile is not None:
-                if session is not None:
-                    if course is not None:
-                        result = Profile.query.filter_by(
-                            account_name=current_user().username,
-                            profile_name=profile,
-                            session_name=session,
-                            course_code=course,
-                        ).delete()
-                    else:
-                        result = Profile.query.filter_by(
-                            account_name=current_user().username,
-                            profile_name=profile,
-                            session_name=session,
-                        ).delete()
+        if profile is not None:
+            if session is not None:
+                if course is not None:
+                    result = Profile.query.filter_by(
+                        account_name=current_user().username,
+                        profile_name=profile,
+                        session_name=session,
+                        course_code=course,
+                    ).delete()
                 else:
                     result = Profile.query.filter_by(
-                        account_name=current_user().username, profile_name=profile
+                        account_name=current_user().username,
+                        profile_name=profile,
+                        session_name=session,
                     ).delete()
             else:
                 result = Profile.query.filter_by(
-                    account_name=current_user().username
+                    account_name=current_user().username, profile_name=profile
                 ).delete()
         else:
-            return jsonify({"status": 0, "message": "Please specify an account"}), 400
+            result = Profile.query.filter_by(
+                account_name=current_user().username
+            ).delete()
 
         db.session.commit()
         return jsonify(result)

@@ -56,7 +56,7 @@ export const Profiles = () => {
                 data,
                 (d) => d.profile_name === profile && d.session_name === session
               ),
-              (c) => ({ code: c.course_code, name: c.course_name })
+              (c) => ({ code: c.course_code, name: c.course.name })
             )
 
             return {
@@ -113,6 +113,7 @@ export const Profiles = () => {
               </Typography>
               <TextField
                 required
+                autoFocus
                 fullWidth
                 label="Profile Name"
                 value={newProfileName}

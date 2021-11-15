@@ -20,7 +20,10 @@ export const BookmarkButton = ({ course_id, ...props }) => {
         .then((data) => setBookmarked(data.length === 1))
   }, [course_id, authedFetch, isAuthed])
 
-  const toggleBookmark = () => {
+  const toggleBookmark = (e) => {
+    e.stopPropagation()
+    e.nativeEvent.stopImmediatePropagation()
+
     if (bookmarked) {
       return authedFetch(`${API_BASE_URL}/bookmark?course=${course_id}`, {
         method: "DELETE",

@@ -1,4 +1,5 @@
 from sqlalchemy_serializer import SerializerMixin
+from sqlalchemy.orm import relationship
 from api import db
 
 
@@ -26,4 +27,14 @@ class Profile(db.Model, SerializerMixin):
     course_code = db.Column(
         db.String, db.ForeignKey("course.code"), unique=False, nullable=True
     )
-    course_name = db.Column(db.String, unique=False, nullable=True)
+
+    account = relationship("Account")
+    course = relationship("Course")
+    serialize_only = (
+        "id",
+        "account_name",
+        "profile_name",
+        "session_name",
+        "course_code",
+        "course.name",
+    )

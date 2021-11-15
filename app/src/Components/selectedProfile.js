@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react"
 import { useTheme } from "@mui/styles"
 import {
   Button,
+  IconButton,
   Grid,
   Typography,
   Dialog,
@@ -10,6 +11,7 @@ import {
   TextField,
 } from "@mui/material"
 import AddCircleIcon from "@mui/icons-material/AddCircle"
+import DeleteIcon from "@mui/icons-material/Delete"
 import map from "lodash/map"
 
 import { AuthContext } from "../contexts/auth"
@@ -22,13 +24,11 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
   const [addDialog, setAddDialog] = useState("")
   const [sessionName, setSessionName] = useState("")
   const [courseCode, setCourseCode] = useState("")
-  const [courseName, setCourseName] = useState("")
 
   const closeAddDialog = () => {
     setAddDialog("")
     setSessionName("")
     setCourseCode("")
-    setCourseName("")
   }
 
   const addToProfile = (e) => {
@@ -38,7 +38,6 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
     formdata.append("profile", selectedProfile.title)
     formdata.append("session", sessionName)
     courseCode !== "" && formdata.append("course_code", courseCode)
-    courseName !== "" && formdata.append("course_name", courseName)
 
     return authedFetch(`${API_BASE_URL}/profile`, {
       method: "POST",
@@ -47,6 +46,21 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
       .then((res) => res.json())
       .then((data) => {
         closeAddDialog()
+        reload()
+      })
+  }
+
+  const handleDelete = (session = null, course = null) => {
+    return authedFetch(
+      `${API_BASE_URL}/profile?profile=${selectedProfile.title}&session=${
+        course ? session + "&course=" + course : session
+      }`,
+      {
+        method: "DELETE",
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
         reload()
       })
   }
@@ -68,6 +82,7 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
             </Typography>
             {addDialog === "session" ? (
               <TextField
+                autoFocus
                 required
                 fullWidth
                 label="Session Name"
@@ -77,19 +92,13 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
             ) : (
               <>
                 <TextField
+                  autoFocus
                   required
                   fullWidth
                   label="Course Code"
                   value={courseCode}
                   onChange={(e) => setCourseCode(e.target.value)}
                   sx={{ marginBottom: 4 }}
-                />
-                <TextField
-                  required
-                  fullWidth
-                  label="Course Name"
-                  value={courseName}
-                  onChange={(e) => setCourseName(e.target.value)}
                 />
               </>
             )}
@@ -116,21 +125,33 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
       <div style={{ margin: "10px 10px" }}>
         {map(selectedProfile.sessions, (session) => {
           return (
-            <div id="session" style={{ marginBottom: "15px" }}>
-              <Typography
+            <div id="session" style={{ margin: "15px" }}>
+              <div
                 style={{
-                  color: theme.palette.text.grey,
-                  fontSize: 20,
-                  marginBottom: "15px",
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: 8,
                 }}
               >
-                {session.name}
-              </Typography>
+                <Typography
+                  style={{
+                    color: theme.palette.text.grey,
+                    fontSize: 20,
+                    margin: "auto 5px auto 0",
+                  }}
+                >
+                  {session.name}
+                </Typography>
+                <IconButton onClick={() => handleDelete(session.name)}>
+                  <DeleteIcon />
+                </IconButton>
+              </div>
               <Grid container>
                 <Grid item>
                   {map(session.courses, (course) => {
                     return (
                       <Button
+                        disableElevation
                         variant="contained"
                         style={{
                           margin: "0 5px",
@@ -140,6 +161,9 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
                           textTransform: "none",
                           border: "2px solid #B5B5B5",
                         }}
+                        onClick={() =>
+                          window.open(`/course/${course.code}`, "__newtab")
+                        }
                       >
                         <div
                           style={{
@@ -147,6 +171,21 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
                             flexDirection: "column",
                           }}
                         >
+                          <IconButton
+                            style={{
+                              position: "absolute",
+                              top: 0,
+                              right: 3,
+                              zIndex: 1,
+                            }}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              e.nativeEvent.stopImmediatePropagation()
+                              handleDelete(session.name, course.code)
+                            }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
                           <Typography style={{ fontSize: 14 }}>
                             {course.code}
                           </Typography>
@@ -160,6 +199,7 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
                 </Grid>
                 <Grid item>
                   <Button
+                    disableElevation
                     variant="contained"
                     style={{
                       margin: "0 5px",
