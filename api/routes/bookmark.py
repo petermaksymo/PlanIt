@@ -25,7 +25,6 @@ def bookmark():
 
     elif request.method == "GET":
         course = request.args.get("course")
-        print(db)
 
         if course is None:
             result = (

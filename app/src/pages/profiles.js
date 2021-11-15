@@ -8,6 +8,8 @@ import {
   DialogContent,
   Grid,
   IconButton,
+  Menu,
+  MenuItem,
   TextField,
   Typography,
 } from "@mui/material"
@@ -15,12 +17,21 @@ import AddCircleIcon from "@mui/icons-material/AddCircle"
 import MoreVertIcon from "@mui/icons-material/MoreVert"
 import remove from "lodash/remove"
 import map from "lodash/map"
+import findIndex from "lodash/findIndex"
 
 import { AuthContext } from "../contexts/auth"
 import SelectedProfile from "../Components/selectedProfile"
 import SavedCourses from "../Components/savedCourses"
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
+
+const PROFILE_COLORS = [
+  '#D55D92',
+  '#AC46A1',
+  '#822FAF',
+  '#6411AD',
+  '#3D0D69'
+]
 
 export const Profiles = () => {
   const theme = useTheme()
@@ -29,12 +40,17 @@ export const Profiles = () => {
   const [selectedProfileId, setSelectedProfileId] = useState(0)
   const selectedProfile = profiles && profiles[selectedProfileId]
 
-  const [addDialogOpen, setAddDialogOpen] = useState(false)
+  const [dialogMode, setDialogMode] = useState(null)
+  const dialogOpen = Boolean(dialogMode)
   const [newProfileName, setNewProfileName] = useState("")
-  const closeAddDialog = () => {
-    setAddDialogOpen(false)
+  const closeDialog = () => {
+    setDialogMode(null)
     setNewProfileName("")
   }
+
+  const [profileAnchorEl, setProfileAnchorEl] = useState(null)
+  const [selectedProfileMenu, setSelectedProfileMenu] = useState(null)
+  const profileMenuOpen = Boolean(profileAnchorEl)
 
   const loadProfile = () => {
     const convertProfileData = (data) => {
@@ -95,7 +111,42 @@ export const Profiles = () => {
       .then((data) => {
         loadProfile()
         setSelectedProfileId(profiles.length)
-        closeAddDialog()
+        closeDialog()
+      })
+  }
+
+  const handlePatch = (e) => {
+    e.preventDefault()
+
+    const formData= new FormData()
+    formData.append('profile', newProfileName)
+
+    return authedFetch(
+      `${API_BASE_URL}/profile?profile=${selectedProfileMenu}`,
+      {
+        method: "PATCH",
+        body: formData
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        closeDialog()
+        setProfileAnchorEl(null)
+        return loadProfile()
+      })
+      .then(() => setSelectedProfileId(findIndex(profiles, p => p.title === selectedProfileMenu)))
+  }
+
+  const handleDelete = (session = null, course = null) => {
+    return authedFetch(
+      `${API_BASE_URL}/profile?profile=${selectedProfileMenu}`,
+      {
+        method: "DELETE",
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        loadProfile()
       })
   }
 
@@ -105,27 +156,27 @@ export const Profiles = () => {
     <>
       <NavBar />
       <div className="pageContainer">
-        <Dialog open={addDialogOpen} onClose={closeAddDialog}>
-          <form onSubmit={createProfile}>
+        <Dialog open={dialogOpen} onClose={closeDialog}>
+          <form onSubmit={dialogMode === 'add' ? createProfile : handlePatch}>
             <DialogContent sx={{ minWidth: 320 }}>
               <Typography paragraph variant="h5">
-                Add a new profile:
+                {dialogMode === 'add' ? 'Add a new profile:' : `Rename ${selectedProfileMenu}:`}
               </Typography>
               <TextField
                 required
                 autoFocus
                 fullWidth
-                label="Profile Name"
+                label={dialogMode === 'add' ? "Profile Name" : 'New Profile Name'}
                 value={newProfileName}
                 onChange={(e) => setNewProfileName(e.target.value)}
               />
             </DialogContent>
             <DialogActions>
-              <Button color="secondary" onClick={closeAddDialog}>
+              <Button color="secondary" onClick={closeDialog}>
                 Cancel
               </Button>
               <Button color="primary" type="submit">
-                Add
+                {dialogMode === 'add' ? 'Add' : 'Save'}
               </Button>
             </DialogActions>
           </form>
@@ -153,7 +204,8 @@ export const Profiles = () => {
                   <Button
                     variant="contained"
                     style={{
-                      margin: "0 10px",
+                      backgroundColor: PROFILE_COLORS[idx%5],
+                      margin: "10px",
                       borderRadius: 10,
                       minWidth: "237px",
                       minHeight: "102px",
@@ -165,11 +217,20 @@ export const Profiles = () => {
                       {profile.title}
                     </Typography>
                     <IconButton
+                      id={`profile-button-${profile.title}`}
+                      aria-controls='profile-menu'
+                      aria-haspopup="true"
                       style={{
                         position: "absolute",
                         top: "4px",
                         right: "2px",
                         color: theme.palette.text.main,
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        e.nativeEvent.stopImmediatePropagation()
+                        setProfileAnchorEl(e.currentTarget)
+                        setSelectedProfileMenu(profile.title)
                       }}
                     >
                       <MoreVertIcon />
@@ -177,40 +238,49 @@ export const Profiles = () => {
                   </Button>
                 )
               })}
-            </Grid>
-            <Button
-              variant="contained"
-              style={{
-                margin: "0 15px",
-                borderRadius: 10,
-                minWidth: "200px",
-                minHeight: "102px",
-                backgroundColor: "#FAFAFA",
-                textTransform: "none",
-              }}
-              onClick={() => setAddDialogOpen(true)}
-            >
-              <div
+              <Button
+                variant="contained"
                 style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
+                  margin: "0 15px",
+                  borderRadius: 10,
+                  minWidth: "200px",
+                  minHeight: "102px",
+                  backgroundColor: "#FAFAFA",
+                  textTransform: "none",
                 }}
+                onClick={() => setDialogMode('add')}
               >
-                <AddCircleIcon
-                  sx={{
-                    top: "50%",
-                    color: theme.palette.background.main,
-                    fontSize: 40,
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
                   }}
-                />
-                <Typography
-                  sx={{ color: theme.palette.text.grey, fontSize: 18 }}
                 >
-                  Create New Profile
-                </Typography>
-              </div>
-            </Button>
+                  <AddCircleIcon
+                    sx={{
+                      top: "50%",
+                      color: theme.palette.background.main,
+                      fontSize: 40,
+                    }}
+                  />
+                  <Typography
+                    sx={{ color: theme.palette.text.grey, fontSize: 18 }}
+                  >
+                    Create New Profile
+                  </Typography>
+                </div>
+              </Button>
+              <Menu
+                id='profile-menu'
+                anchorEl={profileAnchorEl}
+                open={profileMenuOpen}
+                onClose={() => setProfileAnchorEl(null)}
+              >
+                <MenuItem onClick={() => setDialogMode('edit')}>Edit</MenuItem>
+                <MenuItem onClick={() => handleDelete()}>Delete</MenuItem>
+              </Menu>
+            </Grid>
           </Grid>
         </div>
         <SelectedProfile

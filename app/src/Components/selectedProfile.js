@@ -18,6 +18,14 @@ import { AuthContext } from "../contexts/auth"
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
+const COURSE_COLORS = [
+  '#F9EEFF',
+  '#FFDFE8',
+  '#DAD8FF',
+  '#EDCDFF',
+  '#FEC5C5'
+]
+
 const SelectedProfile = ({ selectedProfile, reload }) => {
   const theme = useTheme()
   const { authedFetch } = useContext(AuthContext)
@@ -123,7 +131,7 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
         {selectedProfile.title}
       </Typography>
       <div style={{ margin: "10px 10px" }}>
-        {map(selectedProfile.sessions, (session) => {
+        {map(selectedProfile.sessions, (session, session_idx) => {
           return (
             <div id="session" style={{ margin: "15px" }}>
               <div
@@ -154,9 +162,11 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
                         disableElevation
                         variant="contained"
                         style={{
+                          backgroundColor: COURSE_COLORS[session_idx%5],
                           margin: "0 5px",
                           borderRadius: 10,
                           minWidth: "250px",
+                          maxWidth: 250,
                           minHeight: "91px",
                           textTransform: "none",
                           border: "2px solid #B5B5B5",
@@ -169,6 +179,7 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
                           style={{
                             display: "flex",
                             flexDirection: "column",
+                            color: '#000'
                           }}
                         >
                           <IconButton
@@ -176,7 +187,7 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
                               position: "absolute",
                               top: 0,
                               right: 3,
-                              zIndex: 1,
+                              color: '#000'
                             }}
                             onClick={(e) => {
                               e.stopPropagation()

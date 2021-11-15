@@ -51,7 +51,7 @@ export const BookmarkButton = ({ course_id, ...props }) => {
 
   return (
     <IconButton onClick={toggleBookmark} {...props}>
-      {bookmarked ? <BookmarkIcon /> : <BookmarkBorderIcon />}
+      {bookmarked ? <BookmarkIcon style={{ color: '#000' }}/> : <BookmarkBorderIcon style={{ color: '#000' }} />}
     </IconButton>
   )
 }

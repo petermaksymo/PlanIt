@@ -8,6 +8,14 @@ import BookmarkButton from "./bookmarkButton"
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
+const COURSE_COLORS = [
+  '#F9EEFF',
+  '#FFDFE8',
+  '#DAD8FF',
+  '#EDCDFF',
+  '#FEC5C5'
+]
+
 const SavedCourses = () => {
   const theme = useTheme()
   const { authedFetch } = useContext(AuthContext)
@@ -38,18 +46,24 @@ const SavedCourses = () => {
         </Typography>
       </div>
       <div id="saved-courses" style={{ padding: "30px 286px" }}>
+        <Grid id='course-grid' container>
         {courses ? (
-          <Grid container>
             <Grid item>
-              {map(courses, (course) => {
+              {map(courses, (course, idx) => {
+                const cards_per_row = Math.floor(document.getElementById('course-grid').clientWidth / 270 )
+                const row_idx = Math.floor(idx / cards_per_row)
+                const color = COURSE_COLORS[row_idx%5]
+
                 return (
                   <Button
                     disableElevation
                     variant="contained"
                     style={{
-                      margin: "0 5px",
+                      backgroundColor: color,
+                      margin: "10px 10px",
                       borderRadius: 10,
                       minWidth: "250px",
+                      maxWidth: 250,
                       minHeight: "91px",
                       textTransform: "none",
                       border: "2px solid #B5B5B5",
@@ -65,7 +79,7 @@ const SavedCourses = () => {
                         zIndex: 1,
                       }}
                     />
-                      <div style={{ display: "flex", flexDirection: "column" }}>
+                      <div style={{ display: "flex", flexDirection: "column", color: '#000' }}>
                         <Typography style={{ fontSize: 14 }}>
                           {course.code}
                         </Typography>
@@ -77,10 +91,10 @@ const SavedCourses = () => {
                 )
               })}
             </Grid>
-          </Grid>
         ) : (
           <Typography>Courses you bookmark will be visible here</Typography>
         )}
+        </Grid>
       </div>
     </>
   )
