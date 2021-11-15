@@ -7,10 +7,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 from flask import request, redirect, jsonify, render_template
 from wtforms import Form, StringField, SelectField
 from api.database.models import Course
-from sqlalchemy import or_, and_
 import json
-from api import db
 from api.app import app
+from api.database import db
 
 
 """Handle the data from the POST request that will go to the main algorithm.
@@ -61,4 +60,8 @@ This method shows the information about a single course.
 def course(code):
     query = db.session.query(Course)
     course = query.filter_by(code=code).first()
-    return jsonify(course.serialize())
+    if course:
+        return jsonify(course.serialize())
+    else:
+        raise Exception("Invalid Course Code!")
+
