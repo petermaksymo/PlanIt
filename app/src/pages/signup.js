@@ -114,6 +114,7 @@ export const Signup = () => {
               variant="filled"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              InputProps={{ disableUnderline: true }}
             />
           </div>
           <div id="password" style={{ marginBottom: "4rem" }}>
@@ -133,6 +134,7 @@ export const Signup = () => {
               onChange={(e) => setPassword(e.target.value)}
               inputProps={{
                 pattern: passwordRegEx,
+                disableUnderline: true,
                 title:
                   "Password must be minimum 8 characters with at least one letter, number, and special character",
               }}
@@ -148,6 +150,7 @@ export const Signup = () => {
               onChange={(e) => setConfirmPassword(e.target.value)}
               inputProps={{
                 pattern: passwordRegEx,
+                disableUnderline: true,
                 title:
                   "Password must be minimum 8 characters with at least one letter, number, and special character",
               }}
@@ -171,6 +174,7 @@ export const Signup = () => {
               variant="filled"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              InputProps={{ disableUnderline: true }}
             />
           </div>
           <div id="buttons" className={classes.buttonContainer}>
