@@ -161,7 +161,7 @@ def test_course_success(client):
     response = client.get("/course/ECE444H1")
     assert response.status_code == 200
     data = json.loads(response.data)
-    assert data["Name"] == "Software Engineering"
+    assert data["name"] == "Software Engineering"
 
 
 # Peter Maksymowsky
