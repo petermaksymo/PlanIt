@@ -37,7 +37,7 @@ def search_results():
 def search_courses(search_keywords, year, divisions, departments, campuses, top):
     query = db.session.query(Course)
     if search_keywords:
-        query = query.filter(Course.name.ilike(f'%{search_keywords}%'))
+        query = query.filter(Course.name.ilike(f"%{search_keywords}%"))
     if year:
         query = query.filter_by(course_level=year)
     if divisions:
