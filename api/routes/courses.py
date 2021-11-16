@@ -20,20 +20,16 @@ Pass the original search to the template as well, so the user can see the contex
 """
 
 
-@app.route("/results", methods=["POST"])
+@app.route("/results", methods=["GET"])
 def search_results():
-    results = search_courses(
-        request.form["search_keywords"],
-        request.form["year"],
-        request.form["divisions"],
-        request.form["departments"],
-        request.form["campuses"],
-        request.form["top"],
-    )
-    return jsonify([item.serialize() for item in results])
-
-
-def search_courses(search_keywords, year, divisions, departments, campuses, top):
+    search_keywords = request.args.get("search_keywords")
+    year = request.args.get("year")
+    divisions = request.args.get("divisions")
+    departments = request.args.get("departments")
+    campuses = request.args.get("campuses")
+    top = request.args.get("top")
+    if top is None:
+        top = "50"
     query = db.session.query(Course)
     if search_keywords:
         query = query.filter(Course.name.ilike(f"%{search_keywords}%"))
@@ -46,9 +42,9 @@ def search_courses(search_keywords, year, divisions, departments, campuses, top)
     if campuses:
         query = query.filter_by(campus=campuses)
     if top:
-        query = query.filter_by().limit(top)
+        query = query.filter_by().limit(int(top))
     results = query.all()
-    return results
+    return jsonify([item.serialize() for item in results])
 
 
 """

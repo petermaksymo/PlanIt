@@ -24,7 +24,7 @@ export const ResultCard = ({ result }) => {
             margin: "auto 0",
           }}
         >
-          {result["Name"]}
+          {result["name"]}
         </Typography>
         <Rating sx={{ margin: "auto 0" }} value={rating} readOnly />
         <Typography
@@ -42,11 +42,11 @@ export const ResultCard = ({ result }) => {
         </Typography>
         <BookmarkButton
           sx={{ marginLeft: "auto" }}
-          course_id={result["Code"]}
+          course_id={result["code"]}
         />
       </div>
       <Typography sx={{ padding: "6px 42px" }}>
-        {result["Course Description"]}
+        {result["course_description"]}
       </Typography>
     </Card>
   )
