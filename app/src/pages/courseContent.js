@@ -1,7 +1,11 @@
 import { Typography, Rating, Divider } from "@mui/material"
+import { useParams } from "react-router-dom"
 import BookmarkButton from "../Components/bookmarkButton"
 import { NavBar } from "../Components/navbar"
 import { makeStyles, useTheme } from "@mui/styles"
+import { useEffect, useState } from "react"
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -34,21 +38,39 @@ const useStyles = makeStyles((theme) => ({
 
 export const CourseContent = () => {
   const theme = useTheme()
+  const { course_id } = useParams()
   const classes = useStyles()
-  const result = {
-    name: " Introduction to Databases",
-    code: "CSC343H1",
-    courseDescription:
-      "Introduction to database management systems. The relational data model. Relational algebra. Querying and updating databases: the query language SQL. Application programming with SQL. Integrity constraints, normal forms, and database design. Elements of database system technology: query processing, transaction management.",
-    division: "Faculty of Applied Science and Engineering",
-    department: "Biochemistry",
-    prereq: "",
-    coreq: "",
-    campus: "St. George",
-    term: "Winter 2022",
-    rating: Math.random() * 5,
-    views: Math.round(Math.random() * 10000),
-  }
+  const [result, setResult] = useState()
+
+  useEffect(() => {
+    return fetch(`${API_BASE_URL}/course/${course_id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        setResult({
+          ...data,
+          rating: Math.random() * 5,
+          views: Math.round(Math.random() * 10000),
+        })
+      })
+  }, [course_id])
+
+  // const result = {
+  //   name: " Introduction to Databases",
+  //   code: "CSC343H1",
+  //   courseDescription:
+  //     "Introduction to database management systems. The relational data model. Relational algebra. Querying and updating databases: the query language SQL. Application programming with SQL. Integrity constraints, normal forms, and database design. Elements of database system technology: query processing, transaction management.",
+  //   division: "Faculty of Applied Science and Engineering",
+  //   department: "Biochemistry",
+  //   prereq: "",
+  //   coreq: "",
+  //   campus: "St. George",
+  //   term: "Winter 2022",
+  //   rating: Math.random() * 5,
+  //   views: Math.round(Math.random() * 10000),
+  // }
+
+  if (!result) return null
 
   return (
     <>

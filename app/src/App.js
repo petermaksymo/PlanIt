@@ -32,7 +32,7 @@ function App() {
                 <Route path="/login">
                   <Login />
                 </Route>
-                <Route path="/courseContent">
+                <Route path="/course/:course_id">
                   <CourseContent />
                 </Route>
                 <PrivateRoute path="/profiles" component={Profiles} />
