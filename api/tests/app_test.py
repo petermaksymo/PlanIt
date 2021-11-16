@@ -9,7 +9,7 @@ import sqlalchemy
 from api.app import app
 from api.database import db
 from flask import g
-from api.routes.courses import search_courses
+from api.routes.courses import search_results
 
 
 @pytest.fixture
