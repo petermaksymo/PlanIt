@@ -2,21 +2,33 @@ import React, { useState } from "react"
 import Paper from "@mui/material/Paper"
 import InputBase from "@mui/material/InputBase"
 import IconButton from "@mui/material/IconButton"
-import FormControl from "@mui/material/FormControl"
-import InputLabel from "@mui/material/InputLabel"
-import Select from "@mui/material/Select"
-import MenuItem from "@mui/material/MenuItem"
+import Button from '@mui/material/Button'
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt"
-import { useTheme } from "@mui/styles"
 import Grid from "@mui/material/Grid"
-
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import { makeStyles, useTheme } from "@mui/styles"
 import { Results } from "../Components/results"
 import { NavBar } from "../Components/navbar"
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+
+const useStyles = makeStyles((theme) => ({
+  btn: {
+    backgroundColor: theme.palette.button.brightRed, 
+    borderRadius: 10, 
+    textTransform: "none",
+  },
+  filter: {
+    margin: "20px 16px 20px 0",
+  }
+}))
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
 export const CourseFinder = () => {
   const theme = useTheme()
+  const classes = useStyles()
   const [search, setSearch] = useState("")
   const [year, setYear] = useState("")
   const [department, setDepartment] = useState("") // eslint-disable-line no-unused-vars
@@ -62,6 +74,40 @@ export const CourseFinder = () => {
       })
   }
 
+  const filters = {
+    year: ["Any", 1, 2, 3, 4],
+    division: ["Any",
+              "Faculty of Applied Science and Engineering", 
+              "Faculty of Arts and Science", 
+              "University of Toronto Mississauga", 
+              "University of Toronto Scarborough"],
+    department: ["Any",
+                "ASDN: Arts and Science, Office of the Dean", 
+                "Anatomy and Cell Biology", 
+                "Anthropology", 
+                "Anthropology (UTSC)", 
+                "Art History", 
+                "Astronomy and Astrophysics",
+                "Biochemistry", 
+                "Biological Sciences (UTSC)", 
+                "Biology", 
+                "Canadian Institute for Theoretical Astrophysics", 
+                "Cell and Systems Biology", 
+                "Centre for Criminology and Sociolegal Studies",
+                "Centre for Critical Development Studies (UTSC)",
+                "Centre for Diaspora and Transnational Studies",
+                "Centre for Drama, Theatre and Performance Studies",
+                "Centre for Ethics",
+                "Centre for European, Russian and Eurasian Studies"],
+    campus: ["Any",
+            "Mississauga",
+            "Scarborough",
+            "St. George"],
+    maxResults: ["Any", 10, 25, 50],
+    rating: ["Any", "Over 2", "Over 3", "Over 4", "Over 4.5"],
+    sortBy: ["Any", "Field"]
+  }
+
   return (
     <div>
       <NavBar />
@@ -69,7 +115,7 @@ export const CourseFinder = () => {
         <div
           style={{
             backgroundColor: theme.palette.background.lightPink,
-            padding: "20px 0",
+            padding: "40px 0 20px 0",
           }}
         >
           <div
@@ -97,6 +143,7 @@ export const CourseFinder = () => {
                     borderWidth: "medium",
                     border: "solid",
                     borderColor: theme.palette.background.main,
+                    borderRadius: 3
                   }}
                   className="searchBar"
                   onSubmit={onSubmit}
@@ -111,155 +158,115 @@ export const CourseFinder = () => {
                   />
                   <IconButton
                     type="submit"
-                    sx={{ p: "10px" }}
+                    sx={{ margin: "-10px" }}
                     aria-label="search"
+                    disableRipple={true}
+                    disableFocusRipple={true}
                   >
-                    <ArrowRightAltIcon color="primary" />
+                    <ArrowRightAltIcon sx={{fontSize: 40}} color="primary" />
                   </IconButton>
                 </Paper>
               </Grid>
 
-              <Grid item id="form-filters">
-                <FormControl
-                  variant="standard"
-                  sx={{
-                    m: "1rem 1rem 1rem 0rem",
-                    width: 120,
-                    backgroundColor: theme.palette.button.brightRed,
-                    borderRadius: "0.5rem",
-                  }}
-                >
-                  <InputLabel sx={{ color: "white" }}>Course Year</InputLabel>
-                  <Select
-                    value={year}
-                    onChange={(e) => setYear(e.target.value)}
-                  >
-                    <MenuItem value="">
-                      <em>Any</em>
-                    </MenuItem>
-                    <MenuItem value={1}>1</MenuItem>
-                    <MenuItem value={2}>2</MenuItem>
-                    <MenuItem value={3}>3</MenuItem>
-                    <MenuItem value={4}>4</MenuItem>
-                  </Select>
-                </FormControl>
-
-                <FormControl
-                  variant="standard"
-                  sx={{
-                    m: "1rem 1rem 1rem 0rem",
-                    minWidth: 120,
-                    backgroundColor: theme.palette.button.brightRed,
-                    borderRadius: "0.5rem",
-                  }}
-                >
-                  <InputLabel sx={{ color: "white" }}>Division</InputLabel>
-                  <Select>
-                    <MenuItem value="">
-                      <em>Any</em>
-                    </MenuItem>
-                    <MenuItem value={10}>
-                      Faculty of Applied Science and Engineering
-                    </MenuItem>
-                    <MenuItem value={20}>Faculty of Arts and Science</MenuItem>
-                    <MenuItem value={30}>
-                      University of Toronto Mississauga
-                    </MenuItem>
-                    <MenuItem value={40}>
-                      University of Toronto Scarborough
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-
-                <FormControl
-                  variant="standard"
-                  sx={{
-                    m: "1rem 1rem 1rem 0rem",
-                    minWidth: 120,
-                    backgroundColor: theme.palette.button.brightRed,
-                    borderRadius: "0.5rem",
-                  }}
-                >
-                  <InputLabel sx={{ color: "white" }}>Department</InputLabel>
-                  <Select>
-                    <MenuItem value="">
-                      <em>Any</em>
-                    </MenuItem>
-                    <MenuItem value={10}>
-                      ASDN: Arts and Science, Office of the Dean
-                    </MenuItem>
-                    <MenuItem value={20}>Anatomy and Cell Biology</MenuItem>
-                    <MenuItem value={30}>Anthropology</MenuItem>
-                    <MenuItem value={40}>Anthropology (UTSC)</MenuItem>
-                    <MenuItem value={30}>Art History</MenuItem>
-                    <MenuItem value={30}>Astronomy and Astrophysics</MenuItem>
-                    <MenuItem value={30}>Biochemistry</MenuItem>
-                    <MenuItem value={30}>Biological Sciences (UTSC)</MenuItem>
-                    <MenuItem value={30}>Biology</MenuItem>
-                    <MenuItem value={30}>
-                      Canadian Institute for Theoretical Astrophysics
-                    </MenuItem>
-                    <MenuItem value={30}>Cell and Systems Biology</MenuItem>
-                    <MenuItem value={30}>
-                      Centre for Criminology and Sociolegal Studies
-                    </MenuItem>
-                    <MenuItem value={30}>
-                      Centre for Critical Development Studies (UTSC)
-                    </MenuItem>
-                    <MenuItem value={30}>
-                      Centre for Diaspora and Transnational Studies
-                    </MenuItem>
-                    <MenuItem value={30}>
-                      Centre for Drama, Theatre and Performance Studies
-                    </MenuItem>
-                    <MenuItem value={30}>Centre for Ethics</MenuItem>
-                    <MenuItem value={30}>
-                      Centre for European, Russian and Eurasian Studies
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-
-                <FormControl
-                  variant="standard"
-                  sx={{
-                    m: "1rem 1rem 1rem 0rem",
-                    minWidth: 120,
-                    backgroundColor: theme.palette.button.brightRed,
-                    borderRadius: "0.5rem",
-                  }}
-                >
-                  <InputLabel sx={{ color: "white" }}>Campus</InputLabel>
-                  <Select>
-                    <MenuItem value="">
-                      <em>Any</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Mississauga</MenuItem>
-                    <MenuItem value={20}>Scarborough</MenuItem>
-                    <MenuItem value={30}>St. George</MenuItem>
-                  </Select>
-                </FormControl>
-
-                <FormControl
-                  variant="standard"
-                  sx={{
-                    m: "1rem 1rem 1rem 0rem",
-                    minWidth: 120,
-                    backgroundColor: theme.palette.button.brightRed,
-                    borderRadius: "0.5rem",
-                  }}
-                >
-                  <InputLabel sx={{ color: "white" }}>Max Results</InputLabel>
-                  <Select>
-                    <MenuItem value="">
-                      <em>Any</em>
-                    </MenuItem>
-                    <MenuItem value={10}>10</MenuItem>
-                    <MenuItem value={20}>25</MenuItem>
-                    <MenuItem value={30}>50</MenuItem>
-                  </Select>
-                </FormControl>
+              <Grid item id="form-filters" style={{display: "flex"}}>
+                <div className={classes.filter}>
+                  <PopupState variant="popover" popupId="year-filter" >
+                    {(popupState) => (
+                      <React.Fragment>
+                        <Button variant="contained" {...bindTrigger(popupState)} className={classes.btn}>
+                          Course Year
+                        </Button>
+                        <Menu {...bindMenu(popupState)}>
+                          {filters.year.map(item => {
+                            return <MenuItem onClick={popupState.close}>{item}</MenuItem>
+                          })}
+                        </Menu>
+                      </React.Fragment>
+                    )}
+                  </PopupState>
+                </div>
+                <div className={classes.filter}>
+                  <PopupState variant="popover" popupId="division-filter">
+                    {(popupState) => (
+                      <React.Fragment>
+                        <Button variant="contained" {...bindTrigger(popupState)} className={classes.btn}>
+                          Division
+                        </Button>
+                        <Menu {...bindMenu(popupState)}>
+                          {filters.division.map(item => {
+                            return <MenuItem onClick={popupState.close}>{item}</MenuItem>
+                          })}
+                        </Menu>
+                      </React.Fragment>
+                    )}
+                  </PopupState>
+                </div>
+                <div className={classes.filter}>
+                  <PopupState variant="popover" popupId="department-filter">
+                    {(popupState) => (
+                      <React.Fragment>
+                        <Button variant="contained" {...bindTrigger(popupState)} className={classes.btn}>
+                          Department
+                        </Button>
+                        <Menu {...bindMenu(popupState)}>
+                          {filters.department.map(item => {
+                            return <MenuItem onClick={popupState.close}>{item}</MenuItem>
+                          })}
+                        </Menu>
+                      </React.Fragment>
+                    )}
+                  </PopupState>
+                </div>
+                <div className={classes.filter}>
+                  <PopupState variant="popover" popupId="campus-filter">
+                    {(popupState) => (
+                      <React.Fragment>
+                        <Button variant="contained" {...bindTrigger(popupState)} className={classes.btn}>
+                          Campus
+                        </Button>
+                        <Menu {...bindMenu(popupState)}>
+                          {filters.campus.map(item => {
+                            return <MenuItem onClick={popupState.close}>{item}</MenuItem>
+                          })}
+                        </Menu>
+                      </React.Fragment>
+                    )}
+                  </PopupState>
+                </div>
+                <div className={classes.filter}>
+                  <PopupState variant="popover" popupId="max-results-filter">
+                    {(popupState) => (
+                      <React.Fragment>
+                        <Button variant="contained" {...bindTrigger(popupState)} className={classes.btn}>
+                          Max Results
+                        </Button>
+                        <Menu {...bindMenu(popupState)}>
+                          {filters.maxResults.map(item => {
+                            return <MenuItem onClick={popupState.close}>{item}</MenuItem>
+                          })}
+                        </Menu>
+                      </React.Fragment>
+                    )}
+                  </PopupState>
+                </div>
+                <div className={classes.filter}>
+                  <PopupState variant="popover" popupId="rating-filter">
+                    {(popupState) => (
+                      <React.Fragment>
+                        <Button variant="contained" {...bindTrigger(popupState)} style={{backgroundColor: theme.palette.button.brightRed, borderRadius: "0.5rem", textTransform: "none"}}>
+                          Rating
+                        </Button>
+                        <Menu {...bindMenu(popupState)}>
+                          {filters.rating.map(item => {
+                            return <MenuItem onClick={popupState.close}>{item}</MenuItem>
+                          })}
+                        </Menu>
+                      </React.Fragment>
+                    )}
+                  </PopupState>
+                </div>
               </Grid>
-            </Grid>
+            </Grid> 
           </div>
         </div>
       </div>
@@ -272,24 +279,21 @@ export const CourseFinder = () => {
             boxSizing: "border-box",
           }}
         >
-          <FormControl
-            variant="standard"
-            sx={{
-              m: 1,
-              minWidth: 120,
-              backgroundColor: "#D3D3D3",
-              borderRadius: "0.5rem",
-            }}
-          >
-            <InputLabel>Filter</InputLabel>
-            <Select value={filter} onChange={(e) => setFilter(e.target.value)}>
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value="Field">Field</MenuItem>
-              <MenuItem value="something">Something</MenuItem>
-            </Select>
-          </FormControl>
+          <PopupState variant="popover" popupId="sort-by-filter">
+            {(popupState) => (
+              <React.Fragment>
+                <Button variant="contained" {...bindTrigger(popupState)} className={classes.btn} style={{backgroundColor: "#D3D3D3"}}>
+                  Sorty By 
+                  <ArrowDropDownIcon/>
+                </Button>
+                <Menu {...bindMenu(popupState)}>
+                  {filters.sortBy.map(item => {
+                    return <MenuItem onClick={popupState.close}>{item}</MenuItem>
+                  })}
+                </Menu>
+              </React.Fragment>
+            )}
+          </PopupState>
           <Results data={results} />
         </div>
       </div>
