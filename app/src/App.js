@@ -15,6 +15,7 @@ import { Login } from "./pages/login"
 import { Profiles } from "./pages/profiles"
 import { CourseContent } from "./pages/courseContent"
 import { Account } from "./pages/account"
+import { Help } from "./pages/help"
 import AuthContext from "./contexts/auth"
 import PrivateRoute from "./Components/privateRoute"
 
@@ -34,6 +35,9 @@ function App() {
                 </Route>
                 <Route path="/courseContent">
                   <CourseContent />
+                </Route>
+                <Route path="/help">
+                  <Help />
                 </Route>
                 <PrivateRoute path="/profiles" component={Profiles} />
                 <PrivateRoute path="/account" component={Account} />
