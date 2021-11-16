@@ -36,6 +36,13 @@ def post_account(client, email, username, password):
     )
 
 
+def get_token(client):
+    post_account(client, "admin@admin.ca", "admin", "admin")
+    result = login_account(client, "admin", "admin")
+    token = json.loads(result.data)
+    return token["access_token"]
+
+
 def post_profile(client, account, profile, session, course):
     return client.post(
         "/profile",
@@ -255,18 +262,21 @@ def test_profile_delete(client):
     assert data == 3
 
 
-@pytest.mark.skip
 def test_bookmark_post(client):
-    result = post_bookmark(client, "", "ECE444")
-    assert result.status_code == 400
-    data = json.loads(result.data)
-    assert data["message"] == "Please specify an account"
-
-    result = post_bookmark(client, "admin", "ECE444")
+    token = get_token(client)
+    result = client.post("/bookmark", data=dict(account="admin", course="ECE444"), headers={'Authorization': 'Bearer ' + token}, follow_redirects=True)
     assert result.status_code == 200
-    data = json.loads(result.data)
-    assert data["account_name"] == "admin"
-    assert data["course_name"] == "ECE444"
+
+    # result = post_bookmark(client, "", "ECE444")
+    # assert result.status_code == 400
+    # data = json.loads(result.data)
+    # assert data["message"] == "Please specify an account"
+
+    # result = post_bookmark(client, current_user().username, "ECE444")
+    # assert result.status_code == 200
+    # data = json.loads(result.data)
+    # assert data["account_name"] == current_user().username
+    # assert data["course_name"] == "ECE444"
 
 
 @pytest.mark.skip
