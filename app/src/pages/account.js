@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "50%",
     padding: "10px 0px",
     textTransform: "none",
-  }
+  },
 }))
 
 export const Account = () => {

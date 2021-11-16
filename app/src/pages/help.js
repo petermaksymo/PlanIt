@@ -45,14 +45,18 @@ export const Help = () => {
         </Typography>
       </div>
       <div id="page-container" style={{ margin: "80px 309px" }}>
-        <Typography className={classes.text}>The following video is a tutorial on how to use most of the websites features</Typography>
-        <iframe src='https://www.youtube.com/embed/dQw4w9WgXcQ'
-          frameborder='0'
+        <Typography className={classes.text}>
+          The following video is a tutorial on how to use most of the websites
+          features
+        </Typography>
+        <iframe
+          src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+          frameborder="0"
           width="853"
           height="480"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
-          title='Help Video'
+          title="Help Video"
         />
       </div>
     </>
