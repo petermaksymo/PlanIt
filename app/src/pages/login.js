@@ -16,16 +16,20 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     margin: "auto",
     display: "flex",
+    flexFlow: 'row wrap',
+    flex: '0 1 auto',
     justifyContent: "center",
     alignItems: "center",
   },
   textField: {
     backgroundColor: "#FFFFFF",
-    width: "50%",
+    maxWidth: 400,
+    width: '100%',
     borderRadius: "1rem",
   },
   buttonContainer: {
-    width: "50%",
+    maxWidth: 400,
+    width: '100%',
     display: "flex",
     justifyContent: "space-between",
   },
@@ -39,9 +43,9 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "0.5rem",
   },
   rightSide: {
-    maxWidth: 800,
+    maxWidth: 400,
     width: "100%",
-    marginLeft: "20px",
+    padding: "20px",
   },
 }))
 
@@ -70,7 +74,7 @@ export const Login = () => {
   return (
     <div className={classes.container}>
       <div className={classes.semiContainer}>
-        <Logo height="91" width="192" />
+        <Logo height="91" width="192" style={{ margin: '0 auto'}}/>
         <div id="right-side" className={classes.rightSide}>
           <div id="title" style={{ marginBottom: "2rem" }}>
             <Typography variant="h3" className={classes.text}>
