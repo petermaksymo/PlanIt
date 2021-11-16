@@ -17,14 +17,14 @@ const useStyles = makeStyles((theme) => ({
     padding: 20,
     width: "100%",
     margin: "auto",
-    [theme.breakpoints.down('md')]: {
-      margin: "24px auto"
-    }
+    [theme.breakpoints.down("md")]: {
+      margin: "24px auto",
+    },
   },
   textField: {
     backgroundColor: "#FFFFFF",
     maxWidth: 392,
-    width: '100%',
+    width: "100%",
     borderRadius: "1rem",
   },
   buttonContainer: {
