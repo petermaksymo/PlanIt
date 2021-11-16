@@ -28,7 +28,7 @@ def bookmark():
 
         if course is None:
             result = Bookmark.query.filter_by(
-                account_name=current_user.username(),
+                account_name=current_user().username,
             ).all()
             return jsonify([item.serialize() for item in result])
         else:
