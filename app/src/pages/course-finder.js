@@ -30,12 +30,12 @@ export const CourseFinder = () => {
   const theme = useTheme()
   const classes = useStyles()
   const [search, setSearch] = useState("")
-  const [year, setYear] = useState("")
+  const [year, setYear] = useState("") // eslint-disable-line no-unused-vars
   const [department, setDepartment] = useState("") // eslint-disable-line no-unused-vars
   const [division, setDivision] = useState("") // eslint-disable-line no-unused-vars
   const [campus, setCampus] = useState("") // eslint-disable-line no-unused-vars
-  const [results, setResults] = useState(null)
-  const [filter, setFilter] = useState("")
+  const [results, setResults] = useState(null) 
+  const [filter, setFilter] = useState("") // eslint-disable-line no-unused-vars
 
   const onSubmit = (e) => {
     e.preventDefault()
