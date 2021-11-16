@@ -29,9 +29,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   cornerBorder: {
-    borderRadius: "14px",
-    border: "4px solid",
-    borderColor: theme.palette.background.lightBlue,
     padding: "81px 137px",
   },
   textField: {
@@ -41,6 +38,11 @@ const useStyles = makeStyles((theme) => ({
     border: "2px solid #B5B5B5",
     marginRight: "10px",
   },
+  saveButton: {
+    borderRadius: "50%",
+    padding: "10px 0px",
+    textTransform: "none",
+  }
 }))
 
 export const Account = () => {
@@ -76,87 +78,85 @@ export const Account = () => {
           Account Settings
         </Typography>
       </div>
-      <div id="page-container" style={{ margin: "62px 172px" }}>
-        <div id="course-container" className={classes.cornerBorder}>
-          <div id="username-section">
-            <Typography className={classes.header}>Current Username</Typography>
-            <Typography className={classes.text}>{user.username}</Typography>
-            <Typography className={classes.header}>Change Username</Typography>
-            <div className={classes.align}>
-              <TextField
-                required
-                pattern
-                className={classes.textField}
-                id="filled-basic"
-                label="New Username"
-                variant="filled"
-                value={username}
-                InputProps={{ disableUnderline: true }}
-                onChange={(e) => setUsername(e.target.value)}
+      <div id="page-container" style={{ margin: "80px 309px" }}>
+        <div id="username-section">
+          <Typography className={classes.header}>Current Username</Typography>
+          <Typography className={classes.text}>{user.username}</Typography>
+          <Typography className={classes.header}>Change Username</Typography>
+          <div className={classes.align}>
+            <TextField
+              required
+              pattern
+              className={classes.textField}
+              id="filled-basic"
+              label="New Username"
+              variant="filled"
+              value={username}
+              InputProps={{ disableUnderline: true }}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <Button variant="contained" className={classes.saveButton}>
+              <SaveIcon
+                sx={{ fontSize: 40, color: theme.palette.background.primary }}
               />
-              <Button variant="contained">
-                <SaveIcon
-                  sx={{ fontSize: 40, color: theme.palette.background.primary }}
-                />
-              </Button>
-            </div>
+            </Button>
           </div>
-          <Divider className={classes.divider} />
-          <div id="email-section">
-            <Typography className={classes.header}>Current Email</Typography>
-            <Typography className={classes.text}>{user.email}</Typography>
-            <Typography className={classes.header}>Change Email</Typography>
-            <div className={classes.align}>
-              <TextField
-                required
-                pattern
-                className={classes.textField}
-                id="filled-basic"
-                label="New Email"
-                variant="filled"
-                value={email}
-                InputProps={{ disableUnderline: true }}
-                onChange={(e) => setEmail(e.target.value)}
+        </div>
+        <Divider className={classes.divider} />
+        <div id="email-section">
+          <Typography className={classes.header}>Current Email</Typography>
+          <Typography className={classes.text}>{user.email}</Typography>
+          <Typography className={classes.header}>Change Email</Typography>
+          <div className={classes.align}>
+            <TextField
+              required
+              pattern
+              className={classes.textField}
+              id="filled-basic"
+              label="New Email"
+              variant="filled"
+              value={email}
+              InputProps={{ disableUnderline: true }}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Button variant="contained" className={classes.saveButton}>
+              <SaveIcon
+                sx={{ fontSize: 40, color: theme.palette.background.primary }}
               />
-              <Button variant="contained">
-                <SaveIcon
-                  sx={{ fontSize: 40, color: theme.palette.background.primary }}
-                />
-              </Button>
-            </div>
+            </Button>
           </div>
-          <Divider className={classes.divider} />
-          <div id="password-section">
-            <Typography className={classes.header}>Change Email</Typography>
-            <div className={classes.align}>
-              <TextField
-                required
-                pattern
-                className={classes.textField}
-                id="filled-basic"
-                label="New Password"
-                variant="filled"
-                value={newPassword}
-                InputProps={{ disableUnderline: true }}
-                onChange={(e) => setNewPassword(e.target.value)}
+        </div>
+        <Divider className={classes.divider} />
+        <div id="password-section">
+          <Typography className={classes.header}>Change Email</Typography>
+          <div className={classes.align}>
+            <TextField
+              required
+              pattern
+              className={classes.textField}
+              id="filled-basic"
+              label="New Password"
+              variant="filled"
+              value={newPassword}
+              InputProps={{ disableUnderline: true }}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+            <TextField
+              required
+              pattern
+              className={classes.textField}
+              id="filled-basic"
+              label="Current Password"
+              variant="filled"
+              value={password}
+              InputProps={{ disableUnderline: true }}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button variant="contained" className={classes.saveButton}>
+              <SaveIcon
+                sx={{ fontSize: 40, color: theme.palette.background.primary }}
               />
-              <TextField
-                required
-                pattern
-                className={classes.textField}
-                id="filled-basic"
-                label="Current Password"
-                variant="filled"
-                value={password}
-                InputProps={{ disableUnderline: true }}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <Button variant="contained">
-                <SaveIcon
-                  sx={{ fontSize: 40, color: theme.palette.background.primary }}
-                />
-              </Button>
-            </div>
+            </Button>
           </div>
         </div>
       </div>
