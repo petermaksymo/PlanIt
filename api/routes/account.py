@@ -11,7 +11,7 @@ from api.database.models import Account
 @auth_required
 def account():
     if request.method == "GET":
-        return jsonify(current_user.serialize())
+        return jsonify(current_user().serialize())
     elif request.method == "PATCH":
         email = request.form.get("email")
         username = request.form.get("username")

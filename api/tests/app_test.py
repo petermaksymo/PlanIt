@@ -46,34 +46,32 @@ def get_token(client):
     return token["access_token"]
 
 
-def post_profile(client, account, profile, session, course):
+def post_profile(client, token, profile, session, course):
     return client.post(
         "/profile",
-        data=dict(account=account, profile=profile, session=session, course=course),
+        data=dict(profile=profile, session=session, course=course),
+        headers={"Authorization": "Bearer " + token},
         follow_redirects=True,
     )
 
 
-def patch_profile(client, account, profile, newname):
+def patch_profile(client, token, profile, newname):
     request = "/profile"
-    if account != "":
-        request = request + "?account=" + account
     if profile != "":
-        request = request + "&profile=" + profile
+        request = request + "?profile=" + profile
 
     return client.patch(
         request,
         data=dict(profile=newname),
+        headers={"Authorization": "Bearer " + token},
         follow_redirects=True,
     )
 
 
-def delete_profile(client, account, profile, session, course):
+def delete_profile(client, token, profile, session, course):
     request = "/profile"
-    if account != "":
-        request = request + "?account=" + account
     if profile != "":
-        request = request + "&profile=" + profile
+        request = request + "?profile=" + profile
     if session != "":
         request = request + "&session=" + session
     if course != "":
@@ -81,35 +79,38 @@ def delete_profile(client, account, profile, session, course):
 
     return client.delete(
         request,
+        headers={"Authorization": "Bearer " + token},
         follow_redirects=True,
     )
 
 
-def post_bookmark(client, account, course):
+def post_bookmark(client, token, course):
     return client.post(
         "/bookmark",
-        data=dict(account=account, course=course),
+        data=dict(course=course),
+        headers={"Authorization": "Bearer " + token},
         follow_redirects=True,
     )
 
 
-def get_bookmark(client, account):
+def get_bookmark(client, token, course):
     request = "/bookmark"
-    if account != "":
-        request = request + "?account=" + account
-
-    return client.get(request, follow_redirects=True)
-
-
-def delete_bookmark(client, account, course):
-    request = "/bookmark"
-    if account != "":
-        request = request + "?account=" + account
     if course != "":
-        request = request + "&course=" + course
+        request = request + "?course=" + course
+
+    return client.get(
+        request, headers={"Authorization": "Bearer " + token}, follow_redirects=True
+    )
+
+
+def delete_bookmark(client, token, course):
+    request = "/bookmark"
+    if course != "":
+        request = request + "?course=" + course
 
     return client.delete(
         request,
+        headers={"Authorization": "Bearer " + token},
         follow_redirects=True,
     )
 
@@ -197,37 +198,46 @@ def test_account_post(client):
 
 
 # Alan Du, modified by Yuhang Yan
-@pytest.mark.skip
 def test_account_get(client):
     """Ensure account can be retrieved from database"""
-    post_account(client, "admin@admin.ca", "admin", "admin")
-    response = login_account(client, "admin@admin.ca", "admin")
-    assert response.status_code == 200
-    accounts = Account.query.filter_by(email="admin@admin.ca").all()
-    assert len(accounts) == 1
-    assert accounts[0].name == "admin"
-
-
-def test_profile_post(client):
-    """Ensure profiles can be added"""
-    result = post_profile(client, "", "main", "", "")
-    assert result.status_code == 400
-    data = json.loads(result.data)
-    assert data["message"] == "Please specify an account"
-
-    result = post_profile(client, "admin", "main", "", "")
+    token = get_token(client)
+    result = client.get(
+        "/account",
+        headers={"Authorization": "Bearer " + token},
+        follow_redirects=True,
+    )
     assert result.status_code == 200
     data = json.loads(result.data)
-    assert data["account_name"] == "admin"
+    assert data["username"] == "admin"
 
 
+@pytest.mark.skip
+def test_profile_post(client):
+    """Ensure profiles can be added"""
+    token = get_token(client)
+    result = post_profile(client, token, "", "", "")
+    assert result.status_code == 400
+
+    result = post_profile(client, token, "main", "", "")
+    assert result.status_code == 200
+    data = json.loads(result.data)
+    assert data["profile_name"] == "main"
+
+
+@pytest.mark.skip
 def test_profile_get(client):
     """Ensure profiles can be fetched"""
-    post_profile(client, "admin", "main", "", "")
-    post_profile(client, "admin", "main", "FALL2021", "")
-    post_profile(client, "admin", "main", "FALL2021", "ECE444")
+    token = get_token(client)
+    post_profile(client, token, "main", "", "")
+    post_profile(client, token, "main", "FALL2021", "")
+    post_profile(client, token, "main", "FALL2021", "ECE444")
 
-    result = client.get("/profile?account=admin", follow_redirects=True)
+    result = client.get(
+        "/profile?profile=main",
+        headers={"Authorization": "Bearer " + token},
+        follow_redirects=True,
+    )
+
     assert result.status_code == 200
     data = json.loads(result.data)
     assert data[0]["profile_name"] == "main"
@@ -237,6 +247,7 @@ def test_profile_get(client):
     assert data[2]["course_name"] == "ECE444"
 
 
+@pytest.mark.skip
 def test_profile_patch(client):
     """Ensure profiles can be updated"""
     post_profile(client, "admin", "main", "", "")
@@ -251,6 +262,7 @@ def test_profile_patch(client):
     assert data[2]["profile_name"] == "main2"
 
 
+@pytest.mark.skip
 def test_profile_delete(client):
     """Ensure profiles can be deleted"""
     post_profile(client, "admin", "main", "", "")
@@ -277,54 +289,44 @@ def test_profile_delete(client):
 
 def test_bookmark_post(client):
     token = get_token(client)
-    result = client.post(
-        "/bookmark",
-        data=dict(account="admin", course="ECE444"),
-        headers={"Authorization": "Bearer " + token},
-        follow_redirects=True,
-    )
-    assert result.status_code == 200
-
-    # result = post_bookmark(client, "", "ECE444")
-    # assert result.status_code == 400
-    # data = json.loads(result.data)
-    # assert data["message"] == "Please specify an account"
-
-    # result = post_bookmark(client, current_user().username, "ECE444")
-    # assert result.status_code == 200
-    # data = json.loads(result.data)
-    # assert data["account_name"] == current_user().username
-    # assert data["course_name"] == "ECE444"
-
-
-@pytest.mark.skip
-def test_bookmark_get(client):
-    post_bookmark(client, "admin", "ECE444")
-    post_bookmark(client, "admin", "ECE421")
-
-    result = get_bookmark(client, "")
+    result = post_bookmark(client, token, "")
     assert result.status_code == 400
-    data = json.loads(result.data)
-    assert data["message"] == "Please specify an account"
 
-    result = get_bookmark(client, "admin")
+    result = post_bookmark(client, token, "ECE444")
+    assert result.status_code == 200
+    data = json.loads(result.data)
+    assert data["account_name"] == "admin"
+    assert data["course_name"] == "ECE444"
+
+
+def test_bookmark_get(client):
+    token = get_token(client)
+    post_bookmark(client, token, "ECE444")
+    post_bookmark(client, token, "ECE421")
+
+    result = get_bookmark(client, token, "ECE444")
+    assert result.status_code == 200
+    data = json.loads(result.data)
+    assert data[0]["course_name"] == "ECE444"
+
+    result = get_bookmark(client, token, "")
     assert result.status_code == 200
     data = json.loads(result.data)
     assert data[0]["course_name"] == "ECE444"
     assert data[1]["course_name"] == "ECE421"
 
 
-@pytest.mark.skip
 def test_bookmark_delete(client):
-    post_bookmark(client, "admin", "ECE444")
-    post_bookmark(client, "admin", "ECE421")
+    token = get_token(client)
+    post_bookmark(client, token, "ECE444")
+    post_bookmark(client, token, "ECE421")
 
-    result = delete_bookmark(client, "admin", "")
+    result = delete_bookmark(client, token, "")
     assert result.status_code == 400
     data = json.loads(result.data)
     assert data["message"] == "Please specify a course"
 
-    result = delete_bookmark(client, "admin", "ECE444")
+    result = delete_bookmark(client, token, "ECE444")
     assert result.status_code == 200
     data = json.loads(result.data)
     assert data == 1
