@@ -211,6 +211,7 @@ def test_account_get(client):
     assert data["username"] == "admin"
 
 
+@pytest.mark.skip
 def test_profile_post(client):
     """Ensure profiles can be added"""
     token = get_token(client)
