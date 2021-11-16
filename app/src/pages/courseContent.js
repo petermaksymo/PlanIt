@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.lightBlue,
     height: "3px",
     margin: "41px 0",
+    borderRadius: "50px",
   },
   align: {
     display: "flex",
@@ -53,17 +54,7 @@ export const CourseContent = () => {
         if(data.corequisites === "[]"){
           data.corequisites = "None"
         }
-        data.term = data.term.replace('[', '').replace(']', '').replace(/'/g, '').split(' ')
-        
-        // let temp
-        // for(let i = 0; i < data.term.length; i += 2){
-        //   temp = temp + data.term[i] + " " + data.term[i+1] + ","
-        // }
-        // temp = temp.substring(0, substring.length-1)
-        // data.term = temp
-        console.log(data.term)
-        
-
+        data.term = data.term.replace('[', '').replace(']', '').replaceAll("' ", ', ').replaceAll("'", '')
         setResult({
           ...data,
           rating: Math.random() * 5,
@@ -71,21 +62,6 @@ export const CourseContent = () => {
         })
       })
   }, [course_id])
-
-  // const result = {
-  //   name: " Introduction to Databases",
-  //   code: "CSC343H1",
-  //   courseDescription:
-  //     "Introduction to database management systems. The relational data model. Relational algebra. Querying and updating databases: the query language SQL. Application programming with SQL. Integrity constraints, normal forms, and database design. Elements of database system technology: query processing, transaction management.",
-  //   division: "Faculty of Applied Science and Engineering",
-  //   department: "Biochemistry",
-  //   prereq: "",
-  //   coreq: "",
-  //   campus: "St. George",
-  //   term: "Winter 2022",
-  //   rating: Math.random() * 5,
-  //   views: Math.round(Math.random() * 10000),
-  // }
 
   if (!result) return null
 
