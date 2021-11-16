@@ -27,20 +27,29 @@ export const CourseFinder = () => {
 
   const onSubmit = (e) => {
     e.preventDefault()
-    if (search === "" || year === "") return
+    if (search === "") return
+    let searchParams = new URLSearchParams()
+    searchParams.append("search_keywords", search)
+    if (year != "") {
+      searchParams.append("year", year)
+    }
+    if (division !== "") {
+      searchParams.append("divisions", division)
+    }
+    if (department != null) {
+      searchParams.append("departments", department)
+    }
+    if (campus != "") {
+      searchParams.append("campuses", campus)
+    }
+    if (filter != "") {
+      searchParams.append("top", results)
+    }
+    let url = searchParams.toString()
 
-    const formdata = new FormData()
-    formdata.append("search", search)
-    formdata.append("select", year)
-    formdata.append("departments", "Any")
-    formdata.append("divisions", "Any")
-    formdata.append("campuses", "Any")
-    formdata.append("top", "10")
-
-    fetch(`${API_BASE_URL}/results`, {
-      method: "POST",
+    fetch(`${API_BASE_URL}/results?${url}`, {
+      method: "GET",
       mode: "cors",
-      body: formdata,
     })
       .then((response) => {
         if (response.ok) {
@@ -49,6 +58,7 @@ export const CourseFinder = () => {
       })
       .then((data) => {
         setResults(data)
+        console.log(data)
       })
   }
 
