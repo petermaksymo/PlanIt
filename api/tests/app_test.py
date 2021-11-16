@@ -264,7 +264,12 @@ def test_profile_delete(client):
 
 def test_bookmark_post(client):
     token = get_token(client)
-    result = client.post("/bookmark", data=dict(account="admin", course="ECE444"), headers={'Authorization': 'Bearer ' + token}, follow_redirects=True)
+    result = client.post(
+        "/bookmark",
+        data=dict(account="admin", course="ECE444"),
+        headers={"Authorization": "Bearer " + token},
+        follow_redirects=True,
+    )
     assert result.status_code == 200
 
     # result = post_bookmark(client, "", "ECE444")
