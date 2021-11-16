@@ -205,6 +205,7 @@ export const Profiles = () => {
                 color: theme.palette.text.dark,
                 fontSize: 28,
                 marginBottom: "15px",
+                fontWeight: "bold",
               }}
             >
               My Profiles

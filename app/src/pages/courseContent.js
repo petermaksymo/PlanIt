@@ -25,9 +25,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   cornerBorder: {
-    borderRadius: "14px",
-    border: "4px solid",
-    borderColor: theme.palette.background.lightBlue,
     padding: "81px 137px",
   },
 }))
