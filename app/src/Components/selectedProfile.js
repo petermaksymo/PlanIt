@@ -43,7 +43,7 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
     const formdata = new FormData()
     formdata.append("profile", selectedProfile.title)
     formdata.append("session", sessionName)
-    courseCode !== "" && formdata.append("course_code", searchResult["Code"])
+    courseCode !== "" && formdata.append("course_code", searchResult.code)
 
     return authedFetch(`${API_BASE_URL}/profile`, {
       method: "POST",
@@ -60,7 +60,7 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
   const handleDelete = (session = null, course = null) => {
     return authedFetch(
       `${API_BASE_URL}/profile?profile=${selectedProfile.title}&session=${
-        course ? session + "&course=" + course : session
+        course ? session + "&course_code=" + course : session
       }`,
       {
         method: "DELETE",
@@ -143,8 +143,8 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
                 <Typography>
                   <strong>Found course</strong>
                   <br />
-                  <strong>Course Name:</strong> {searchResult["Name"]} <br />
-                  <strong>Course Code:</strong> {searchResult["Code"]}
+                  <strong>Course Name:</strong> {searchResult.name} <br />
+                  <strong>Course Code:</strong> {searchResult.code}
                 </Typography>
               </>
             )}
