@@ -37,7 +37,7 @@ const AuthProvider = ({ children }) => {
     return decodedToken.payload.exp < new Date().getTime() / 1000
   }
 
-  const authedFetch = (url, options = {}) => {
+  const authedFetch = (url, options = {}, try_again = true) => {
     const makeCall = () => {
       const token = localStorage.getItem("PLANIT_JWT")
 
@@ -50,7 +50,7 @@ const AuthProvider = ({ children }) => {
       })
     }
 
-    if (checkTokenExpired()) {
+    if (checkTokenExpired() && try_again) {
       return reAuthenticate().then(makeCall)
     }
 
@@ -71,13 +71,18 @@ const AuthProvider = ({ children }) => {
       return
     }
 
-    return authedFetch(`${API_BASE_URL}/refresh`, { method: "POST" })
+    return authedFetch(`${API_BASE_URL}/refresh`, { method: "POST" }, false)
       .then((res) => res.json())
       .then((token) => {
         if (token.access_token)
           localStorage.setItem("PLANIT_JWT", token.access_token)
         setIsAuthed(true)
         setIsAuthLoading(false)
+      })
+      .catch((err) => {
+        logout()
+        setIsAuthLoading(false)
+        window.location = "/login"
       })
   }
 

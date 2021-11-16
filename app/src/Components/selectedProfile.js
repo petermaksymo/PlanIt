@@ -91,7 +91,7 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
     )
 
   return (
-    <div id="selected-profile" style={{ padding: "30px 286px" }}>
+    <div id="selected-profile" style={{ padding: "30px 0" }}>
       <Dialog open={addDialog !== ""} onClose={closeAddDialog}>
         <form
           onSubmit={
@@ -159,158 +159,167 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
           </DialogActions>
         </form>
       </Dialog>
-      <Typography
-        style={{
-          color: theme.palette.text.dark,
-          fontSize: 28,
-          marginBottom: "15px",
-        }}
-      >
-        {selectedProfile.title}
-      </Typography>
-      <div style={{ margin: "10px 10px" }}>
-        {map(selectedProfile.sessions, (session, session_idx) => {
-          return (
-            <div id="session" style={{ margin: "15px" }}>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: 8,
-                }}
-              >
-                <Typography
-                  style={{
-                    color: theme.palette.text.grey,
-                    fontSize: 20,
-                    margin: "auto 5px auto 0",
-                  }}
-                >
-                  {session.name}
-                </Typography>
-                <IconButton onClick={() => handleDelete(session.name)}>
-                  <DeleteIcon />
-                </IconButton>
-              </div>
-              <Grid container>
-                <Grid item>
-                  {map(session.courses, (course) => {
-                    return (
-                      <Button
-                        disableElevation
-                        variant="contained"
-                        style={{
-                          backgroundColor: COURSE_COLORS[session_idx % 5],
-                          margin: 10,
-                          borderRadius: 10,
-                          minWidth: "250px",
-                          maxWidth: 250,
-                          minHeight: "91px",
-                          textTransform: "none",
-                          border: "2px solid #B5B5B5",
-                        }}
-                        onClick={() =>
-                          window.open(`/course/${course.code}`, "__newtab")
-                        }
-                      >
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            color: "#000",
-                          }}
-                        >
-                          <IconButton
-                            style={{
-                              position: "absolute",
-                              top: 0,
-                              right: 3,
-                              color: "#000",
-                            }}
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              e.nativeEvent.stopImmediatePropagation()
-                              handleDelete(session.name, course.code)
-                            }}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                          <Typography style={{ fontSize: 14 }}>
-                            {course.code}
-                          </Typography>
-                          <Typography style={{ fontSize: 14 }}>
-                            {course.name}
-                          </Typography>
-                        </div>
-                      </Button>
-                    )
-                  })}
-                  <Button
-                    disableElevation
-                    variant="contained"
-                    style={{
-                      margin: "0 5px",
-                      borderRadius: 10,
-                      minWidth: "250px",
-                      minHeight: "91px",
-                      textTransform: "none",
-                      border: "2px solid #B5B5B5",
-                      backgroundColor: "#FAFAFA",
-                    }}
-                    onClick={() => {
-                      setSessionName(session.name)
-                      setAddDialog("course")
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                      }}
-                    >
-                      <AddCircleIcon
-                        sx={{
-                          top: "50%",
-                          color: theme.palette.background.main,
-                          fontSize: 40,
-                        }}
-                      />
-                      <Typography
-                        sx={{
-                          color: theme.palette.text.grey,
-                          fontSize: 16,
-                        }}
-                      >
-                        Add Course
-                      </Typography>
-                    </div>
-                  </Button>
-                </Grid>
-              </Grid>
-            </div>
-          )
-        })}
-      </div>
       <div
         style={{
-          display: "flex",
-          alignItems: "center",
-          marginTop: "20px",
-          cursor: "pointer",
+          maxWidth: 1440,
+          margin: "auto",
+          padding: "0 24px",
+          boxSizing: "border-box",
         }}
-        onClick={() => setAddDialog("session")}
       >
-        <AddCircleIcon
-          sx={{
-            top: "50%",
-            color: theme.palette.background.main,
-            fontSize: 40,
+        <Typography
+          style={{
+            color: theme.palette.text.dark,
+            fontSize: 28,
+            marginBottom: "15px",
           }}
-        />
-        <Typography style={{ color: theme.palette.text.dark, fontSize: 20 }}>
-          Add Session
+        >
+          {selectedProfile.title}
         </Typography>
+        <div style={{ margin: "10px 10px" }}>
+          {map(selectedProfile.sessions, (session, session_idx) => {
+            return (
+              <div id="session" style={{ margin: "15px" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginBottom: 8,
+                  }}
+                >
+                  <Typography
+                    style={{
+                      color: theme.palette.text.grey,
+                      fontSize: 20,
+                      margin: "auto 5px auto 0",
+                    }}
+                  >
+                    {session.name}
+                  </Typography>
+                  <IconButton onClick={() => handleDelete(session.name)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </div>
+                <Grid container>
+                  <Grid item>
+                    {map(session.courses, (course) => {
+                      return (
+                        <Button
+                          disableElevation
+                          variant="contained"
+                          style={{
+                            backgroundColor: COURSE_COLORS[session_idx % 5],
+                            margin: 10,
+                            borderRadius: 10,
+                            minWidth: "250px",
+                            maxWidth: 250,
+                            minHeight: "91px",
+                            textTransform: "none",
+                            border: "2px solid #B5B5B5",
+                          }}
+                          onClick={() =>
+                            window.open(`/course/${course.code}`, "__newtab")
+                          }
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              color: "#000",
+                            }}
+                          >
+                            <IconButton
+                              style={{
+                                position: "absolute",
+                                top: 0,
+                                right: 3,
+                                color: "#000",
+                              }}
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                e.nativeEvent.stopImmediatePropagation()
+                                handleDelete(session.name, course.code)
+                              }}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                            <Typography style={{ fontSize: 14 }}>
+                              {course.code}
+                            </Typography>
+                            <Typography style={{ fontSize: 14 }}>
+                              {course.name}
+                            </Typography>
+                          </div>
+                        </Button>
+                      )
+                    })}
+                    <Button
+                      disableElevation
+                      variant="contained"
+                      style={{
+                        margin: "0 5px",
+                        borderRadius: 10,
+                        minWidth: "250px",
+                        minHeight: "91px",
+                        textTransform: "none",
+                        border: "2px solid #B5B5B5",
+                        backgroundColor: "#FAFAFA",
+                      }}
+                      onClick={() => {
+                        setSessionName(session.name)
+                        setAddDialog("course")
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                        }}
+                      >
+                        <AddCircleIcon
+                          sx={{
+                            top: "50%",
+                            color: theme.palette.background.main,
+                            fontSize: 40,
+                          }}
+                        />
+                        <Typography
+                          sx={{
+                            color: theme.palette.text.grey,
+                            fontSize: 16,
+                          }}
+                        >
+                          Add Course
+                        </Typography>
+                      </div>
+                    </Button>
+                  </Grid>
+                </Grid>
+              </div>
+            )
+          })}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginTop: "20px",
+            cursor: "pointer",
+          }}
+          onClick={() => setAddDialog("session")}
+        >
+          <AddCircleIcon
+            sx={{
+              top: "50%",
+              color: theme.palette.background.main,
+              fontSize: 40,
+            }}
+          />
+          <Typography style={{ color: theme.palette.text.dark, fontSize: 20 }}>
+            Add Session
+          </Typography>
+        </div>
       </div>
     </div>
   )

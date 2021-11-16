@@ -188,110 +188,121 @@ export const Profiles = () => {
         <div
           id="profiles"
           style={{
-            padding: "30px 286px",
+            padding: '30px 0',
             backgroundColor: theme.palette.background.lightPink,
           }}
         >
-          <Typography
+          <div
             style={{
-              color: theme.palette.text.dark,
-              fontSize: 28,
-              marginBottom: "15px",
+              maxWidth: 1440,
+              margin: "auto",
+              padding: "0 24px",
+              boxSizing: "border-box",
             }}
           >
-            My Profiles
-          </Typography>
-          <Grid container>
-            <Grid item style={{ marginLeft: "50px" }}>
-              {map(profiles, (profile, idx) => {
-                const isSelected = idx === selectedProfileId
+            <Typography
+              style={{
+                color: theme.palette.text.dark,
+                fontSize: 28,
+                marginBottom: "15px",
+              }}
+            >
+              My Profiles
+            </Typography>
+            <Grid container>
+              <Grid item style={{ marginLeft: "50px" }}>
+                {map(profiles, (profile, idx) => {
+                  const isSelected = idx === selectedProfileId
 
-                return (
-                  <Button
-                    variant="contained"
-                    disableElevation
-                    style={{
-                      border: isSelected
-                        ? "5px solid #FF9E00"
-                        : "5px solid transparent",
-                      backgroundColor: PROFILE_COLORS[idx % 5],
-                      margin: "10px",
-                      borderRadius: 10,
-                      minWidth: "237px",
-                      minHeight: "102px",
-                      textTransform: "none",
-                    }}
-                    onClick={() => setSelectedProfileId(idx)}
-                  >
-                    <Typography style={{ margin: "30px 15px", fontSize: 20 }}>
-                      {profile.title}
-                    </Typography>
-                    <IconButton
-                      id={`profile-button-${profile.title}`}
-                      aria-controls="profile-menu"
-                      aria-haspopup="true"
+                  return (
+                    <Button
+                      variant="contained"
+                      disableElevation
                       style={{
-                        position: "absolute",
-                        top: "4px",
-                        right: "2px",
-                        color: theme.palette.text.main,
+                        border: isSelected
+                          ? "5px solid #FF9E00"
+                          : "5px solid transparent",
+                        backgroundColor: PROFILE_COLORS[idx % 5],
+                        margin: "10px",
+                        borderRadius: 10,
+                        minWidth: "237px",
+                        minHeight: "102px",
+                        textTransform: "none",
                       }}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        e.nativeEvent.stopImmediatePropagation()
-                        setProfileAnchorEl(e.currentTarget)
-                        setSelectedProfileMenu(profile.title)
-                      }}
+                      onClick={() => setSelectedProfileId(idx)}
                     >
-                      <MoreVertIcon />
-                    </IconButton>
-                  </Button>
-                )
-              })}
-              <Button
-                variant="contained"
-                style={{
-                  margin: "0 15px",
-                  borderRadius: 10,
-                  minWidth: "200px",
-                  minHeight: "102px",
-                  backgroundColor: "#FAFAFA",
-                  textTransform: "none",
-                }}
-                onClick={() => setDialogMode("add")}
-              >
-                <div
+                      <Typography style={{ margin: "30px 15px", fontSize: 20 }}>
+                        {profile.title}
+                      </Typography>
+                      <IconButton
+                        id={`profile-button-${profile.title}`}
+                        aria-controls="profile-menu"
+                        aria-haspopup="true"
+                        style={{
+                          position: "absolute",
+                          top: "4px",
+                          right: "2px",
+                          color: theme.palette.text.main,
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          e.nativeEvent.stopImmediatePropagation()
+                          setProfileAnchorEl(e.currentTarget)
+                          setSelectedProfileMenu(profile.title)
+                        }}
+                      >
+                        <MoreVertIcon />
+                      </IconButton>
+                    </Button>
+                  )
+                })}
+                <Button
+                  variant="contained"
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
+                    margin: "0 15px",
+                    borderRadius: 10,
+                    minWidth: "200px",
+                    minHeight: "102px",
+                    backgroundColor: "#FAFAFA",
+                    textTransform: "none",
                   }}
+                  onClick={() => setDialogMode("add")}
                 >
-                  <AddCircleIcon
-                    sx={{
-                      top: "50%",
-                      color: theme.palette.background.main,
-                      fontSize: 40,
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
                     }}
-                  />
-                  <Typography
-                    sx={{ color: theme.palette.text.grey, fontSize: 18 }}
                   >
-                    Create New Profile
-                  </Typography>
-                </div>
-              </Button>
-              <Menu
-                id="profile-menu"
-                anchorEl={profileAnchorEl}
-                open={profileMenuOpen}
-                onClose={() => setProfileAnchorEl(null)}
-              >
-                <MenuItem onClick={() => setDialogMode("edit")}>Edit</MenuItem>
-                <MenuItem onClick={() => handleDelete()}>Delete</MenuItem>
-              </Menu>
+                    <AddCircleIcon
+                      sx={{
+                        top: "50%",
+                        color: theme.palette.background.main,
+                        fontSize: 40,
+                      }}
+                    />
+                    <Typography
+                      sx={{ color: theme.palette.text.grey, fontSize: 18 }}
+                    >
+                      Create New Profile
+                    </Typography>
+                  </div>
+                </Button>
+                <Menu
+                  id="profile-menu"
+                  anchorEl={profileAnchorEl}
+                  open={profileMenuOpen}
+                  onClose={() => setProfileAnchorEl(null)}
+                >
+                  <MenuItem onClick={() => setDialogMode("edit")}>
+                    Edit
+                  </MenuItem>
+                  <MenuItem onClick={() => handleDelete()}>Delete</MenuItem>
+                </Menu>
+              </Grid>
             </Grid>
-          </Grid>
+          </div>
         </div>
         <SelectedProfile
           selectedProfile={selectedProfile}
