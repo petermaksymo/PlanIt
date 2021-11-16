@@ -47,6 +47,23 @@ export const CourseContent = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data)
+        if(data.pre_requisites === "[]"){
+          data.pre_requisites = "None"
+        }
+        if(data.corequisites === "[]"){
+          data.corequisites = "None"
+        }
+        data.term = data.term.replace('[', '').replace(']', '').replace(/'/g, '').split(' ')
+        
+        // let temp
+        // for(let i = 0; i < data.term.length; i += 2){
+        //   temp = temp + data.term[i] + " " + data.term[i+1] + ","
+        // }
+        // temp = temp.substring(0, substring.length-1)
+        // data.term = temp
+        console.log(data.term)
+        
+
         setResult({
           ...data,
           rating: Math.random() * 5,
@@ -124,7 +141,7 @@ export const CourseContent = () => {
             <Typography
               sx={{ padding: "6px 42px", color: theme.palette.text.grey }}
             >
-              {result.courseDescription}
+              {result.course_description}
             </Typography>
           </div>
           <Divider className={classes.divider} />
@@ -145,12 +162,12 @@ export const CourseContent = () => {
           <Divider className={classes.divider} />
           <div id="segment3" className={classes.align}>
             <Typography className={classes.header}>Pre-requisites: </Typography>
-            <Typography className={classes.text}>{result.prereq}</Typography>
+            <Typography className={classes.text}>{result.pre_requisites}</Typography>
           </div>
           <Divider className={classes.divider} />
           <div id="segment4" className={classes.align}>
             <Typography className={classes.header}>Co-requisites: </Typography>
-            <Typography className={classes.text}>{result.coreq}</Typography>
+            <Typography className={classes.text}>{result.corequisites}</Typography>
           </div>
           <Divider className={classes.divider} />
           <div id="segment5" className={classes.align}>
