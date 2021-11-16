@@ -30,19 +30,19 @@ export const CourseFinder = () => {
     if (search === "") return
     let searchParams = new URLSearchParams()
     searchParams.append("search_keywords", search)
-    if (year != "") {
+    if (year !== "") {
       searchParams.append("year", year)
     }
     if (division !== "") {
       searchParams.append("divisions", division)
     }
-    if (department != null) {
+    if (department !== null) {
       searchParams.append("departments", department)
     }
-    if (campus != "") {
+    if (campus !== "") {
       searchParams.append("campuses", campus)
     }
-    if (filter != "") {
+    if (filter !== "") {
       searchParams.append("top", results)
     }
     let url = searchParams.toString()
