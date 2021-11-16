@@ -14,12 +14,17 @@ const useStyles = makeStyles((theme) => ({
   },
   semiContainer: {
     maxWidth: 800,
+    padding: 20,
     width: "100%",
     margin: "auto",
+    [theme.breakpoints.down("md")]: {
+      margin: "24px auto",
+    },
   },
   textField: {
     backgroundColor: "#FFFFFF",
-    width: "49%",
+    maxWidth: 392,
+    width: "100%",
     borderRadius: "1rem",
   },
   buttonContainer: {
@@ -94,7 +99,7 @@ export const Signup = () => {
   return (
     <div className={classes.container}>
       <div className={classes.semiContainer}>
-        <div id="title" style={{ marginBottom: "4rem" }}>
+        <div id="title" style={{ marginBottom: "3rem" }}>
           <Typography variant="h3" className={classes.text}>
             Create your PlanIt account
           </Typography>
@@ -117,7 +122,7 @@ export const Signup = () => {
               InputProps={{ disableUnderline: true }}
             />
           </div>
-          <div id="password" style={{ marginBottom: "4rem" }}>
+          <div id="password" style={{ marginBottom: "2rem" }}>
             <Typography className={classes.text}>
               Enter a password at least 8 characters long with at least 1 number
               or symbol:
@@ -138,6 +143,7 @@ export const Signup = () => {
                 title:
                   "Password must be minimum 8 characters with at least one letter, number, and special character",
               }}
+              sx={{ marginBottom: 1 }}
             />
             <TextField
               required
@@ -163,7 +169,7 @@ export const Signup = () => {
               <Typography className={classes.text}>Show Password</Typography>
             </div>
           </div>
-          <div id="email" style={{ marginBottom: "6rem" }}>
+          <div id="email" style={{ marginBottom: "2rem" }}>
             <Typography className={classes.text}>Enter your email:</Typography>
             <TextField
               required

@@ -66,184 +66,212 @@ export const CourseFinder = () => {
     <div>
       <NavBar />
       <div className="pageContainer">
-        <Grid
-          container
-          direction="column"
-          justifyContent="center"
-          alignItems="flex-start"
+        <div
           style={{
             backgroundColor: theme.palette.background.lightPink,
-            padding: "20px 286px",
+            padding: "20px 0",
           }}
         >
-          <Grid item>
-            <Paper
-              component="form"
-              sx={{
-                p: "2px 4px",
-                display: "flex",
-                alignItems: "center",
-                width: 650,
-                borderWidth: "medium",
-                border: "solid",
-                borderColor: theme.palette.background.main,
-              }}
-              className="searchBar"
-              onSubmit={onSubmit}
+          <div
+            style={{
+              maxWidth: 1440,
+              margin: "auto",
+              padding: "0 24px",
+              boxSizing: "border-box",
+            }}
+          >
+            <Grid
+              container
+              direction="column"
+              justifyContent="center"
+              alignItems="flex-start"
             >
-              <InputBase
-                autoFocus
-                sx={{ ml: 1, flex: 1 }}
-                placeholder="Search by course name, department, or campus"
-                inputProps={{ "aria-label": "search google maps" }}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-              <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
-                <ArrowRightAltIcon color="primary" />
-              </IconButton>
-            </Paper>
-          </Grid>
+              <Grid item sx={{ width: "100%" }}>
+                <Paper
+                  component="form"
+                  sx={{
+                    p: "2px 4px",
+                    display: "flex",
+                    alignItems: "center",
+                    maxWidth: 650,
+                    borderWidth: "medium",
+                    border: "solid",
+                    borderColor: theme.palette.background.main,
+                  }}
+                  className="searchBar"
+                  onSubmit={onSubmit}
+                >
+                  <InputBase
+                    autoFocus
+                    sx={{ ml: 1, flex: 1 }}
+                    placeholder="Search by course name, department, or campus"
+                    inputProps={{ "aria-label": "search google maps" }}
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                  <IconButton
+                    type="submit"
+                    sx={{ p: "10px" }}
+                    aria-label="search"
+                  >
+                    <ArrowRightAltIcon color="primary" />
+                  </IconButton>
+                </Paper>
+              </Grid>
 
-          <Grid item id="form-filters">
-            <FormControl
-              variant="standard"
-              sx={{
-                m: "1rem 1rem 1rem 0rem",
-                width: 120,
-                backgroundColor: theme.palette.button.brightRed,
-                borderRadius: "0.5rem",
-              }}
-            >
-              <InputLabel sx={{ color: "white" }}>Course Year</InputLabel>
-              <Select value={year} onChange={(e) => setYear(e.target.value)}>
-                <MenuItem value="">
-                  <em>Any</em>
-                </MenuItem>
-                <MenuItem value={1}>1</MenuItem>
-                <MenuItem value={2}>2</MenuItem>
-                <MenuItem value={3}>3</MenuItem>
-                <MenuItem value={4}>4</MenuItem>
-              </Select>
-            </FormControl>
+              <Grid item id="form-filters">
+                <FormControl
+                  variant="standard"
+                  sx={{
+                    m: "1rem 1rem 1rem 0rem",
+                    width: 120,
+                    backgroundColor: theme.palette.button.brightRed,
+                    borderRadius: "0.5rem",
+                  }}
+                >
+                  <InputLabel sx={{ color: "white" }}>Course Year</InputLabel>
+                  <Select
+                    value={year}
+                    onChange={(e) => setYear(e.target.value)}
+                  >
+                    <MenuItem value="">
+                      <em>Any</em>
+                    </MenuItem>
+                    <MenuItem value={1}>1</MenuItem>
+                    <MenuItem value={2}>2</MenuItem>
+                    <MenuItem value={3}>3</MenuItem>
+                    <MenuItem value={4}>4</MenuItem>
+                  </Select>
+                </FormControl>
 
-            <FormControl
-              variant="standard"
-              sx={{
-                m: "1rem 1rem 1rem 0rem",
-                minWidth: 120,
-                backgroundColor: theme.palette.button.brightRed,
-                borderRadius: "0.5rem",
-              }}
-            >
-              <InputLabel sx={{ color: "white" }}>Division</InputLabel>
-              <Select>
-                <MenuItem value="">
-                  <em>Any</em>
-                </MenuItem>
-                <MenuItem value={10}>
-                  Faculty of Applied Science and Engineering
-                </MenuItem>
-                <MenuItem value={20}>Faculty of Arts and Science</MenuItem>
-                <MenuItem value={30}>
-                  University of Toronto Mississauga
-                </MenuItem>
-                <MenuItem value={40}>
-                  University of Toronto Scarborough
-                </MenuItem>
-              </Select>
-            </FormControl>
+                <FormControl
+                  variant="standard"
+                  sx={{
+                    m: "1rem 1rem 1rem 0rem",
+                    minWidth: 120,
+                    backgroundColor: theme.palette.button.brightRed,
+                    borderRadius: "0.5rem",
+                  }}
+                >
+                  <InputLabel sx={{ color: "white" }}>Division</InputLabel>
+                  <Select>
+                    <MenuItem value="">
+                      <em>Any</em>
+                    </MenuItem>
+                    <MenuItem value={10}>
+                      Faculty of Applied Science and Engineering
+                    </MenuItem>
+                    <MenuItem value={20}>Faculty of Arts and Science</MenuItem>
+                    <MenuItem value={30}>
+                      University of Toronto Mississauga
+                    </MenuItem>
+                    <MenuItem value={40}>
+                      University of Toronto Scarborough
+                    </MenuItem>
+                  </Select>
+                </FormControl>
 
-            <FormControl
-              variant="standard"
-              sx={{
-                m: "1rem 1rem 1rem 0rem",
-                minWidth: 120,
-                backgroundColor: theme.palette.button.brightRed,
-                borderRadius: "0.5rem",
-              }}
-            >
-              <InputLabel sx={{ color: "white" }}>Department</InputLabel>
-              <Select>
-                <MenuItem value="">
-                  <em>Any</em>
-                </MenuItem>
-                <MenuItem value={10}>
-                  ASDN: Arts and Science, Office of the Dean
-                </MenuItem>
-                <MenuItem value={20}>Anatomy and Cell Biology</MenuItem>
-                <MenuItem value={30}>Anthropology</MenuItem>
-                <MenuItem value={40}>Anthropology (UTSC)</MenuItem>
-                <MenuItem value={30}>Art History</MenuItem>
-                <MenuItem value={30}>Astronomy and Astrophysics</MenuItem>
-                <MenuItem value={30}>Biochemistry</MenuItem>
-                <MenuItem value={30}>Biological Sciences (UTSC)</MenuItem>
-                <MenuItem value={30}>Biology</MenuItem>
-                <MenuItem value={30}>
-                  Canadian Institute for Theoretical Astrophysics
-                </MenuItem>
-                <MenuItem value={30}>Cell and Systems Biology</MenuItem>
-                <MenuItem value={30}>
-                  Centre for Criminology and Sociolegal Studies
-                </MenuItem>
-                <MenuItem value={30}>
-                  Centre for Critical Development Studies (UTSC)
-                </MenuItem>
-                <MenuItem value={30}>
-                  Centre for Diaspora and Transnational Studies
-                </MenuItem>
-                <MenuItem value={30}>
-                  Centre for Drama, Theatre and Performance Studies
-                </MenuItem>
-                <MenuItem value={30}>Centre for Ethics</MenuItem>
-                <MenuItem value={30}>
-                  Centre for European, Russian and Eurasian Studies
-                </MenuItem>
-              </Select>
-            </FormControl>
+                <FormControl
+                  variant="standard"
+                  sx={{
+                    m: "1rem 1rem 1rem 0rem",
+                    minWidth: 120,
+                    backgroundColor: theme.palette.button.brightRed,
+                    borderRadius: "0.5rem",
+                  }}
+                >
+                  <InputLabel sx={{ color: "white" }}>Department</InputLabel>
+                  <Select>
+                    <MenuItem value="">
+                      <em>Any</em>
+                    </MenuItem>
+                    <MenuItem value={10}>
+                      ASDN: Arts and Science, Office of the Dean
+                    </MenuItem>
+                    <MenuItem value={20}>Anatomy and Cell Biology</MenuItem>
+                    <MenuItem value={30}>Anthropology</MenuItem>
+                    <MenuItem value={40}>Anthropology (UTSC)</MenuItem>
+                    <MenuItem value={30}>Art History</MenuItem>
+                    <MenuItem value={30}>Astronomy and Astrophysics</MenuItem>
+                    <MenuItem value={30}>Biochemistry</MenuItem>
+                    <MenuItem value={30}>Biological Sciences (UTSC)</MenuItem>
+                    <MenuItem value={30}>Biology</MenuItem>
+                    <MenuItem value={30}>
+                      Canadian Institute for Theoretical Astrophysics
+                    </MenuItem>
+                    <MenuItem value={30}>Cell and Systems Biology</MenuItem>
+                    <MenuItem value={30}>
+                      Centre for Criminology and Sociolegal Studies
+                    </MenuItem>
+                    <MenuItem value={30}>
+                      Centre for Critical Development Studies (UTSC)
+                    </MenuItem>
+                    <MenuItem value={30}>
+                      Centre for Diaspora and Transnational Studies
+                    </MenuItem>
+                    <MenuItem value={30}>
+                      Centre for Drama, Theatre and Performance Studies
+                    </MenuItem>
+                    <MenuItem value={30}>Centre for Ethics</MenuItem>
+                    <MenuItem value={30}>
+                      Centre for European, Russian and Eurasian Studies
+                    </MenuItem>
+                  </Select>
+                </FormControl>
 
-            <FormControl
-              variant="standard"
-              sx={{
-                m: "1rem 1rem 1rem 0rem",
-                minWidth: 120,
-                backgroundColor: theme.palette.button.brightRed,
-                borderRadius: "0.5rem",
-              }}
-            >
-              <InputLabel sx={{ color: "white" }}>Campus</InputLabel>
-              <Select>
-                <MenuItem value="">
-                  <em>Any</em>
-                </MenuItem>
-                <MenuItem value={10}>Mississauga</MenuItem>
-                <MenuItem value={20}>Scarborough</MenuItem>
-                <MenuItem value={30}>St. George</MenuItem>
-              </Select>
-            </FormControl>
+                <FormControl
+                  variant="standard"
+                  sx={{
+                    m: "1rem 1rem 1rem 0rem",
+                    minWidth: 120,
+                    backgroundColor: theme.palette.button.brightRed,
+                    borderRadius: "0.5rem",
+                  }}
+                >
+                  <InputLabel sx={{ color: "white" }}>Campus</InputLabel>
+                  <Select>
+                    <MenuItem value="">
+                      <em>Any</em>
+                    </MenuItem>
+                    <MenuItem value={10}>Mississauga</MenuItem>
+                    <MenuItem value={20}>Scarborough</MenuItem>
+                    <MenuItem value={30}>St. George</MenuItem>
+                  </Select>
+                </FormControl>
 
-            <FormControl
-              variant="standard"
-              sx={{
-                m: "1rem 1rem 1rem 0rem",
-                minWidth: 120,
-                backgroundColor: theme.palette.button.brightRed,
-                borderRadius: "0.5rem",
-              }}
-            >
-              <InputLabel sx={{ color: "white" }}>Max Results</InputLabel>
-              <Select>
-                <MenuItem value="">
-                  <em>Any</em>
-                </MenuItem>
-                <MenuItem value={10}>10</MenuItem>
-                <MenuItem value={20}>25</MenuItem>
-                <MenuItem value={30}>50</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-        </Grid>
-        <div style={{ margin: "20px 286px" }}>
+                <FormControl
+                  variant="standard"
+                  sx={{
+                    m: "1rem 1rem 1rem 0rem",
+                    minWidth: 120,
+                    backgroundColor: theme.palette.button.brightRed,
+                    borderRadius: "0.5rem",
+                  }}
+                >
+                  <InputLabel sx={{ color: "white" }}>Max Results</InputLabel>
+                  <Select>
+                    <MenuItem value="">
+                      <em>Any</em>
+                    </MenuItem>
+                    <MenuItem value={10}>10</MenuItem>
+                    <MenuItem value={20}>25</MenuItem>
+                    <MenuItem value={30}>50</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
+          </div>
+        </div>
+      </div>
+      <div style={{ margin: "20px 0" }}>
+        <div
+          style={{
+            maxWidth: 1440,
+            margin: "auto",
+            padding: "0 24px",
+            boxSizing: "border-box",
+          }}
+        >
           <FormControl
             variant="standard"
             sx={{
