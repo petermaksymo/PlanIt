@@ -236,7 +236,7 @@ def test_profile_get(client):
         headers={"Authorization": "Bearer " + token},
         follow_redirects=True,
     )
-    
+
     assert result.status_code == 200
     data = json.loads(result.data)
     assert data[0]["profile_name"] == "main"
