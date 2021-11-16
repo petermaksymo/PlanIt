@@ -15,6 +15,8 @@ class Account(db.Model, SerializerMixin):
     is_active = db.Column(db.Boolean, default=True, server_default="true")
     created_at = db.Column(db.DateTime, index=False, unique=False, nullable=False)
 
+    serialize_rules = ("-password",)
+
     @property
     def identity(self):
         return self.id

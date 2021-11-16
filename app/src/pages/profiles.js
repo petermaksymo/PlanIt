@@ -188,7 +188,7 @@ export const Profiles = () => {
         <div
           id="profiles"
           style={{
-            padding: '30px 0',
+            padding: "30px 0",
             backgroundColor: theme.palette.background.lightPink,
           }}
         >

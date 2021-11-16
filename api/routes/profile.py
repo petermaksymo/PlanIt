@@ -79,16 +79,16 @@ def profile():
         """
         profile = request.args.get("profile")
         session = request.args.get("session")
-        course = request.args.get("course")
+        course_code = request.args.get("course_code")
 
         if profile is not None:
             if session is not None:
-                if course is not None:
+                if course_code is not None:
                     result = Profile.query.filter_by(
                         account_name=current_user().username,
                         profile_name=profile,
                         session_name=session,
-                        course_code=course,
+                        course_code=course_code,
                     ).delete()
                 else:
                     result = Profile.query.filter_by(

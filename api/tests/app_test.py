@@ -49,7 +49,7 @@ def get_token(client):
 def post_profile(client, token, profile, session, course):
     return client.post(
         "/profile",
-        data=dict(profile=profile, session=session, course=course),
+        data=dict(profile=profile, session=session, course_code=course),
         headers={"Authorization": "Bearer " + token},
         follow_redirects=True,
     )
@@ -75,7 +75,7 @@ def delete_profile(client, token, profile, session, course):
     if session != "":
         request = request + "&session=" + session
     if course != "":
-        request = request + "&course=" + course
+        request = request + "&course_code=" + course
 
     return client.delete(
         request,
@@ -209,52 +209,65 @@ def test_account_get(client):
     assert result.status_code == 200
     data = json.loads(result.data)
     assert data["username"] == "admin"
+    assert data["email"] == "admin@admin.ca"
+    assert "password" not in data
 
 
-@pytest.mark.skip
 def test_profile_post(client):
     """Ensure profiles can be added"""
-    token = get_token(client)
-    result = post_profile(client, token, "", "", "")
-    assert result.status_code == 400
+    # test without authentication
+    result = post_profile(client, "", "main", "", "")
+    assert result.status_code == 401
 
+    token = get_token(client)
     result = post_profile(client, token, "main", "", "")
     assert result.status_code == 200
     data = json.loads(result.data)
+    assert data["account_name"] == "admin"
     assert data["profile_name"] == "main"
 
 
-@pytest.mark.skip
 def test_profile_get(client):
     """Ensure profiles can be fetched"""
+    sample_course = Course(
+        code="ECE444H1", name="Software Engineering", division="a", department="a"
+    )
+    db.session.add(sample_course)
+    db.session.commit()
+
     token = get_token(client)
     post_profile(client, token, "main", "", "")
     post_profile(client, token, "main", "FALL2021", "")
-    post_profile(client, token, "main", "FALL2021", "ECE444")
+    post_profile(client, token, "main", "FALL2021", "ECE444H1")
 
     result = client.get(
-        "/profile?profile=main",
+        "/profile?account=wrong_account",
         headers={"Authorization": "Bearer " + token},
         follow_redirects=True,
     )
-
     assert result.status_code == 200
     data = json.loads(result.data)
     assert data[0]["profile_name"] == "main"
     assert data[0]["session_name"] is None
     assert data[1]["session_name"] == "FALL2021"
-    assert data[1]["course_name"] is None
-    assert data[2]["course_name"] == "ECE444"
+    assert data[1]["course_code"] is None
+    assert data[2]["course_code"] == "ECE444H1"
 
 
-@pytest.mark.skip
 def test_profile_patch(client):
     """Ensure profiles can be updated"""
-    post_profile(client, "admin", "main", "", "")
-    post_profile(client, "admin", "main", "FALL2021", "")
-    post_profile(client, "admin", "main", "FALL2021", "ECE444")
+    sample_course = Course(
+        code="ECE444H1", name="Software Engineering", division="a", department="a"
+    )
+    db.session.add(sample_course)
+    db.session.commit()
 
-    result = patch_profile(client, "admin", "main", "main2")
+    token = get_token(client)
+    post_profile(client, token, "main", "", "")
+    post_profile(client, token, "main", "FALL2021", "")
+    post_profile(client, token, "main", "FALL2021", "ECE444H1")
+
+    result = patch_profile(client, token, "main", "main2")
     assert result.status_code == 200
     data = json.loads(result.data)
     assert data[0]["profile_name"] == "main2"
@@ -262,129 +275,191 @@ def test_profile_patch(client):
     assert data[2]["profile_name"] == "main2"
 
 
-@pytest.mark.skip
 def test_profile_delete(client):
     """Ensure profiles can be deleted"""
-    post_profile(client, "admin", "main", "", "")
-    post_profile(client, "admin", "main", "FALL2021", "")
-    post_profile(client, "admin", "main", "FALL2021", "ECE444")
-    result = delete_profile(client, "admin", "main", "FALL2021", "ECE444")
+    sample_course = Course(
+        code="ECE444H1", name="Software Engineering", division="a", department="a"
+    )
+    db.session.add(sample_course)
+    db.session.commit()
+
+    token = get_token(client)
+    post_profile(client, token, "main", "", "")
+    post_profile(client, token, "main", "FALL2021", "")
+    post_profile(client, token, "main", "FALL2021", "ECE444H1")
+    result = delete_profile(client, token, "main", "FALL2021", "ECE444H1")
     assert result.status_code == 200
     data = json.loads(result.data)
     assert data == 1
 
-    post_profile(client, "admin", "main", "FALL2021", "ECE444")
-    result = delete_profile(client, "admin", "main", "FALL2021", "")
+    post_profile(client, token, "main", "FALL2021", "ECE444H1")
+    result = delete_profile(client, token, "main", "FALL2021", "")
     assert result.status_code == 200
     data = json.loads(result.data)
     assert data == 2
 
-    post_profile(client, "admin", "main", "FALL2021", "")
-    post_profile(client, "admin", "main", "FALL2021", "ECE444")
-    result = delete_profile(client, "admin", "main", "", "")
+    post_profile(client, token, "main", "FALL2021", "")
+    post_profile(client, token, "main", "FALL2021", "ECE444H1")
+    result = delete_profile(client, token, "main", "", "")
     assert result.status_code == 200
     data = json.loads(result.data)
     assert data == 3
 
 
 def test_bookmark_post(client):
+    sample_course = Course(
+        code="ECE444H1", name="Software Engineering", division="a", department="a"
+    )
+    db.session.add(sample_course)
+    db.session.commit()
+
     token = get_token(client)
     result = post_bookmark(client, token, "")
     assert result.status_code == 400
 
-    result = post_bookmark(client, token, "ECE444")
+    result = post_bookmark(client, token, "ECE444H1")
     assert result.status_code == 200
     data = json.loads(result.data)
+    print(data)
+
     assert data["account_name"] == "admin"
-    assert data["course_name"] == "ECE444"
+    assert data["course_code"] == "ECE444H1"
+    assert data["course"]["name"] == "Software Engineering"
 
 
 def test_bookmark_get(client):
-    token = get_token(client)
-    post_bookmark(client, token, "ECE444")
-    post_bookmark(client, token, "ECE421")
+    sample_course = Course(
+        code="ECE444H1", name="Software Engineering", division="a", department="a"
+    )
+    sample_course_2 = Course(
+        code="ECE421H1", name="Intro to Machine Learning", division="a", department="a"
+    )
+    db.session.add(sample_course)
+    db.session.add(sample_course_2)
+    db.session.commit()
 
-    result = get_bookmark(client, token, "ECE444")
+    token = get_token(client)
+    post_bookmark(client, token, "ECE444H1")
+    post_bookmark(client, token, "ECE421H1")
+
+    result = get_bookmark(client, token, "ECE444H1")
     assert result.status_code == 200
     data = json.loads(result.data)
-    assert data[0]["course_name"] == "ECE444"
+    assert data[0]["course_code"] == "ECE444H1"
 
     result = get_bookmark(client, token, "")
     assert result.status_code == 200
     data = json.loads(result.data)
-    assert data[0]["course_name"] == "ECE444"
-    assert data[1]["course_name"] == "ECE421"
+    assert data[0]["course_code"] == "ECE444H1"
+    assert data[1]["course_code"] == "ECE421H1"
 
 
 def test_bookmark_delete(client):
+    sample_course = Course(
+        code="ECE444H1", name="Software Engineering", division="a", department="a"
+    )
+    sample_course_2 = Course(
+        code="ECE421H1", name="Intro to Machine Learning", division="a", department="a"
+    )
+    db.session.add(sample_course)
+    db.session.add(sample_course_2)
+    db.session.commit()
+
     token = get_token(client)
-    post_bookmark(client, token, "ECE444")
-    post_bookmark(client, token, "ECE421")
+    post_bookmark(client, token, "ECE444H1")
+    post_bookmark(client, token, "ECE421H1")
 
     result = delete_bookmark(client, token, "")
     assert result.status_code == 400
     data = json.loads(result.data)
     assert data["message"] == "Please specify a course"
 
-    result = delete_bookmark(client, token, "ECE444")
+    result = delete_bookmark(client, token, "ECE444H1")
     assert result.status_code == 200
     data = json.loads(result.data)
     assert data == 1
 
 
 def test_reaction_post(client):
+    sample_course = Course(
+        code="ECE444H1", name="Software Engineering", division="a", department="a"
+    )
+    db.session.add(sample_course)
+    db.session.commit()
+
+    get_token(client)
     result = post_reaction(client, "admin", "", "")
     assert result.status_code == 400
 
-    result = post_reaction(client, "admin", "ECE444", "")
+    result = post_reaction(client, "admin", "ECE444H1", "")
     assert result.status_code == 200
     data = json.loads(result.data)
     assert data["account_name"] == "admin"
 
 
 def test_reaction_get(client):
-    post_reaction(client, "admin", "ECE444", "")
+    sample_course = Course(
+        code="ECE444H1", name="Software Engineering", division="a", department="a"
+    )
+    db.session.add(sample_course)
+    db.session.commit()
+
+    get_token(client)
+    post_account(client, "admin2@admin.ca", "admin2", "admin")
+    post_account(client, "admin3@admin.ca", "admin3", "admin")
+
+    post_reaction(client, "admin", "ECE444H1", "")
 
     result = get_reaction(client, "")
     assert result.status_code == 400
 
-    result = get_reaction(client, "ECE444")
+    result = get_reaction(client, "ECE444H1")
     assert result.status_code == 200
     data = json.loads(result.data)
     assert data["views"] == 1
     assert data["rating"] is None
 
-    post_reaction(client, "admin2", "ECE444", "5")
-    post_reaction(client, "admin3", "ECE444", "4")
-    result = get_reaction(client, "ECE444")
+    post_reaction(client, "admin2", "ECE444H1", "5")
+    post_reaction(client, "admin3", "ECE444H1", "4")
+    result = get_reaction(client, "ECE444H1")
     data = json.loads(result.data)
     assert data["views"] == 3
     assert data["rating"] == 4.5
 
 
 def test_reaction_patch(client):
-    post_reaction(client, "admin", "ECE444", "")
+    sample_course = Course(
+        code="ECE444H1", name="Software Engineering", division="a", department="a"
+    )
+    db.session.add(sample_course)
+    db.session.commit()
+
+    get_token(client)
+    post_reaction(client, "admin", "ECE444H1", "")
 
     result = patch_reaction(client, "admin", "", 5)
     assert result.status_code == 400
 
-    result = patch_reaction(client, "admin", "ECE444", 4)
+    result = patch_reaction(client, "admin", "ECE444H1", 5)
+    data = json.loads(result.data)
     assert result.status_code == 200
-    data = json.loads(result.data)
-    assert data["rating"] == 4
-
-    result = get_reaction(client, "ECE444")
-    data = json.loads(result.data)
-    assert data["rating"] == 4
+    assert data["rating"] == 5
 
 
 def test_reaction_delete(client):
-    post_reaction(client, "admin", "ECE444", "")
+    sample_course = Course(
+        code="ECE444H1", name="Software Engineering", division="a", department="a"
+    )
+    db.session.add(sample_course)
+    db.session.commit()
+
+    get_token(client)
+    post_reaction(client, "admin", "ECE444H1", "")
 
     result = delete_reaction(client, "admin", "")
     assert result.status_code == 400
 
-    result = delete_reaction(client, "admin", "ECE444")
+    result = delete_reaction(client, "admin", "ECE444H1")
     assert result.status_code == 200
     data = json.loads(result.data)
     assert data == 1
