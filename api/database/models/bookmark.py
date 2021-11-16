@@ -1,16 +1,20 @@
+from sqlalchemy_serializer import SerializerMixin
+from sqlalchemy.orm import relationship
 from api import db
-from api.database import Serializer
 
 
-class Bookmark(db.Model):
+class Bookmark(db.Model, SerializerMixin):
     """Model for bookmarks"""
 
     __tablename__ = "bookmark"
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    account_name = db.Column(db.String, unique=False, nullable=False)
-    course_name = db.Column(db.String, unique=False, nullable=False)
-
-    def serialize(self):
-        d = Serializer.serialize(self)
-        return d
+    account_name = db.Column(
+        db.String, db.ForeignKey("account.username"), unique=False, nullable=False
+    )
+    course_code = db.Column(
+        db.String, db.ForeignKey("course.code"), unique=False, nullable=False
+    )
+    account = relationship("Account")
+    course = relationship("Course")
+    serialize_only = ("id", "account_name", "course_code", "course.name")

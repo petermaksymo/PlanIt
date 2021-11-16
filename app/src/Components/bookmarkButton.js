@@ -20,7 +20,10 @@ export const BookmarkButton = ({ course_id, ...props }) => {
         .then((data) => setBookmarked(data.length === 1))
   }, [course_id, authedFetch, isAuthed])
 
-  const toggleBookmark = () => {
+  const toggleBookmark = (e) => {
+    e.stopPropagation()
+    e.nativeEvent.stopImmediatePropagation()
+
     if (bookmarked) {
       return authedFetch(`${API_BASE_URL}/bookmark?course=${course_id}`, {
         method: "DELETE",
@@ -39,7 +42,7 @@ export const BookmarkButton = ({ course_id, ...props }) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          setBookmarked(data.course_name === course_id)
+          setBookmarked(data.course_code === course_id)
         })
     }
   }
@@ -48,7 +51,11 @@ export const BookmarkButton = ({ course_id, ...props }) => {
 
   return (
     <IconButton onClick={toggleBookmark} {...props}>
-      {bookmarked ? <BookmarkIcon /> : <BookmarkBorderIcon />}
+      {bookmarked ? (
+        <BookmarkIcon style={{ color: "#000" }} />
+      ) : (
+        <BookmarkBorderIcon style={{ color: "#000" }} />
+      )}
     </IconButton>
   )
 }

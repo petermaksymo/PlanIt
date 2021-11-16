@@ -11,12 +11,12 @@ from api.database.models import Account
 @auth_required
 def account():
     if request.method == "GET":
-        return jsonify(current_user().serialize())
+        return jsonify(current_user().to_dict())
     elif request.method == "PATCH":
         email = request.form.get("email")
         username = request.form.get("username")
         password = request.form.get("password")
-        new_account = Account.query.filter_by(id=current_user.id).first()
+        new_account = Account.query.filter_by(id=current_user().id).first()
         if email:
             new_account.email = email
         if username:
@@ -27,7 +27,7 @@ def account():
         db.session.commit()
         return (jsonify(new_account), 200)
     elif request.method == "DELETE":
-        deleting_account = Account.query.filter_by(id=current_user.id).first()
+        deleting_account = Account.query.filter_by(id=current_user().id).first()
         db.session.delete(deleting_account)
         db.session.commit()
         return 200
@@ -52,7 +52,7 @@ def signup():
     )
     db.session.add(new_user)
     db.session.commit()
-    return (jsonify(new_user.serialize()), 200)
+    return (jsonify(new_user.to_dict()), 200)
 
 
 @app.route("/login", methods=["POST"])

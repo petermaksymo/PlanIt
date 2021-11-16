@@ -1,5 +1,5 @@
+from sqlalchemy_serializer import SerializerMixin
 from api import db
-from api.database import Serializer
 import json
 
 """
@@ -14,7 +14,7 @@ The data can be imported to database using pgAdmin4
 """
 
 
-class Course(db.Model, json.JSONEncoder):
+class Course(db.Model, json.JSONEncoder, SerializerMixin):
     """Model for courses."""
 
     __tablename__ = "course"
@@ -48,7 +48,3 @@ class Course(db.Model, json.JSONEncoder):
     Majors_outcomes = db.Column(db.String)
     Minors_outcomes = db.Column(db.String)
     ai_Pre_Reqs = db.Column(db.String)
-
-    def serialize(self):
-        d = Serializer.serialize(self)
-        return d

@@ -53,6 +53,7 @@ export const Login = () => {
 
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const [error, setError] = useState()
 
   useEffect(() => {
     if (isAuthed) history.push("/profiles")
@@ -61,9 +62,9 @@ export const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    return login(username, password).then(() => {
-      history.push("/profiles")
-    })
+    return login(username, password)
+      .then(() => history.push("/profiles"))
+      .catch((err) => setError(err))
   }
 
   return (
@@ -76,6 +77,7 @@ export const Login = () => {
               Sign in
             </Typography>
           </div>
+          {error && <Typography color="error">{error}</Typography>}
           <form onSubmit={handleSubmit}>
             <div id="username" style={{ marginBottom: "1rem" }}>
               <TextField

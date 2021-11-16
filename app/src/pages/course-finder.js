@@ -92,6 +92,7 @@ export const CourseFinder = () => {
               onSubmit={onSubmit}
             >
               <InputBase
+                autoFocus
                 sx={{ ml: 1, flex: 1 }}
                 placeholder="Search by course name, department, or campus"
                 inputProps={{ "aria-label": "search google maps" }}

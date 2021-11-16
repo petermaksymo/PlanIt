@@ -1,8 +1,9 @@
+from sqlalchemy_serializer import SerializerMixin
+from sqlalchemy.orm import relationship
 from api import db
-from api.database import Serializer
 
 
-class Profile(db.Model):
+class Profile(db.Model, SerializerMixin):
     """
     Model for profiles
     Profiles includes the Profile, the Sessions, and the Courses in each session.
@@ -18,11 +19,22 @@ class Profile(db.Model):
     __tablename__ = "profile"
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    account_name = db.Column(db.String, unique=False, nullable=False)
+    account_name = db.Column(
+        db.String, db.ForeignKey("account.username"), unique=False, nullable=False
+    )
     profile_name = db.Column(db.String, unique=False, nullable=False)
     session_name = db.Column(db.String, unique=False, nullable=True)
-    course_name = db.Column(db.String, unique=False, nullable=True)
+    course_code = db.Column(
+        db.String, db.ForeignKey("course.code"), unique=False, nullable=True
+    )
 
-    def serialize(self):
-        d = Serializer.serialize(self)
-        return d
+    account = relationship("Account")
+    course = relationship("Course")
+    serialize_only = (
+        "id",
+        "account_name",
+        "profile_name",
+        "session_name",
+        "course_code",
+        "course.name",
+    )

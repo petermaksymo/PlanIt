@@ -34,7 +34,7 @@ def reaction():
         )
         db.session.add(new_entry)
         db.session.commit()
-        return jsonify(new_entry.serialize())
+        return jsonify(new_entry.to_dict())
 
     elif request.method == "GET":
         """
@@ -87,7 +87,7 @@ def reaction():
         entry.rating = rating
 
         db.session.commit()
-        return jsonify(entry.serialize())
+        return jsonify(entry.to_dict())
 
     elif request.method == "DELETE":
         """

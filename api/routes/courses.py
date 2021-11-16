@@ -44,7 +44,7 @@ def search_results():
     if top:
         query = query.filter_by().limit(int(top))
     results = query.all()
-    return jsonify([item.serialize() for item in results])
+    return jsonify([item.to_dict() for item in results])
 
 
 """
@@ -57,6 +57,6 @@ def course(code):
     query = db.session.query(Course)
     course = query.filter_by(code=code).first()
     if course:
-        return jsonify(course.serialize())
+        return jsonify(course.to_dict())
     else:
         raise Exception("Invalid Course Code!")
