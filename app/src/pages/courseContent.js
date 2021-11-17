@@ -44,7 +44,6 @@ export const CourseContent = () => {
     return fetch(`${API_BASE_URL}/course/${course_id}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
         if (data.pre_requisites !== null && data.pre_requisites !== "[]") {
           data.pre_requisites = data.pre_requisites
             .replace("[", "")
@@ -72,7 +71,7 @@ export const CourseContent = () => {
             .replaceAll("' ", ", ")
             .replaceAll("'", "")
         } else {
-          data.term = "Not Offerred Currently"
+          data.term = "Not Offered Currently"
         }
 
         if (data.related_course !== null) {
