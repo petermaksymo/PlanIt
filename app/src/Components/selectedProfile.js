@@ -29,6 +29,7 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
   const [sessionName, setSessionName] = useState("")
   const [courseCode, setCourseCode] = useState("")
   const [searchResult, setSearchResult] = useState()
+  const [ranCourseSearch, setRanCourseSearch] = useState(false)
 
   const closeAddDialog = () => {
     setAddDialog("")
@@ -74,11 +75,12 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
 
   const handleCourseSearch = (e) => {
     e.preventDefault()
-
+    setRanCourseSearch(true)
     return fetch(`${API_BASE_URL}/course/${courseCode.toUpperCase()}`)
       .then((res) => res.json())
       .then((data) => {
         setSearchResult(data)
+        setRanCourseSearch(false)
       })
       .catch((err) => console.log(err))
   }
@@ -109,7 +111,8 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
             ) : (
               <>
                 <Typography paragraph>
-                  Search for a course by course code for a match:
+                  Search for a course by exact course code for a match (e.g.
+                  ECE444H1):
                 </Typography>
                 <TextField
                   autoFocus
@@ -131,7 +134,7 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
                 />
               </>
             )}
-            {searchResult && (
+            {searchResult ? (
               <>
                 <Typography>
                   <strong>Found course</strong>
@@ -140,6 +143,16 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
                   <strong>Course Code:</strong> {searchResult.code}
                 </Typography>
               </>
+            ) : (
+              ranCourseSearch && (
+                <>
+                  <Typography>
+                    <strong>Error</strong>
+                    <br />
+                    Unable to find course
+                  </Typography>
+                </>
+              )
             )}
           </DialogContent>
           <DialogActions>
