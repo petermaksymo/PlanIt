@@ -48,3 +48,4 @@ class Course(db.Model, json.JSONEncoder, SerializerMixin):
     Majors_outcomes = db.Column(db.String)
     Minors_outcomes = db.Column(db.String)
     ai_Pre_Reqs = db.Column(db.String)
+    related_course = db.Column(db.Text)
