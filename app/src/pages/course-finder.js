@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Paper from "@mui/material/Paper"
 import InputBase from "@mui/material/InputBase"
 import IconButton from "@mui/material/IconButton"
@@ -46,8 +46,13 @@ export const CourseFinder = () => {
   const [rating, setRating] = useState("")
   const [filter, setFilter] = useState("")
 
+  // Re-run search if the filter changes
+  useEffect(() => {
+    if (results) return onSubmit()
+  }, [filter]) // eslint-disable-line react-hooks/exhaustive-deps
+
   const onSubmit = (e) => {
-    e.preventDefault()
+    e && e.preventDefault()
     if (
       search === "" &&
       year === "" &&
@@ -72,6 +77,9 @@ export const CourseFinder = () => {
     }
     if (top !== "" && top !== "Any") {
       searchParams.append("top", top)
+    }
+    if (filter !== "" && filter !== "Any") {
+      searchParams.append("sort_by", filter)
     }
     let url = searchParams.toString()
 
@@ -212,8 +220,17 @@ export const CourseFinder = () => {
     campus: ["Any", "Mississauga", "Scarborough", "St. George"],
     maxResults: ["Any", 10, 25, 50],
     rating: ["Any", "Over 2", "Over 3", "Over 4", "Over 4.5"],
-    sortBy: ["Any", "Field"],
+    sortBy: [
+      { value: "", text: "Any" },
+      { value: "code", text: "Course Code" },
+      { value: "name", text: "Course Name" },
+      { value: "course_level", text: "Year" },
+      { value: "division", text: "Division" },
+      { value: "department", text: "Department" },
+      { value: "campus", text: "Campus" },
+    ],
   }
+  const selectedFilter = filters.sortBy.find((f) => f.value === filter)
 
   return (
     <div>
@@ -258,7 +275,7 @@ export const CourseFinder = () => {
                   <InputBase
                     autoFocus
                     sx={{ ml: 1, flex: 1 }}
-                    placeholder="Search by course name, department, or campus"
+                    placeholder="Search by course name, or course code number"
                     inputProps={{ "aria-label": "search google maps" }}
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
@@ -528,8 +545,8 @@ export const CourseFinder = () => {
                   style={{ backgroundColor: "#D3D3D3" }}
                 >
                   Sort By
-                  {filter !== "" && filter !== "Any" ? (
-                    <>: {filter}</>
+                  {selectedFilter && selectedFilter.text !== "Any" ? (
+                    <>: {selectedFilter.text}</>
                   ) : (
                     <ArrowDropDownIcon />
                   )}
@@ -538,14 +555,14 @@ export const CourseFinder = () => {
                   {filters.sortBy.map((item, index) => {
                     return (
                       <MenuItem
-                        key={item}
-                        selected={item === filter}
+                        key={item.value}
+                        selected={item.value === filter}
                         onClick={() => {
                           popupState.close()
-                          setFilter(item)
+                          setFilter(item.value)
                         }}
                       >
-                        {item}
+                        {item.text}
                       </MenuItem>
                     )
                   })}
