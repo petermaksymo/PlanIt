@@ -246,7 +246,7 @@ export const CourseFinder = () => {
                     p: "2px 4px",
                     display: "flex",
                     alignItems: "center",
-                    width: 1010,
+                    maxWidth: 1010,
                     borderWidth: "medium",
                     border: "solid",
                     borderColor: theme.palette.background.main,
@@ -275,7 +275,7 @@ export const CourseFinder = () => {
                 </Paper>
               </Grid>
 
-              <Grid item id="form-filters" style={{ display: "flex" }}>
+              <Grid item id="form-filters" style={{ display: "flex", flexFlow: 'row wrap' }}>
                 <div className={classes.filter}>
                   <PopupState variant="popover" popupId="year-filter">
                     {(popupState) => (
