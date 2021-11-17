@@ -51,11 +51,38 @@ export const CourseContent = () => {
         if (data.corequisites === "[]") {
           data.corequisites = "None"
         }
-        data.term = data.term
+        if(data.term !== null){
+          data.term = data.term
           .replace("[", "")
           .replace("]", "")
           .replaceAll("' ", ", ")
           .replaceAll("'", "")
+        }
+        else{
+          data.term = "Not Offerred Currently"
+        }
+        
+        if(data.related_course !== null){
+          data.related_course = data.related_course
+          .replace('[','')
+          .replace(']','')
+          .split(' ')
+          if(data.related_course.length === 1){
+            data.related_course = data.related_course[0]
+          }
+          else if (data.related_course.length > 5){
+            data.related_course = data.related_course
+              .slice(0, 5)
+              .join('  ')
+          }
+          else {
+            data.related_course = data.related_course
+            .join('  ')
+          }
+        }
+        else{
+          data.related_course = "None"
+        }
         setResult({
           ...data,
           rating: Math.random() * 5,
@@ -138,20 +165,17 @@ export const CourseContent = () => {
           </div>
           <Divider className={classes.divider} />
           <div id="segment3" className={classes.align}>
-            <Typography className={classes.header}>Pre-requisites: </Typography>
-            <Typography className={classes.text}>
-              {result.pre_requisites}
-            </Typography>
+            <div className={classes.align} style={{ width: "50%" }}>
+              <Typography className={classes.header}>Pre-requisites: </Typography>
+              <Typography className={classes.text}>{result.pre_requisites}</Typography>
+            </div>
+            <div className={classes.align} style={{ width: "50%" }}>
+              <Typography className={classes.header}>Co-requisites: </Typography>
+              <Typography className={classes.text}>{result.corequisites}</Typography>
+            </div>
           </div>
           <Divider className={classes.divider} />
           <div id="segment4" className={classes.align}>
-            <Typography className={classes.header}>Co-requisites: </Typography>
-            <Typography className={classes.text}>
-              {result.corequisites}
-            </Typography>
-          </div>
-          <Divider className={classes.divider} />
-          <div id="segment5" className={classes.align}>
             <div className={classes.align} style={{ width: "50%" }}>
               <Typography className={classes.header}>Campus: </Typography>
               <Typography className={classes.text}>{result.campus}</Typography>
@@ -160,6 +184,11 @@ export const CourseContent = () => {
               <Typography className={classes.header}>Term: </Typography>
               <Typography className={classes.text}>{result.term}</Typography>
             </div>
+          </div>
+          <Divider className={classes.divider} />
+          <div id="segment5" className={classes.align}>
+              <Typography className={classes.header}>Related Courses: </Typography>
+              <Typography className={classes.text}>{result.related_course}</Typography>
           </div>
         </div>
       </div>
