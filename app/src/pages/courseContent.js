@@ -45,58 +45,49 @@ export const CourseContent = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data)
-        if(data.pre_requisites !== null && data.pre_requisites !== "[]"){
+        if (data.pre_requisites !== null && data.pre_requisites !== "[]") {
           data.pre_requisites = data.pre_requisites
-          .replace("[", "")
-          .replace("]", "")
-          .replaceAll("' ", ", ")
-          .replaceAll("'", "")
-        }
-        else{
+            .replace("[", "")
+            .replace("]", "")
+            .replaceAll("' ", ", ")
+            .replaceAll("'", "")
+        } else {
           data.pre_requisites = "None"
         }
 
-        if(data.corequisites !== null && data.corequisites !== "[]"){
+        if (data.corequisites !== null && data.corequisites !== "[]") {
           data.corequisites = data.corequisites
-          .replace("[", "")
-          .replace("]", "")
-          .replaceAll("' ", ", ")
-          .replaceAll("'", "")
-        }
-        else{
+            .replace("[", "")
+            .replace("]", "")
+            .replaceAll("' ", ", ")
+            .replaceAll("'", "")
+        } else {
           data.corequisites = "None"
         }
 
-        if(data.term !== null){
+        if (data.term !== null) {
           data.term = data.term
-          .replace("[", "")
-          .replace("]", "")
-          .replaceAll("' ", ", ")
-          .replaceAll("'", "")
-        }
-        else{
+            .replace("[", "")
+            .replace("]", "")
+            .replaceAll("' ", ", ")
+            .replaceAll("'", "")
+        } else {
           data.term = "Not Offerred Currently"
         }
 
-        if(data.related_course !== null){
+        if (data.related_course !== null) {
           data.related_course = data.related_course
-          .replace('[','')
-          .replace(']','')
-          .split(' ')
-          if(data.related_course.length === 1){
+            .replace("[", "")
+            .replace("]", "")
+            .split(" ")
+          if (data.related_course.length === 1) {
             data.related_course = data.related_course[0]
+          } else if (data.related_course.length > 5) {
+            data.related_course = data.related_course.slice(0, 5).join(", ")
+          } else {
+            data.related_course = data.related_course.join(", ")
           }
-          else if (data.related_course.length > 5){
-            data.related_course = data.related_course
-              .slice(0, 5)
-              .join(', ')
-          }
-          else {
-            data.related_course = data.related_course
-            .join(', ')
-          }
-        }
-        else{
+        } else {
           data.related_course = "None"
         }
         setResult({
@@ -182,12 +173,20 @@ export const CourseContent = () => {
           <Divider className={classes.divider} />
           <div id="segment3" className={classes.align}>
             <div className={classes.align} style={{ width: "50%" }}>
-              <Typography className={classes.header}>Pre-requisites: </Typography>
-              <Typography className={classes.text}>{result.pre_requisites}</Typography>
+              <Typography className={classes.header}>
+                Pre-requisites:{" "}
+              </Typography>
+              <Typography className={classes.text}>
+                {result.pre_requisites}
+              </Typography>
             </div>
             <div className={classes.align} style={{ width: "50%" }}>
-              <Typography className={classes.header}>Co-requisites: </Typography>
-              <Typography className={classes.text}>{result.corequisites}</Typography>
+              <Typography className={classes.header}>
+                Co-requisites:{" "}
+              </Typography>
+              <Typography className={classes.text}>
+                {result.corequisites}
+              </Typography>
             </div>
           </div>
           <Divider className={classes.divider} />
@@ -203,8 +202,12 @@ export const CourseContent = () => {
           </div>
           <Divider className={classes.divider} />
           <div id="segment5" className={classes.align}>
-              <Typography className={classes.header}>Related Courses: </Typography>
-              <Typography className={classes.text}>{result.related_course}</Typography>
+            <Typography className={classes.header}>
+              Related Courses:{" "}
+            </Typography>
+            <Typography className={classes.text}>
+              {result.related_course}
+            </Typography>
           </div>
         </div>
       </div>
