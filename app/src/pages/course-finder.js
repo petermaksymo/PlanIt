@@ -34,6 +34,7 @@ export const CourseFinder = () => {
   const [department, setDepartment] = useState("") // eslint-disable-line no-unused-vars
   const [division, setDivision] = useState("") // eslint-disable-line no-unused-vars
   const [campus, setCampus] = useState("") // eslint-disable-line no-unused-vars
+  const [top, setTop] = useState("") // eslint-disable-line no-unused-vars
   const [results, setResults] = useState(null)
   const [filter, setFilter] = useState("") // eslint-disable-line no-unused-vars
 
@@ -48,7 +49,7 @@ export const CourseFinder = () => {
     if (division !== "") {
       searchParams.append("divisions", division)
     }
-    if (department !== null) {
+    if (department !== "") {
       searchParams.append("departments", department)
     }
     if (campus !== "") {
