@@ -285,7 +285,7 @@ export const CourseFinder = () => {
                   <InputBase
                     autoFocus
                     sx={{ ml: 1, flex: 1 }}
-                    placeholder="Search by course name, or course code number"
+                    placeholder="Search by course name, or course code"
                     inputProps={{ "aria-label": "search google maps" }}
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}

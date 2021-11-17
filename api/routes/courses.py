@@ -65,13 +65,14 @@ Pass the original search to the template as well, so the user can see the contex
 
 @app.route("/results", methods=["GET"])
 def search_results():
-    search_keywords = request.args.get("search_keywords")
+    search_keywords = request.args.get("search_keywords").rstrip()
     year = request.args.get("year")
     division = request.args.get("division")
     department = request.args.get("department")
     campus = request.args.get("campus")
     top = request.args.get("top")
     sort_by = request.args.get("sort_by")
+
     if top is None:
         top = "50"
     if search_keywords:
