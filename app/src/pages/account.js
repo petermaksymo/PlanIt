@@ -118,7 +118,7 @@ export const Account = () => {
               fontWeight: "bold",
             }}
           >
-            Account Settings
+            My Account
           </Typography>
         </div>
       </div>

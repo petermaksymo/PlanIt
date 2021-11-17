@@ -1,13 +1,14 @@
 import React, { useState, useContext } from "react"
-import { useHistory } from "react-router-dom"
+import { useHistory, useLocation } from "react-router-dom"
 import { Link } from "react-router-dom"
-import { useTheme } from "@mui/styles"
+import { useTheme, makeStyles } from "@mui/styles"
 import AppBar from "@mui/material/AppBar"
 import Button from "@mui/material/Button"
 import IconButton from "@mui/material/IconButton"
 import MenuIcon from "@mui/icons-material/Menu"
-import Menu from "@mui/material/Menu"
-import MenuItem from "@mui/material/MenuItem"
+import Drawer from "@mui/material/Drawer"
+import List from "@mui/material/List"
+import ListItem from "@mui/material/ListItem"
 import Toolbar from "@mui/material/Toolbar"
 import Typography from "@mui/material/Typography"
 import useMediaQuery from "@mui/material/useMediaQuery"
@@ -15,17 +16,19 @@ import useMediaQuery from "@mui/material/useMediaQuery"
 import Logo from "./logo"
 import { AuthContext } from "../contexts/auth"
 
-const NavBarOption = ({ title, link }) => (
-  <Link to={link} style={{ margin: "auto 14px" }}>
-    <Typography sx={{ fontSize: "18px", margin: "0 1rem" }}>{title}</Typography>
-  </Link>
-)
+const useStyles = makeStyles((theme) => ({
+  menuItem: {
+    fontSize: 22,
+  },
+}))
 
 export const NavBar = () => {
   const theme = useTheme()
+  const classes = useStyles(theme)
   const history = useHistory()
+  const location = useLocation()
   const onMobile = useMediaQuery(theme.breakpoints.down("md"))
-  const [menuAnchorEl, setMenuAnchorEl] = useState(null)
+  const [menuOpen, setMenuOpen] = useState(null)
   const { isAuthed, logout } = useContext(AuthContext)
 
   const navOptions = [
@@ -42,40 +45,52 @@ export const NavBar = () => {
         edge="start"
         color="inherit"
         aria-label="menu"
-        onClick={(e) => setMenuAnchorEl(e.currentTarget)}
+        onClick={(e) => setMenuOpen(true)}
       >
         <MenuIcon />
       </IconButton>
-      <Menu
-        open={!!menuAnchorEl}
-        onClose={() => setMenuAnchorEl(null)}
-        anchorEl={menuAnchorEl}
-      >
-        {navOptions.map((option) => (
-          <Link to={option.link}>
-            <MenuItem>{option.title}</MenuItem>
-          </Link>
-        ))}
-        {isAuthed ? (
-          <MenuItem
-            onClick={() => {
-              logout()
-              history.push("/")
-            }}
-          >
-            Logout
-          </MenuItem>
-        ) : (
-          <>
-            <Link to="/login">
-              <MenuItem>Login</MenuItem>
+      <Drawer open={menuOpen} onClose={() => setMenuOpen(null)}>
+        <List
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            height: "100%",
+            width: 250,
+          }}
+        >
+          {navOptions.map((option) => (
+            <Link to={option.link}>
+              <ListItem
+                selected={option.link === location.pathname}
+                className={classes.menuItem}
+              >
+                {option.title}
+              </ListItem>
             </Link>
-            <Link to="/signup">
-              <MenuItem>Sign Up</MenuItem>
-            </Link>
-          </>
-        )}
-      </Menu>
+          ))}
+          <div style={{ flex: 1 }} />
+          {isAuthed ? (
+            <ListItem
+              className={classes.menuItem}
+              onClick={() => {
+                logout()
+                history.push("/")
+              }}
+            >
+              Logout
+            </ListItem>
+          ) : (
+            <>
+              <Link to="/login">
+                <ListItem className={classes.menuItem}>Login</ListItem>
+              </Link>
+              <Link to="/signup">
+                <ListItem className={classes.menuItem}>Sign Up</ListItem>
+              </Link>
+            </>
+          )}
+        </List>
+      </Drawer>
       <Link to="/" style={{ margin: "auto" }}>
         <Logo height={48} width={96} />
       </Link>
@@ -88,14 +103,27 @@ export const NavBar = () => {
         <Logo height={48} width={96} />
       </Link>
       {navOptions.map((option) => (
-        <NavBarOption title={option.title} link={option.link} />
+        <Link
+          to={option.link}
+          style={{
+            margin: "auto 8px",
+            ...(option.link === location.pathname && {
+              borderBottom: "2px solid #FF9100",
+              paddingTop: 2,
+            }),
+          }}
+        >
+          <Typography sx={{ fontSize: "18px", margin: "0 8px" }}>
+            {option.title}
+          </Typography>
+        </Link>
       ))}
       <div style={{ flex: 1 }} />
       {isAuthed ? (
         <Button
           variant="contained"
           sx={{
-            marginRight: "14px",
+            marginRight: "8px",
             backgroundColor: theme.palette.button.navBarButton,
           }}
           onClick={() => {
@@ -111,7 +139,7 @@ export const NavBar = () => {
             <Button
               variant="contained"
               sx={{
-                marginRight: "14px",
+                marginRight: "8px",
                 backgroundColor: theme.palette.button.navBarButton,
               }}
             >
@@ -142,6 +170,7 @@ export const NavBar = () => {
           width: "100%",
           margin: "auto",
           boxSizing: "border-box",
+          padding: "0 12px !important",
         }}
       >
         {onMobile ? mobileNavBar : desktopNavBar}
