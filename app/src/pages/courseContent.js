@@ -1,7 +1,11 @@
 import { Typography, Rating, Divider } from "@mui/material"
+import { useParams } from "react-router-dom"
 import BookmarkButton from "../Components/bookmarkButton"
 import { NavBar } from "../Components/navbar"
 import { makeStyles, useTheme } from "@mui/styles"
+import { useEffect, useState } from "react"
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -18,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.lightBlue,
     height: "3px",
     margin: "41px 0",
+    borderRadius: "50px",
   },
   align: {
     display: "flex",
@@ -31,21 +36,35 @@ const useStyles = makeStyles((theme) => ({
 
 export const CourseContent = () => {
   const theme = useTheme()
+  const { course_id } = useParams()
   const classes = useStyles()
-  const result = {
-    name: " Introduction to Databases",
-    code: "CSC343H1",
-    courseDescription:
-      "Introduction to database management systems. The relational data model. Relational algebra. Querying and updating databases: the query language SQL. Application programming with SQL. Integrity constraints, normal forms, and database design. Elements of database system technology: query processing, transaction management.",
-    division: "Faculty of Applied Science and Engineering",
-    department: "Biochemistry",
-    prereq: "",
-    coreq: "",
-    campus: "St. George",
-    term: "Winter 2022",
-    rating: Math.random() * 5,
-    views: Math.round(Math.random() * 10000),
-  }
+  const [result, setResult] = useState()
+
+  useEffect(() => {
+    return fetch(`${API_BASE_URL}/course/${course_id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        if (data.pre_requisites === "[]") {
+          data.pre_requisites = "None"
+        }
+        if (data.corequisites === "[]") {
+          data.corequisites = "None"
+        }
+        data.term = data.term
+          .replace("[", "")
+          .replace("]", "")
+          .replaceAll("' ", ", ")
+          .replaceAll("'", "")
+        setResult({
+          ...data,
+          rating: Math.random() * 5,
+          views: Math.round(Math.random() * 10000),
+        })
+      })
+  }, [course_id])
+
+  if (!result) return null
 
   return (
     <>
@@ -99,7 +118,7 @@ export const CourseContent = () => {
             <Typography
               sx={{ padding: "6px 42px", color: theme.palette.text.grey }}
             >
-              {result.courseDescription}
+              {result.course_description}
             </Typography>
           </div>
           <Divider className={classes.divider} />
@@ -120,12 +139,16 @@ export const CourseContent = () => {
           <Divider className={classes.divider} />
           <div id="segment3" className={classes.align}>
             <Typography className={classes.header}>Pre-requisites: </Typography>
-            <Typography className={classes.text}>{result.prereq}</Typography>
+            <Typography className={classes.text}>
+              {result.pre_requisites}
+            </Typography>
           </div>
           <Divider className={classes.divider} />
           <div id="segment4" className={classes.align}>
             <Typography className={classes.header}>Co-requisites: </Typography>
-            <Typography className={classes.text}>{result.coreq}</Typography>
+            <Typography className={classes.text}>
+              {result.corequisites}
+            </Typography>
           </div>
           <Divider className={classes.divider} />
           <div id="segment5" className={classes.align}>
