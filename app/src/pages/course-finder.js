@@ -48,7 +48,14 @@ export const CourseFinder = () => {
 
   const onSubmit = (e) => {
     e.preventDefault()
-    if (search === "" && year === '' && department === "" && division === "" && campus === "") return
+    if (
+      search === "" &&
+      year === "" &&
+      department === "" &&
+      division === "" &&
+      campus === ""
+    )
+      return
     let searchParams = new URLSearchParams()
     searchParams.append("search_keywords", search)
     if (year !== "") {
@@ -516,7 +523,7 @@ export const CourseFinder = () => {
                   className={classes.btn}
                   style={{ backgroundColor: "#D3D3D3" }}
                 >
-                  Sorty By
+                  Sort By
                   {filter !== "" && filter !== "Any" ? (
                     <>: {filter}</>
                   ) : (
