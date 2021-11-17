@@ -45,12 +45,28 @@ export const CourseContent = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data)
-        if (data.pre_requisites === "[]") {
+        if(data.pre_requisites !== null && data.pre_requisites !== "[]"){
+          data.pre_requisites = data.pre_requisites
+          .replace("[", "")
+          .replace("]", "")
+          .replaceAll("' ", ", ")
+          .replaceAll("'", "")
+        }
+        else{
           data.pre_requisites = "None"
         }
-        if (data.corequisites === "[]") {
+
+        if(data.corequisites !== null && data.corequisites !== "[]"){
+          data.corequisites = data.corequisites
+          .replace("[", "")
+          .replace("]", "")
+          .replaceAll("' ", ", ")
+          .replaceAll("'", "")
+        }
+        else{
           data.corequisites = "None"
         }
+
         if(data.term !== null){
           data.term = data.term
           .replace("[", "")
@@ -61,7 +77,7 @@ export const CourseContent = () => {
         else{
           data.term = "Not Offerred Currently"
         }
-        
+
         if(data.related_course !== null){
           data.related_course = data.related_course
           .replace('[','')
@@ -73,11 +89,11 @@ export const CourseContent = () => {
           else if (data.related_course.length > 5){
             data.related_course = data.related_course
               .slice(0, 5)
-              .join('  ')
+              .join(', ')
           }
           else {
             data.related_course = data.related_course
-            .join('  ')
+            .join(', ')
           }
         }
         else{
