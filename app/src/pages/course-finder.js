@@ -37,34 +37,34 @@ export const CourseFinder = () => {
   const theme = useTheme()
   const classes = useStyles()
   const [search, setSearch] = useState("")
-  const [year, setYear] = useState("") // eslint-disable-line no-unused-vars
-  const [department, setDepartment] = useState("") // eslint-disable-line no-unused-vars
-  const [division, setDivision] = useState("") // eslint-disable-line no-unused-vars
-  const [campus, setCampus] = useState("") // eslint-disable-line no-unused-vars
-  const [top, setTop] = useState("") // eslint-disable-line no-unused-vars
+  const [year, setYear] = useState("")
+  const [department, setDepartment] = useState("")
+  const [division, setDivision] = useState("")
+  const [campus, setCampus] = useState("")
+  const [top, setTop] = useState("")
   const [results, setResults] = useState(null)
   const [rating, setRating] = useState("")
-  const [filter, setFilter] = useState("") // eslint-disable-line no-unused-vars
+  const [filter, setFilter] = useState("")
 
   const onSubmit = (e) => {
     e.preventDefault()
-    if (search === "") return
+    if (search === "" && year === '' && department === "" && division === "" && campus === "") return
     let searchParams = new URLSearchParams()
     searchParams.append("search_keywords", search)
     if (year !== "") {
       searchParams.append("year", year)
     }
     if (division !== "") {
-      searchParams.append("divisions", division)
+      searchParams.append("division", division)
     }
     if (department !== "") {
-      searchParams.append("departments", department)
+      searchParams.append("department", department)
     }
     if (campus !== "") {
-      searchParams.append("campuses", campus)
+      searchParams.append("campus", campus)
     }
-    if (filter !== "") {
-      searchParams.append("top", results)
+    if (top !== "") {
+      searchParams.append("top", top)
     }
     let url = searchParams.toString()
 
@@ -79,26 +79,27 @@ export const CourseFinder = () => {
       })
       .then((data) => {
         setResults(data)
-        console.log(data)
       })
   }
 
   const filters = {
-    year: ["Any", 1, 2, 3, 4],
+    year: ["Any", 1, 2, 3, 4, 5, 6],
     division: [
       "Any",
-      "Faculty of Applied Science and Engineering",
       "Faculty of Arts and Science",
+      "Faculty of Applied Science & Engineering",
+      "Faculty of Music",
+      "John H. Daniels Faculty of Architecture, Landscape, & Design",
       "University of Toronto Mississauga",
       "University of Toronto Scarborough",
     ],
     department: [
       "Any",
-      "ASDN: Arts and Science, Office of the Dean",
       "Anatomy and Cell Biology",
       "Anthropology",
       "Anthropology (UTSC)",
       "Art History",
+      "ASDN: Arts and Science, Office of the Dean",
       "Astronomy and Astrophysics",
       "Biochemistry",
       "Biological Sciences (UTSC)",
@@ -107,10 +108,99 @@ export const CourseFinder = () => {
       "Cell and Systems Biology",
       "Centre for Criminology and Sociolegal Studies",
       "Centre for Critical Development Studies (UTSC)",
-      "Centre for Diaspora and Transnational Studies",
+      "Centre for Diaspora & Transnational Studies",
       "Centre for Drama, Theatre and Performance Studies",
-      "Centre for Ethics",
       "Centre for European, Russian and Eurasian Studies",
+      "Centre for Industrial Relations and Human Resources",
+      "Centre for Study of United States",
+      "Centre for Teaching and Learning (UTSC)",
+      "Chemical and Physical Sciences",
+      "Chemical Engineering and Applied Chemistry",
+      "Chemistry",
+      "Cinema Studies Institute",
+      "Civil and Mineral Engineering",
+      "Classics",
+      "Computer Science",
+      "Cross Disciplinary Programs Office",
+      "Department for the Study of Religion",
+      "Dept. of Arts, Culture & Media (UTSC)",
+      "Dept. of Computer & Mathematical Sci (UTSC)",
+      "Dept. of Historical & Cultural Studies (UTSC)",
+      "Dept. of Physical & Environmental Sci (UTSC)",
+      "Division of Engineering Science",
+      "Earth Sciences",
+      "East Asian Studies",
+      "Ecology and Evolutionary Biology",
+      "Economics",
+      "Edward S. Rogers Sr. Dept. of Electrical & Computer Engin.",
+      "Engineering First Year Office",
+      "English",
+      "English and Drama",
+      "English (UTSC)",
+      "Factor Inwentash Faculty of Social Work",
+      "Faculty of Applied Science & Engineering",
+      "Faculty of Arts and Science",
+      "Faculty of Music",
+      "French",
+      "Geography and Planning",
+      "Geography, Geomatics and Environment",
+      "Germanic Languages & Literatures",
+      "Health and Society (UTSC)",
+      "Historical Studies",
+      "History",
+      "Human Biology Program",
+      "Human Geography (UTSC)",
+      "Immunology",
+      "Indigenous Studies Arts & Science",
+      "Inst for Studies in Transdisciplinary Engin Educ & Practice",
+      "Inst. for the History & Philosophy of Science & Technology",
+      "Institute for Management and Innovation",
+      "Institute for the Study of University Pedagogy",
+      "Institute of Biomedical Engineering",
+      "Institute of Communication and Culture",
+      "Italian Studies",
+      "Jewish Studies",
+      "John H. Daniels Faculty of Architecture, Landscape, & Design",
+      "Laboratory Medicine and Pathobiology",
+      "Language Studies",
+      "Language Studies (UTSC)",
+      "Linguistics",
+      "Management",
+      "Management (UTSC)",
+      "Materials Science and Engineering",
+      "Mathematical and Computational Sciences",
+      "Mathematics",
+      "Mechanical & Industrial Engineering",
+      "Molecular Genetics",
+      "Munk School of Global Affairs and Public Policy",
+      "Near & Middle Eastern Civilizations",
+      "New College",
+      "Nutritional Sciences",
+      "Pharmacology",
+      "Philosophy",
+      "Philosophy (UTSC)",
+      "Physics",
+      "Physiology",
+      "Political Science",
+      "Political Science (UTSC)",
+      "Psychology",
+      "Psychology (UTSC)",
+      "Rotman Commerce",
+      "School of Environment",
+      "Sexual Diversity Studies",
+      "Slavic Languages and Literatures",
+      "Sociology",
+      "Sociology (UTSC)",
+      "Spanish and Portuguese",
+      "Statistical Sciences",
+      "St. Michael's College",
+      "Trinity College",
+      "University College",
+      "University of Toronto Mississauga",
+      "University of Toronto Scarborough",
+      "Victoria College",
+      "Visual Studies",
+      "Women and Gender Studies Institute",
     ],
     campus: ["Any", "Mississauga", "Scarborough", "St. George"],
     maxResults: ["Any", 10, 25, 50],
@@ -341,9 +431,7 @@ export const CourseFinder = () => {
                           <div className={classes.btnDiv}>
                             <Typography>
                               Max Results
-                              {results !== "" && results !== "Any" && (
-                                <>: {results}</>
-                              )}
+                              {top !== "" && top !== "Any" && <>: {top}</>}
                             </Typography>
                           </div>
                         </Button>
@@ -352,10 +440,10 @@ export const CourseFinder = () => {
                             return (
                               <MenuItem
                                 key={item}
-                                selected={item === results}
+                                selected={item === top}
                                 onClick={() => {
                                   popupState.close()
-                                  setResults(item)
+                                  setTop(item)
                                 }}
                               >
                                 {item}

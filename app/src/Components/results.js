@@ -24,7 +24,7 @@ export const ResultCard = ({ result }) => {
             margin: "auto 0",
           }}
         >
-          {result["name"]}
+          {result.code + " - " + result.name}
         </Typography>
         <Rating sx={{ margin: "auto 0" }} value={rating} readOnly />
         <Typography
