@@ -203,7 +203,7 @@ export const Profiles = () => {
             <Typography
               style={{
                 color: theme.palette.text.dark,
-                fontSize: 28,
+                fontSize: 24,
                 marginBottom: "15px",
                 fontWeight: "bold",
               }}
@@ -232,7 +232,7 @@ export const Profiles = () => {
                       }}
                       onClick={() => setSelectedProfileId(idx)}
                     >
-                      <Typography style={{ margin: "30px 15px", fontSize: 20 }}>
+                      <Typography style={{ margin: "30px 15px", fontSize: 18 }}>
                         {profile.title}
                       </Typography>
                       <IconButton
@@ -284,7 +284,7 @@ export const Profiles = () => {
                       }}
                     />
                     <Typography
-                      sx={{ color: theme.palette.text.grey, fontSize: 18 }}
+                      sx={{ color: theme.palette.text.grey, fontSize: 16 }}
                     >
                       Create New Profile
                     </Typography>

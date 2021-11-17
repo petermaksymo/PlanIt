@@ -7,13 +7,13 @@ const useStyles = makeStyles((theme) => ({
   header: {
     color: theme.palette.text.grey,
     fontSize: 20,
-    marginBottom: "15px",
+    marginBottom: "5px",
     fontWeight: "bold",
   },
   text: {
     color: theme.palette.text.grey,
     fontSize: 18,
-    marginBottom: "15px",
+    marginBottom: "5px",
   },
 }))
 
@@ -27,13 +27,13 @@ export const Help = () => {
       <div
         id="profiles"
         style={{
-          padding: "30px 0",
+          padding: "20px 0",
           backgroundColor: theme.palette.background.lightPink,
         }}
       >
         <div
           style={{
-            maxWidth: 1440,
+            maxWidth: 1200,
             margin: "auto",
             padding: "0 24px",
             boxSizing: "border-box",
@@ -43,7 +43,7 @@ export const Help = () => {
             style={{
               color: theme.palette.text.dark,
               fontSize: 28,
-              marginBottom: "15px",
+              marginBottom: "5px",
               fontWeight: "bold",
             }}
           >
@@ -51,10 +51,10 @@ export const Help = () => {
           </Typography>
         </div>
       </div>
-      <div id="page-container" style={{ margin: "40px 0" }}>
+      <div id="page-container" style={{ margin: "20px 0" }}>
         <div
           style={{
-            maxWidth: 1440,
+            maxWidth: 1200,
             margin: "auto",
             padding: "0 24px",
             boxSizing: "border-box",
