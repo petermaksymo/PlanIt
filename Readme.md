@@ -45,7 +45,7 @@ More information can be found in the [Wiki](https://github.com/ECE444-2021Fall/p
 
 For now, you can test the api using docker with the following steps:
 
-1. After building the api from step 2 (or using `docker-compose-f docker-compose.yml up -d --build`)
+1. After building the api from step 2 (or using `docker-compose -f docker-compose.yml up -d --build`)
 
 2. Run `docker-compose -f docker-compose.yml run -e ENVIRONMENT=testing --rm api python -m pytest` and the tests should run 
 
