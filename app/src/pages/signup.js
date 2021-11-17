@@ -124,8 +124,7 @@ export const Signup = () => {
           </div>
           <div id="password" style={{ marginBottom: "2rem" }}>
             <Typography className={classes.text}>
-              Enter a password at least 8 characters long with at least 1 letter, number and special character
-              or symbol:
+              Enter a password at least 8 characters long with at least 1 letter, number and special character or symbol:
             </Typography>
             <TextField
               required
