@@ -14,18 +14,19 @@ def account():
         return jsonify(current_user().to_dict())
     elif request.method == "PATCH":
         email = request.form.get("email")
-        username = request.form.get("username")
-        password = request.form.get("password")
+        new_password = request.form.get("new_password")
+
+        if email is None and new_password is None:
+            return jsonify("Missing required fields"), 400
+
         new_account = Account.query.filter_by(id=current_user().id).first()
         if email:
             new_account.email = email
-        if username:
-            new_account.username = username
-        if password:
-            new_account.password = guard.hash_password(password)
+        if new_password:
+            new_account.password = guard.hash_password(new_password)
         db.session.add(new_account)
         db.session.commit()
-        return (jsonify(new_account), 200)
+        return (jsonify(new_account.to_dict()), 200)
     elif request.method == "DELETE":
         deleting_account = Account.query.filter_by(id=current_user().id).first()
         db.session.delete(deleting_account)
