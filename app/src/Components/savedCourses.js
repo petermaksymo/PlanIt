@@ -43,7 +43,7 @@ const SavedCourses = () => {
             boxSizing: "border-box",
           }}
         >
-          <Typography style={{ color: theme.palette.text.dark, fontSize: 28 }}>
+          <Typography style={{ color: theme.palette.text.dark, fontSize: 24 }}>
             Saved Courses
           </Typography>
         </div>

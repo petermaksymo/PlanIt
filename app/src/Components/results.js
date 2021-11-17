@@ -66,7 +66,7 @@ export const ResultCard = ({ result }) => {
           color: "#555555",
         }}
       >
-        <Link to={`/course/${result.code}`} style={{}}>
+        <Link to={`/course/${result.code}`} target="_blank" style={{}}>
           More Details
         </Link>
       </Typography>

@@ -9,13 +9,13 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
 const useStyles = makeStyles((theme) => ({
   header: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     color: theme.palette.text.grey,
     marginRight: 20,
   },
   text: {
-    fontSize: 18,
+    fontSize: 16,
     color: theme.palette.text.grey,
   },
   divider: {
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   courseContainer: {
-    maxWidth: 1440,
+    maxWidth: 1200,
     margin: "auto",
     padding: "0 24px",
     boxSizing: "border-box",
