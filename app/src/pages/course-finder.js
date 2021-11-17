@@ -12,6 +12,9 @@ import { makeStyles, useTheme } from "@mui/styles"
 import { Results } from "../Components/results"
 import { NavBar } from "../Components/navbar"
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
+import { Typography } from "@mui/material"
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
 const useStyles = makeStyles((theme) => ({
   btn: {
@@ -19,12 +22,16 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 10,
     textTransform: "none",
   },
+  btnDiv: {
+    width: "125px",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  },
   filter: {
     margin: "20px 16px 20px 0",
   },
 }))
-
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
 export const CourseFinder = () => {
   const theme = useTheme()
@@ -36,6 +43,7 @@ export const CourseFinder = () => {
   const [campus, setCampus] = useState("") // eslint-disable-line no-unused-vars
   const [top, setTop] = useState("") // eslint-disable-line no-unused-vars
   const [results, setResults] = useState(null)
+  const [rating, setRating] = useState("")
   const [filter, setFilter] = useState("") // eslint-disable-line no-unused-vars
 
   const onSubmit = (e) => {
@@ -141,7 +149,7 @@ export const CourseFinder = () => {
                     p: "2px 4px",
                     display: "flex",
                     alignItems: "center",
-                    maxWidth: 650,
+                    width: 1010,
                     borderWidth: "medium",
                     border: "solid",
                     borderColor: theme.palette.background.main,
@@ -180,12 +188,20 @@ export const CourseFinder = () => {
                           {...bindTrigger(popupState)}
                           className={classes.btn}
                         >
-                          Course Year
+                          <div className={classes.btnDiv}>
+                            <Typography >
+                              Course Year
+                              {year !=="" && year !=="Any" && (<>: {year}</>)}
+                            </Typography>
+                          </div>
                         </Button>
                         <Menu {...bindMenu(popupState)}>
-                          {filters.year.map((item) => {
+                          {filters.year.map((item, index) => {
                             return (
-                              <MenuItem onClick={popupState.close}>
+                              <MenuItem 
+                                key={item}
+                                selected={item===year}
+                                onClick={() => {popupState.close(); setYear(item)}}>
                                 {item}
                               </MenuItem>
                             )
@@ -204,12 +220,20 @@ export const CourseFinder = () => {
                           {...bindTrigger(popupState)}
                           className={classes.btn}
                         >
-                          Division
+                          <div className={classes.btnDiv}>
+                            <Typography >
+                              Division
+                              {division !=="" && division !=="Any" && (<>: {division}</>)}
+                            </Typography>
+                          </div>
                         </Button>
                         <Menu {...bindMenu(popupState)}>
-                          {filters.division.map((item) => {
+                          {filters.division.map((item, index) => {
                             return (
-                              <MenuItem onClick={popupState.close}>
+                              <MenuItem 
+                                key={item}
+                                selected={item===division}
+                                onClick={() => {popupState.close(); setDivision(item)}}>
                                 {item}
                               </MenuItem>
                             )
@@ -228,12 +252,20 @@ export const CourseFinder = () => {
                           {...bindTrigger(popupState)}
                           className={classes.btn}
                         >
-                          Department
+                          <div className={classes.btnDiv}>
+                            <Typography >
+                              Department
+                              {department !=="" && department !=="Any" && (<>: {department}</>)}
+                            </Typography>
+                          </div>
                         </Button>
                         <Menu {...bindMenu(popupState)}>
-                          {filters.department.map((item) => {
+                          {filters.department.map((item, index) => {
                             return (
-                              <MenuItem onClick={popupState.close}>
+                              <MenuItem 
+                                key={item}
+                                selected={item===department}
+                                onClick={() => {popupState.close(); setDepartment(item)}}>
                                 {item}
                               </MenuItem>
                             )
@@ -252,12 +284,20 @@ export const CourseFinder = () => {
                           {...bindTrigger(popupState)}
                           className={classes.btn}
                         >
-                          Campus
+                          <div className={classes.btnDiv}>
+                            <Typography >
+                              Campus
+                              {campus !=="" && campus !=="Any" && (<>: {campus}</>)}
+                            </Typography>
+                          </div>
                         </Button>
                         <Menu {...bindMenu(popupState)}>
-                          {filters.campus.map((item) => {
+                          {filters.campus.map((item, index) => {
                             return (
-                              <MenuItem onClick={popupState.close}>
+                              <MenuItem 
+                                key={item}
+                                selected={item===campus}
+                                onClick={() => {popupState.close(); setCampus(item)}}>
                                 {item}
                               </MenuItem>
                             )
@@ -276,12 +316,20 @@ export const CourseFinder = () => {
                           {...bindTrigger(popupState)}
                           className={classes.btn}
                         >
-                          Max Results
+                          <div className={classes.btnDiv}>
+                            <Typography >
+                              Max Results
+                              {results !=="" && results !=="Any" && (<>: {results}</>)}
+                            </Typography>
+                          </div>
                         </Button>
                         <Menu {...bindMenu(popupState)}>
-                          {filters.maxResults.map((item) => {
+                          {filters.maxResults.map((item, index) => {
                             return (
-                              <MenuItem onClick={popupState.close}>
+                              <MenuItem 
+                                key={item}
+                                selected={item===results}
+                                onClick={() => {popupState.close(); setResults(item)}}>
                                 {item}
                               </MenuItem>
                             )
@@ -298,18 +346,22 @@ export const CourseFinder = () => {
                         <Button
                           variant="contained"
                           {...bindTrigger(popupState)}
-                          style={{
-                            backgroundColor: theme.palette.button.brightRed,
-                            borderRadius: "0.5rem",
-                            textTransform: "none",
-                          }}
+                          className={classes.btn}
                         >
-                          Rating
+                          <div className={classes.btnDiv}>
+                            <Typography >
+                              Rating
+                              {rating !=="" && rating !=="Any" && (<>: {rating}</>)}
+                            </Typography>
+                          </div>
                         </Button>
                         <Menu {...bindMenu(popupState)}>
-                          {filters.rating.map((item) => {
+                          {filters.rating.map((item, index) => {
                             return (
-                              <MenuItem onClick={popupState.close}>
+                              <MenuItem 
+                                key={item}
+                                selected={item===rating}
+                                onClick={() => {popupState.close(); setRating(item)}}>
                                 {item}
                               </MenuItem>
                             )
@@ -342,13 +394,18 @@ export const CourseFinder = () => {
                   className={classes.btn}
                   style={{ backgroundColor: "#D3D3D3" }}
                 >
-                  Sorty By
-                  <ArrowDropDownIcon />
+                    Sorty By
+                    {(filter !=="" && filter !=="Any") ? (<>: {filter}</>) : <ArrowDropDownIcon />}
                 </Button>
                 <Menu {...bindMenu(popupState)}>
-                  {filters.sortBy.map((item) => {
+                  {filters.sortBy.map((item, index) => {
                     return (
-                      <MenuItem onClick={popupState.close}>{item}</MenuItem>
+                      <MenuItem 
+                        key={item}
+                        selected={item===filter}
+                        onClick={() => {popupState.close(); setFilter(item)}}>
+                        {item}
+                      </MenuItem>
                     )
                   })}
                 </Menu>
