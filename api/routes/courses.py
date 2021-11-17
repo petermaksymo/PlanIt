@@ -12,7 +12,7 @@ from api.app import app
 from api.database import db
 
 
-def course_filter(query, year, division, department, campus, top):
+def course_filter(query, year, division, department, campus, top, sort_by):
     if year:
         query = query.filter_by(course_level=year)
     if division:
@@ -21,31 +21,37 @@ def course_filter(query, year, division, department, campus, top):
         query = query.filter_by(department=department)
     if campus:
         query = query.filter_by(campus=campus)
+    if sort_by:
+        query = query.order_by(getattr(Course, sort_by))
     if top:
-        query = query.filter_by().limit(int(top))
+        query = query.limit(int(top))
     return query
 
 
 def search_by_courses_code_number(
-    search_keywords, year, division, department, campus, top
+    search_keywords, year, division, department, campus, top, sort_by
 ):
     query = db.session.query(Course)
     query = query.filter(Course.code.ilike(f"%{search_keywords}%"))
-    query = course_filter(query, year, division, department, campus, top)
+    query = course_filter(query, year, division, department, campus, top, sort_by)
     return query
 
 
-def search_by_courses_code(search_keywords, year, division, department, campus, top):
+def search_by_courses_code(
+    search_keywords, year, division, department, campus, top, sort_by
+):
     query = db.session.query(Course)
     query = query.filter(Course.code.ilike(f"{search_keywords}%"))
-    query = course_filter(query, year, division, department, campus, top)
+    query = course_filter(query, year, division, department, campus, top, sort_by)
     return query
 
 
-def search_by_courses_name(search_keywords, year, division, department, campus, top):
+def search_by_courses_name(
+    search_keywords, year, division, department, campus, top, sort_by
+):
     query = db.session.query(Course)
     query = query.filter(Course.name.ilike(f"%{search_keywords}%"))
-    query = course_filter(query, year, division, department, campus, top)
+    query = course_filter(query, year, division, department, campus, top, sort_by)
     return query
 
 
@@ -65,6 +71,7 @@ def search_results():
     department = request.args.get("department")
     campus = request.args.get("campus")
     top = request.args.get("top")
+    sort_by = request.args.get("sort_by")
     if top is None:
         top = "50"
     if search_keywords:
@@ -73,7 +80,7 @@ def search_results():
         ):
             # Search by course code (number only)
             query = search_by_courses_code_number(
-                search_keywords, year, division, department, campus, top
+                search_keywords, year, division, department, campus, top, sort_by
             )
             if query.count() != 0:
                 results = query.all()
@@ -81,20 +88,20 @@ def search_results():
         if len(search_keywords) <= 8:
             # Search by course code
             query = search_by_courses_code(
-                search_keywords, year, division, department, campus, top
+                search_keywords, year, division, department, campus, top, sort_by
             )
             if query.count() != 0:
                 results = query.all()
                 return jsonify([item.to_dict() for item in results])
         # Search by course name
         query = search_by_courses_name(
-            search_keywords, year, division, department, campus, top
+            search_keywords, year, division, department, campus, top, sort_by
         )
         results = query.all()
         return jsonify([item.to_dict() for item in results])
     else:
         query = db.session.query(Course)
-        query = course_filter(query, year, division, department, campus, top)
+        query = course_filter(query, year, division, department, campus, top, sort_by)
         results = query.all()
         return jsonify([item.to_dict() for item in results])
 
@@ -107,7 +114,7 @@ This method shows the information about a single course.
 @app.route("/course/<code>")
 def course(code):
     query = db.session.query(Course)
-    course = query.filter_by(code=code).first()
+    course = query.filter(Course.code.ilike(f"{code}%")).first()
     if course:
         return jsonify(course.to_dict())
     else:

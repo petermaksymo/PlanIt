@@ -320,7 +320,6 @@ def test_bookmark_post(client):
     result = post_bookmark(client, token, "ECE444H1")
     assert result.status_code == 200
     data = json.loads(result.data)
-    print(data)
 
     assert data["account_name"] == "admin"
     assert data["course_code"] == "ECE444H1"
