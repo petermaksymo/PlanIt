@@ -12,6 +12,43 @@ from api.app import app
 from api.database import db
 
 
+def course_filter(query, year, division, department, campus, top):
+    if year:
+        query = query.filter_by(course_level=year)
+    if division:
+        query = query.filter_by(division=division)
+    if department:
+        query = query.filter_by(department=department)
+    if campus:
+        query = query.filter_by(campus=campus)
+    if top:
+        query = query.filter_by().limit(int(top))
+    return query
+
+
+def search_by_courses_code_number(
+    search_keywords, year, division, department, campus, top
+):
+    query = db.session.query(Course)
+    query = query.filter(Course.code.ilike(f"%{search_keywords}%"))
+    query = course_filter(query, year, division, department, campus, top)
+    return query
+
+
+def search_by_courses_code(search_keywords, year, division, department, campus, top):
+    query = db.session.query(Course)
+    query = query.filter(Course.code.ilike(f"{search_keywords}%"))
+    query = course_filter(query, year, division, department, campus, top)
+    return query
+
+
+def search_by_courses_name(search_keywords, year, division, department, campus, top):
+    query = db.session.query(Course)
+    query = query.filter(Course.name.ilike(f"%{search_keywords}%"))
+    query = course_filter(query, year, division, department, campus, top)
+    return query
+
+
 """Handle the data from the POST request that will go to the main algorithm.
 If we get an empty search, just go back to home.
 Otherwise, pull out the elements of the POST request that are used by the algorithm, and get the results.
@@ -24,27 +61,42 @@ Pass the original search to the template as well, so the user can see the contex
 def search_results():
     search_keywords = request.args.get("search_keywords")
     year = request.args.get("year")
-    divisions = request.args.get("divisions")
-    departments = request.args.get("departments")
-    campuses = request.args.get("campuses")
+    division = request.args.get("division")
+    department = request.args.get("department")
+    campus = request.args.get("campus")
     top = request.args.get("top")
     if top is None:
         top = "50"
-    query = db.session.query(Course)
     if search_keywords:
-        query = query.filter(Course.name.ilike(f"%{search_keywords}%"))
-    if year:
-        query = query.filter_by(course_level=year)
-    if divisions:
-        query = query.filter_by(division=divisions)
-    if departments:
-        query = query.filter_by(department=departments)
-    if campuses:
-        query = query.filter_by(campus=campuses)
-    if top:
-        query = query.filter_by().limit(int(top))
-    results = query.all()
-    return jsonify([item.to_dict() for item in results])
+        if len(search_keywords) <= 4 and all(
+            char.isdigit() for char in search_keywords
+        ):
+            # Search by course code (number only)
+            query = search_by_courses_code_number(
+                search_keywords, year, division, department, campus, top
+            )
+            if query.count() != 0:
+                results = query.all()
+                return jsonify([item.to_dict() for item in results])
+        if len(search_keywords) <= 8:
+            # Search by course code
+            query = search_by_courses_code(
+                search_keywords, year, division, department, campus, top
+            )
+            if query.count() != 0:
+                results = query.all()
+                return jsonify([item.to_dict() for item in results])
+        # Search by course name
+        query = search_by_courses_name(
+            search_keywords, year, division, department, campus, top
+        )
+        results = query.all()
+        return jsonify([item.to_dict() for item in results])
+    else:
+        query = db.session.query(Course)
+        query = course_filter(query, year, division, department, campus, top)
+        results = query.all()
+        return jsonify([item.to_dict() for item in results])
 
 
 """
