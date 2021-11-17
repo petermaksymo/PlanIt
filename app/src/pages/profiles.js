@@ -260,7 +260,7 @@ export const Profiles = () => {
                 <Button
                   variant="contained"
                   style={{
-                    margin: "0 15px",
+                    margin: 10,
                     borderRadius: 10,
                     minWidth: "200px",
                     minHeight: "102px",

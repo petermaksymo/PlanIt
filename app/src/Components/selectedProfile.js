@@ -268,7 +268,7 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
                           disableElevation
                           variant="contained"
                           style={{
-                            margin: "0 5px",
+                            margin: 10,
                             borderRadius: 10,
                             minWidth: "250px",
                             minHeight: "91px",

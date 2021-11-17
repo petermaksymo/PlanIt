@@ -21,16 +21,29 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     backgroundColor: theme.palette.background.lightBlue,
     height: "3px",
-    margin: "41px 0",
+    margin: "25px 0",
     borderRadius: "50px",
+  },
+  alignSegment: {
+    display: "flex",
+    flexFlow: "row wrap",
+    alignItems: "center",
   },
   align: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    width: "50%",
+    margin: "16px 0",
+    [theme.breakpoints.down("md")]: {
+      width: "100%",
+    },
   },
-  cornerBorder: {
-    padding: "81px 137px",
+  courseContainer: {
+    maxWidth: 1440,
+    margin: "auto",
+    padding: "0 24px",
+    boxSizing: "border-box",
   },
 }))
 
@@ -102,10 +115,17 @@ export const CourseContent = () => {
   return (
     <>
       <NavBar />
-      <div id="page-container" style={{ margin: "62px 172px" }}>
-        <div id="course-container" className={classes.cornerBorder}>
+      <div id="page-container" style={{ margin: "62px 0" }}>
+        <div id="course-container" className={classes.courseContainer}>
           <div id="segment1">
-            <div style={{ display: "flex" }}>
+            <div
+              style={{
+                position: "relative",
+                display: "flex",
+                flexFlow: "row wrap",
+                paddingRight: 40,
+              }}
+            >
               <Typography
                 sx={{
                   fontSize: 18,
@@ -117,34 +137,36 @@ export const CourseContent = () => {
               >
                 {result.code} &#8211; {result.name}
               </Typography>
-              <Rating
-                sx={{ margin: "auto 0" }}
-                value={result.rating}
-                readOnly
-              />
-              <Typography
-                sx={{
-                  margin: "auto 0",
-                  paddingLeft: 1,
-                  paddingRight: 4,
-                  fontSize: 14,
-                  color: theme.palette.text.grey,
-                }}
-              >
-                {Math.round(result.rating)}/5 (
-                {Math.round(Math.random() * 1000)} votes)
-              </Typography>
-              <Typography
-                sx={{
-                  margin: "auto 0",
-                  fontSize: 14,
-                  color: theme.palette.text.grey,
-                }}
-              >
-                {result.views} Views
-              </Typography>
+              <div style={{ display: "flex" }}>
+                <Rating
+                  sx={{ margin: "auto 0" }}
+                  value={result.rating}
+                  readOnly
+                />
+                <Typography
+                  sx={{
+                    margin: "auto 0",
+                    paddingLeft: 1,
+                    paddingRight: 4,
+                    fontSize: 14,
+                    color: theme.palette.text.grey,
+                  }}
+                >
+                  {Math.round(result.rating)}/5 (
+                  {Math.round(Math.random() * 1000)} votes)
+                </Typography>
+                <Typography
+                  sx={{
+                    margin: "auto 0",
+                    fontSize: 14,
+                    color: theme.palette.text.grey,
+                  }}
+                >
+                  {result.views} Views
+                </Typography>
+              </div>
               <BookmarkButton
-                sx={{ marginLeft: "auto" }}
+                sx={{ position: "absolute", top: -7, right: -7 }}
                 course_id={result.code}
               />
             </div>
@@ -155,14 +177,14 @@ export const CourseContent = () => {
             </Typography>
           </div>
           <Divider className={classes.divider} />
-          <div id="segment2" className={classes.align}>
-            <div className={classes.align} style={{ width: "50%" }}>
+          <div id="segment2" className={classes.alignSegment}>
+            <div className={classes.align}>
               <Typography className={classes.header}>Division: </Typography>
               <Typography className={classes.text}>
                 {result.division}
               </Typography>
             </div>
-            <div className={classes.align} style={{ width: "50%" }}>
+            <div className={classes.align}>
               <Typography className={classes.header}>Department: </Typography>
               <Typography className={classes.text}>
                 {result.department}
@@ -170,8 +192,8 @@ export const CourseContent = () => {
             </div>
           </div>
           <Divider className={classes.divider} />
-          <div id="segment3" className={classes.align}>
-            <div className={classes.align} style={{ width: "50%" }}>
+          <div id="segment3" className={classes.alignSegment}>
+            <div className={classes.align}>
               <Typography className={classes.header}>
                 Pre-requisites:{" "}
               </Typography>
@@ -179,7 +201,7 @@ export const CourseContent = () => {
                 {result.pre_requisites}
               </Typography>
             </div>
-            <div className={classes.align} style={{ width: "50%" }}>
+            <div className={classes.align}>
               <Typography className={classes.header}>
                 Co-requisites:{" "}
               </Typography>
@@ -189,18 +211,18 @@ export const CourseContent = () => {
             </div>
           </div>
           <Divider className={classes.divider} />
-          <div id="segment4" className={classes.align}>
-            <div className={classes.align} style={{ width: "50%" }}>
+          <div id="segment4" className={classes.alignSegment}>
+            <div className={classes.align}>
               <Typography className={classes.header}>Campus: </Typography>
               <Typography className={classes.text}>{result.campus}</Typography>
             </div>
-            <div className={classes.align} style={{ width: "50%" }}>
+            <div className={classes.align}>
               <Typography className={classes.header}>Term: </Typography>
               <Typography className={classes.text}>{result.term}</Typography>
             </div>
           </div>
           <Divider className={classes.divider} />
-          <div id="segment5" className={classes.align}>
+          <div id="segment5" className={classes.alignSegment}>
             <Typography className={classes.header}>
               Related Courses:{" "}
             </Typography>
