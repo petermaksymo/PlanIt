@@ -31,6 +31,16 @@ const useStyles = makeStyles((theme) => ({
   filter: {
     margin: "20px 16px 20px 0",
   },
+  populatedFilterLabel: {
+    position: "absolute",
+    fontSize: 11,
+    top: 0,
+  },
+  populatedFilterText: {
+    fontSize: 14,
+    marginTop: 8,
+    marginBottom: -4,
+  },
 }))
 
 export const CourseFinder = () => {
@@ -343,12 +353,22 @@ export const CourseFinder = () => {
                           className={classes.btn}
                         >
                           <div className={classes.btnDiv}>
-                            <Typography>
-                              Division
-                              {division !== "" && division !== "Any" && (
-                                <>: {division}</>
-                              )}
-                            </Typography>
+                            {division !== "" && division !== "Any" ? (
+                              <>
+                                <Typography
+                                  className={classes.populatedFilterLabel}
+                                >
+                                  Division:
+                                </Typography>
+                                <Typography
+                                  className={classes.populatedFilterText}
+                                >
+                                  {division}
+                                </Typography>
+                              </>
+                            ) : (
+                              <Typography>Division</Typography>
+                            )}
                           </div>
                         </Button>
                         <Menu {...bindMenu(popupState)}>
@@ -381,12 +401,22 @@ export const CourseFinder = () => {
                           className={classes.btn}
                         >
                           <div className={classes.btnDiv}>
-                            <Typography>
-                              Department
-                              {department !== "" && department !== "Any" && (
-                                <>: {department}</>
-                              )}
-                            </Typography>
+                            {department !== "" && department !== "Any" ? (
+                              <>
+                                <Typography
+                                  className={classes.populatedFilterLabel}
+                                >
+                                  Department:
+                                </Typography>
+                                <Typography
+                                  className={classes.populatedFilterText}
+                                >
+                                  {department}
+                                </Typography>
+                              </>
+                            ) : (
+                              <Typography>Department</Typography>
+                            )}
                           </div>
                         </Button>
                         <Menu {...bindMenu(popupState)}>
@@ -419,12 +449,22 @@ export const CourseFinder = () => {
                           className={classes.btn}
                         >
                           <div className={classes.btnDiv}>
-                            <Typography>
-                              Campus
-                              {campus !== "" && campus !== "Any" && (
-                                <>: {campus}</>
-                              )}
-                            </Typography>
+                            {campus !== "" && campus !== "Any" ? (
+                              <>
+                                <Typography
+                                  className={classes.populatedFilterLabel}
+                                >
+                                  Campus:
+                                </Typography>
+                                <Typography
+                                  className={classes.populatedFilterText}
+                                >
+                                  {campus}
+                                </Typography>
+                              </>
+                            ) : (
+                              <Typography>Campus</Typography>
+                            )}
                           </div>
                         </Button>
                         <Menu {...bindMenu(popupState)}>
