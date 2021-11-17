@@ -13,8 +13,6 @@ from api.database import db
 
 
 def course_filter(query, year, division, department, campus, top, sort_by):
-    print("\n\n\n")
-
     if year:
         query = query.filter_by(course_level=year)
     if division:
