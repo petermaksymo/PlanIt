@@ -19,15 +19,20 @@ This is an ECE444 group project where our team of five is tasked with creating a
 
 # Version
 
-v0.0.1
+v1.0.0
 
 # Tech Stack
 
-React.js
+### Frontend:
+- React.js
+- Material UI
 
-Flask
+### Backend:
+- Flask
+- SQLAlchemy
 
-PostgreSQL
+### Database:
+- PostgreSQL
 
 # Development Environment
 
@@ -47,7 +52,7 @@ For now, you can test the api using docker with the following steps:
 
 1. After building the api from step 2 (or using `docker-compose -f docker-compose.yml up -d --build`)
 
-2. Run `docker-compose -f docker-compose.yml run -e ENVIRONMENT=testing --rm api python -m pytest` and the tests should run 
+2. Run `docker exec -i planit_api python -m pytest api -W ignore::DeprecationWarning` and the tests should run 
 
 # License
 
@@ -66,6 +71,8 @@ See [Contribution.md](./Contribution.md)
 * [Kieun Joshua Park](https://github.com/kjoshuapark)
 
 # Resources
+[Figma Designs](https://www.figma.com/file/6ZOzNFenFQdGMGAuXnEQCc/PlanIt-Mockup?node-id=0%3A1)
+
 [Github Projects Board](https://github.com/ECE444-2021Fall/project1-education-pathways-group-10-4sight/projects/1)
 
 [Github Wiki](https://github.com/ECE444-2021Fall/project1-education-pathways-group-10-4sight/wiki)
