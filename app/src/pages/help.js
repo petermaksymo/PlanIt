@@ -69,7 +69,7 @@ export const Help = () => {
               position: "relative",
               overflow: "hidden",
               width: "100%",
-              paddingTop: "56.25%",
+              paddingTop: "57%",
             }}
           >
             <iframe
@@ -82,7 +82,7 @@ export const Help = () => {
                 right: 0,
                 bottom: 0,
               }}
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+              src="https://www.youtube.com/embed/_E2EQi3-cac"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen
