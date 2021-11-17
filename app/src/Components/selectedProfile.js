@@ -111,7 +111,8 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
             ) : (
               <>
                 <Typography paragraph>
-                  Search for a course by exact course code for a match (e.g. ECE444H1):
+                  Search for a course by exact course code for a match (e.g.
+                  ECE444H1):
                 </Typography>
                 <TextField
                   autoFocus
@@ -142,14 +143,16 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
                   <strong>Course Code:</strong> {searchResult.code}
                 </Typography>
               </>
-            ):(ranCourseSearch &&
-              <>
-              <Typography>
-                <strong>Error</strong>
-                <br />
-                Unable to find course
-              </Typography>
-            </>
+            ) : (
+              ranCourseSearch && (
+                <>
+                  <Typography>
+                    <strong>Error</strong>
+                    <br />
+                    Unable to find course
+                  </Typography>
+                </>
+              )
             )}
           </DialogContent>
           <DialogActions>

@@ -189,19 +189,23 @@ export const CourseFinder = () => {
                           className={classes.btn}
                         >
                           <div className={classes.btnDiv}>
-                            <Typography >
+                            <Typography>
                               Course Year
-                              {year !=="" && year !=="Any" && (<>: {year}</>)}
+                              {year !== "" && year !== "Any" && <>: {year}</>}
                             </Typography>
                           </div>
                         </Button>
                         <Menu {...bindMenu(popupState)}>
                           {filters.year.map((item, index) => {
                             return (
-                              <MenuItem 
+                              <MenuItem
                                 key={item}
-                                selected={item===year}
-                                onClick={() => {popupState.close(); setYear(item)}}>
+                                selected={item === year}
+                                onClick={() => {
+                                  popupState.close()
+                                  setYear(item)
+                                }}
+                              >
                                 {item}
                               </MenuItem>
                             )
@@ -221,19 +225,25 @@ export const CourseFinder = () => {
                           className={classes.btn}
                         >
                           <div className={classes.btnDiv}>
-                            <Typography >
+                            <Typography>
                               Division
-                              {division !=="" && division !=="Any" && (<>: {division}</>)}
+                              {division !== "" && division !== "Any" && (
+                                <>: {division}</>
+                              )}
                             </Typography>
                           </div>
                         </Button>
                         <Menu {...bindMenu(popupState)}>
                           {filters.division.map((item, index) => {
                             return (
-                              <MenuItem 
+                              <MenuItem
                                 key={item}
-                                selected={item===division}
-                                onClick={() => {popupState.close(); setDivision(item)}}>
+                                selected={item === division}
+                                onClick={() => {
+                                  popupState.close()
+                                  setDivision(item)
+                                }}
+                              >
                                 {item}
                               </MenuItem>
                             )
@@ -253,19 +263,25 @@ export const CourseFinder = () => {
                           className={classes.btn}
                         >
                           <div className={classes.btnDiv}>
-                            <Typography >
+                            <Typography>
                               Department
-                              {department !=="" && department !=="Any" && (<>: {department}</>)}
+                              {department !== "" && department !== "Any" && (
+                                <>: {department}</>
+                              )}
                             </Typography>
                           </div>
                         </Button>
                         <Menu {...bindMenu(popupState)}>
                           {filters.department.map((item, index) => {
                             return (
-                              <MenuItem 
+                              <MenuItem
                                 key={item}
-                                selected={item===department}
-                                onClick={() => {popupState.close(); setDepartment(item)}}>
+                                selected={item === department}
+                                onClick={() => {
+                                  popupState.close()
+                                  setDepartment(item)
+                                }}
+                              >
                                 {item}
                               </MenuItem>
                             )
@@ -285,19 +301,25 @@ export const CourseFinder = () => {
                           className={classes.btn}
                         >
                           <div className={classes.btnDiv}>
-                            <Typography >
+                            <Typography>
                               Campus
-                              {campus !=="" && campus !=="Any" && (<>: {campus}</>)}
+                              {campus !== "" && campus !== "Any" && (
+                                <>: {campus}</>
+                              )}
                             </Typography>
                           </div>
                         </Button>
                         <Menu {...bindMenu(popupState)}>
                           {filters.campus.map((item, index) => {
                             return (
-                              <MenuItem 
+                              <MenuItem
                                 key={item}
-                                selected={item===campus}
-                                onClick={() => {popupState.close(); setCampus(item)}}>
+                                selected={item === campus}
+                                onClick={() => {
+                                  popupState.close()
+                                  setCampus(item)
+                                }}
+                              >
                                 {item}
                               </MenuItem>
                             )
@@ -317,19 +339,25 @@ export const CourseFinder = () => {
                           className={classes.btn}
                         >
                           <div className={classes.btnDiv}>
-                            <Typography >
+                            <Typography>
                               Max Results
-                              {results !=="" && results !=="Any" && (<>: {results}</>)}
+                              {results !== "" && results !== "Any" && (
+                                <>: {results}</>
+                              )}
                             </Typography>
                           </div>
                         </Button>
                         <Menu {...bindMenu(popupState)}>
                           {filters.maxResults.map((item, index) => {
                             return (
-                              <MenuItem 
+                              <MenuItem
                                 key={item}
-                                selected={item===results}
-                                onClick={() => {popupState.close(); setResults(item)}}>
+                                selected={item === results}
+                                onClick={() => {
+                                  popupState.close()
+                                  setResults(item)
+                                }}
+                              >
                                 {item}
                               </MenuItem>
                             )
@@ -349,19 +377,25 @@ export const CourseFinder = () => {
                           className={classes.btn}
                         >
                           <div className={classes.btnDiv}>
-                            <Typography >
+                            <Typography>
                               Rating
-                              {rating !=="" && rating !=="Any" && (<>: {rating}</>)}
+                              {rating !== "" && rating !== "Any" && (
+                                <>: {rating}</>
+                              )}
                             </Typography>
                           </div>
                         </Button>
                         <Menu {...bindMenu(popupState)}>
                           {filters.rating.map((item, index) => {
                             return (
-                              <MenuItem 
+                              <MenuItem
                                 key={item}
-                                selected={item===rating}
-                                onClick={() => {popupState.close(); setRating(item)}}>
+                                selected={item === rating}
+                                onClick={() => {
+                                  popupState.close()
+                                  setRating(item)
+                                }}
+                              >
                                 {item}
                               </MenuItem>
                             )
@@ -394,16 +428,24 @@ export const CourseFinder = () => {
                   className={classes.btn}
                   style={{ backgroundColor: "#D3D3D3" }}
                 >
-                    Sorty By
-                    {(filter !=="" && filter !=="Any") ? (<>: {filter}</>) : <ArrowDropDownIcon />}
+                  Sorty By
+                  {filter !== "" && filter !== "Any" ? (
+                    <>: {filter}</>
+                  ) : (
+                    <ArrowDropDownIcon />
+                  )}
                 </Button>
                 <Menu {...bindMenu(popupState)}>
                   {filters.sortBy.map((item, index) => {
                     return (
-                      <MenuItem 
+                      <MenuItem
                         key={item}
-                        selected={item===filter}
-                        onClick={() => {popupState.close(); setFilter(item)}}>
+                        selected={item === filter}
+                        onClick={() => {
+                          popupState.close()
+                          setFilter(item)
+                        }}
+                      >
                         {item}
                       </MenuItem>
                     )
