@@ -95,12 +95,28 @@ def search_results():
                 results = query.all()
                 return jsonify([item.to_dict() for item in results])
         # Search by course name
+        # Met "and" or "&" in search_keywords
+        if "and" in search_keywords.lower() or "&" in search_keywords:
+            search_keywords = search_keywords.replace("and", "&")
+            query1 = search_by_courses_name(
+                search_keywords, year, division, department, campus, top, sort_by
+            )
+            search_keywords = search_keywords.replace("&", "and")
+            query2 = search_by_courses_name(
+                search_keywords, year, division, department, campus, top, sort_by
+            )
+            l1 = query1.all()
+            l2 = query2.all()
+            results = [*l1, *l2]
+            return jsonify([item.to_dict() for item in results])
+        # Search by course name. Normal search.
         query = search_by_courses_name(
             search_keywords, year, division, department, campus, top, sort_by
         )
         results = query.all()
         return jsonify([item.to_dict() for item in results])
     else:
+        # If search_keywords not exist, just do filters.
         query = db.session.query(Course)
         query = course_filter(query, year, division, department, campus, top, sort_by)
         results = query.all()
