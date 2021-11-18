@@ -12,13 +12,13 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 const useStyles = makeStyles((theme) => ({
   header: {
     color: theme.palette.text.grey,
-    fontSize: 20,
+    fontSize: 18,
     marginBottom: "15px",
     fontWeight: "bold",
   },
   text: {
     color: theme.palette.text.grey,
-    fontSize: 18,
+    fontSize: 16,
     marginBottom: "15px",
     marginLeft: "15px",
   },
@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.lightBlue,
     height: "3px",
     margin: "41px 0",
+    borderRadius: "50px",
   },
   align: {
     display: "flex",
@@ -98,13 +99,13 @@ export const Account = () => {
       <div
         id="profiles"
         style={{
-          padding: "30px 0",
+          padding: "20px 0",
           backgroundColor: theme.palette.background.lightPink,
         }}
       >
         <div
           style={{
-            maxWidth: 1440,
+            maxWidth: 1200,
             margin: "auto",
             padding: "0 24px",
             boxSizing: "border-box",
@@ -114,7 +115,7 @@ export const Account = () => {
             style={{
               color: theme.palette.text.dark,
               fontSize: 28,
-              marginBottom: "15px",
+              marginBottom: "5px",
               fontWeight: "bold",
             }}
           >
@@ -125,7 +126,7 @@ export const Account = () => {
       <div id="page-container" style={{ margin: "40px 0" }}>
         <div
           style={{
-            maxWidth: 1440,
+            maxWidth: 1200,
             margin: "auto",
             padding: "0 24px",
             boxSizing: "border-box",

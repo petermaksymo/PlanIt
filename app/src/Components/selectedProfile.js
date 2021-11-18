@@ -167,7 +167,7 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
             <Typography
               style={{
                 color: theme.palette.text.dark,
-                fontSize: 28,
+                fontSize: 24,
                 marginBottom: "15px",
               }}
             >
@@ -176,7 +176,7 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
             <div style={{ margin: "10px 10px" }}>
               {map(selectedProfile.sessions, (session, session_idx) => {
                 return (
-                  <div id="session" style={{ margin: "15px" }}>
+                  <div id="session" style={{ margin: "5px" }}>
                     <div
                       style={{
                         display: "flex",
@@ -187,7 +187,7 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
                       <Typography
                         style={{
                           color: theme.palette.text.grey,
-                          fontSize: 20,
+                          fontSize: 18,
                           margin: "auto 5px auto 0",
                         }}
                       >
@@ -314,10 +314,11 @@ const SelectedProfile = ({ selectedProfile, reload }) => {
                   top: "50%",
                   color: theme.palette.background.main,
                   fontSize: 40,
+                  margin: "10px",
                 }}
               />
               <Typography
-                style={{ color: theme.palette.text.dark, fontSize: 20 }}
+                style={{ color: theme.palette.text.dark, fontSize: 18 }}
               >
                 Add Session
               </Typography>
