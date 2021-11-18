@@ -115,6 +115,7 @@ def search_results():
         results = query.all()
         return jsonify([item.to_dict() for item in results])
     else:
+        # If search_keywords not exist, just do filters.
         query = db.session.query(Course)
         query = course_filter(query, year, division, department, campus, top, sort_by)
         results = query.all()
