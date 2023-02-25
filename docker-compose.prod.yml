@@ -3,12 +3,12 @@ version: '3.8'
 services:
   app:
     container_name: planit_app
-    build: ./app
+    build:
+      context: ./app
+      dockerfile: Dockerfile.prod
     volumes:
       - './app:/app'
       - '/app/node_modules'
-    ports:
-      - ${APP_PORT}:3000
     environment:
       - CHOKIDAR_USEPOLLING=true
       - REACT_APP_API_BASE_URL
@@ -19,20 +19,19 @@ services:
     build: ./api
     volumes:
       - './api:/api'
-    ports:
-      - ${API_PORT}:5000
     depends_on:
       - postgres
     restart: "always"
     environment:
       - API_PORT
-      - ENVIRONMENT=development
-      - FLASK_ENV=development
-      - FLASK_DEBUG=1
+      - ENVIRONMENT
+      - FLASK_ENV
+      - FLASK_DEBUG
       - POSTGRES_HOST
       - POSTGRES_DB
       - POSTGRES_USER
-      - POSTGRES_PASSWORD=development_password
+      - POSTGRES_PASSWORD
+      - SECRET_KEY
 
   postgres:
     container_name: planit_postgres
@@ -41,9 +40,7 @@ services:
       - POSTGRES_HOST
       - POSTGRES_DB
       - POSTGRES_USER
-      - POSTGRES_PASSWORD=development_password
-    ports:
-      - "5432:5432"
+      - POSTGRES_PASSWORD
     volumes:
       - planit-postgres-data:/var/lib/postgresql/data
 
