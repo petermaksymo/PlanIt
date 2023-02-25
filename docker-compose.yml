@@ -26,13 +26,14 @@ services:
     restart: "always"
     environment:
       - API_PORT
-      - ENVIRONMENT=development
-      - FLASK_ENV=development
-      - FLASK_DEBUG=1
+      - ENVIRONMENT
+      - FLASK_ENV
+      - FLASK_DEBUG
       - POSTGRES_HOST
       - POSTGRES_DB
       - POSTGRES_USER
-      - POSTGRES_PASSWORD=development_password
+      - POSTGRES_PASSWORD
+      - SECRET_KEY
 
   postgres:
     container_name: planit_postgres
@@ -41,7 +42,7 @@ services:
       - POSTGRES_HOST
       - POSTGRES_DB
       - POSTGRES_USER
-      - POSTGRES_PASSWORD=development_password
+      - POSTGRES_PASSWORD
     ports:
       - "5432:5432"
     volumes:

@@ -4,7 +4,7 @@ import os
 class Config(object):
     """Base Configuration"""
 
-    SECRET_KEY = "super secret string that will never be cracked or pushed to a public github repo"
+    SECRET_KEY = os.getenv("SECRET_KEY", "super secret string that will never be cracked or pushed to a public github repo")
 
     db_user = os.getenv("POSTGRES_USER")
     db_password = os.getenv("POSTGRES_PASSWORD")
@@ -23,7 +23,7 @@ class Config(object):
 class ProductionConfig(Config):
     """Production Configuration"""
 
-    SECRET_KEY = "super secret string that will never be cracked or pushed to a public github repo"
+    SECRET_KEY = os.getenv("SECRET_KEY", "super secret string that will never be cracked or pushed to a public github repo")
 
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "test")
     # Fix for database url using outdated postgres prefix
