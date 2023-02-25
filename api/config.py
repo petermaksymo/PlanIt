@@ -27,7 +27,7 @@ class ProductionConfig(Config):
 
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "test")
     # Fix for database url using outdated postgres prefix
-    SQLALCHEMY_DATABASE_URI = SQLALCHEMY_DATABASE_URI.replace("postgres", "postgresql")
+    SQLALCHEMY_DATABASE_URI = SQLALCHEMY_DATABASE_URI.replace("postgres://", "postgresql://")
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
