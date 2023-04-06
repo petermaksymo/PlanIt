@@ -20,7 +20,7 @@ RUN apt update && apt install -y python3-pip libpq-dev
 
 # Copy the built static files from the react stage
 COPY --from=react /app/build /usr/share/nginx/html
-COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY app/nginx/default.conf /etc/nginx/conf.d/default.conf
 
 COPY ./api /app/api
 WORKDIR /app/api
