@@ -1,0 +1,14 @@
+# Use the python base image
+FROM python:3.7
+
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR api
+COPY . ./
+
+RUN pip3 install -r requirements.txt
+RUN pip3 install gunicorn
+
+WORKDIR /
+ENV FLASK_APP=api.app
+CMD gunicorn -b 0.0.0.0:5000 api.app:app
