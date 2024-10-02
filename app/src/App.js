@@ -27,7 +27,7 @@ function App() {
       const scriptTag = document.createElement('script')
       scriptTag.defer = true
       scriptTag.src = REACT_APP_UMAMI_URL
-      scriptTag['data-website-id'] = REACT_APP_UMAMI_ID
+      scriptTag.setAttribute('data-website-id',  REACT_APP_UMAMI_ID)
       document.head.appendChild(scriptTag)
     }
   }, [])
