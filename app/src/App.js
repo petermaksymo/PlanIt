@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useEffect} from "react"
 import {
   BrowserRouter as Router,
   Switch,
@@ -19,7 +19,20 @@ import { Help } from "./pages/help"
 import AuthContext from "./contexts/auth"
 import PrivateRoute from "./Components/privateRoute"
 
+const { UMAMI_URL, UMAMI_ID } = process.env
+
 function App() {
+  useEffect(() => {
+    console.log(process.env)
+
+    if(UMAMI_URL && UMAMI_ID) {
+      const scriptTag = document.createElement('script')
+      scriptTag.src = process.env.UMAMI_URL
+      scriptTag['data-website-id'] = process.env.UMAMI_ID
+      document.head.appendChild(scriptTag)
+    }
+  }, [])
+
   return (
     <div className="App">
       <StyledEngineProvider injectFirst>
