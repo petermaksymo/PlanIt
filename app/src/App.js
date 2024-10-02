@@ -19,16 +19,14 @@ import { Help } from "./pages/help"
 import AuthContext from "./contexts/auth"
 import PrivateRoute from "./Components/privateRoute"
 
-const { UMAMI_URL, UMAMI_ID } = process.env
+const { REACT_APP_UMAMI_URL, REACT_APP_UMAMI_ID } = process.env
 
 function App() {
   useEffect(() => {
-    console.log(process.env)
-
-    if(UMAMI_URL && UMAMI_ID) {
+    if(REACT_APP_UMAMI_URL && REACT_APP_UMAMI_ID) {
       const scriptTag = document.createElement('script')
-      scriptTag.src = process.env.UMAMI_URL
-      scriptTag['data-website-id'] = process.env.UMAMI_ID
+      scriptTag.src = REACT_APP_UMAMI_URL
+      scriptTag['data-website-id'] = REACT_APP_UMAMI_ID
       document.head.appendChild(scriptTag)
     }
   }, [])

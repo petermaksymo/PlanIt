@@ -12,8 +12,8 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
       - REACT_APP_API_BASE_URL
-      - UMAMI_URL
-      - UMAMI_ID
+      - REACT_APP_UMAMI_URL
+      - REACT_APP_UMAMI_ID
     stdin_open: true
 
   api:
