@@ -25,6 +25,7 @@ function App() {
   useEffect(() => {
     if(REACT_APP_UMAMI_URL && REACT_APP_UMAMI_ID) {
       const scriptTag = document.createElement('script')
+      scriptTag.defer = true
       scriptTag.src = REACT_APP_UMAMI_URL
       scriptTag['data-website-id'] = REACT_APP_UMAMI_ID
       document.head.appendChild(scriptTag)
